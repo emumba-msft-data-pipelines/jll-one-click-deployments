@@ -48,7 +48,7 @@
                 "description": "Your login name must not contain a SQL Identifier or a typical system name (like admin, administrator, sa, root, dbmanager, loginmanager, etc.) or a built-in database user or role (like dbo, guest, public, etc.)"
             }
         },
-        "jll_demographics_http_linkedservice_properties_typeProperties_url": {
+        "demographics_http_linkedservice_properties_typeProperties_url": {
             "type": "string",
             "defaultValue": "https://data.cdc.gov"
         },
@@ -87,7 +87,7 @@
             "location": "[parameters('location')]",
             "tags": {
                 "Environment": "Public",
-                "AssociatedDataSet": "JLL_Demographics"
+                "AssociatedDataSet": "Demographics"
             },
             "identity": {
                 "type": "SystemAssigned"
@@ -98,7 +98,7 @@
 
 
                 {
-                    "name": "[concat(parameters('factoryName'), '/jll_demographics_blobstorage_linkedservice')]",
+                    "name": "[concat(parameters('factoryName'), '/demographics_blobstorage_linkedservice')]",
                     "type": "Microsoft.DataFactory/factories/linkedServices",
                     "apiVersion": "2018-06-01",
                     "properties": {
@@ -113,14 +113,14 @@
                     ]
                 },
                 {
-                    "name": "[concat(parameters('factoryName'), '/jll_demographics_http_linkedservice')]",
+                    "name": "[concat(parameters('factoryName'), '/demographics_http_linkedservice')]",
                     "type": "Microsoft.DataFactory/factories/linkedServices",
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "annotations": [],
                         "type": "HttpServer",
                         "typeProperties": {
-                            "url": "[parameters('jll_demographics_http_linkedservice_properties_typeProperties_url')]",
+                            "url": "[parameters('demographics_http_linkedservice_properties_typeProperties_url')]",
                             "enableServerCertificateValidation": true,
                             "authenticationType": "Anonymous"
                         }
@@ -131,7 +131,7 @@
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'Yes')]",
-                    "name": "[concat(parameters('factoryName'), '/jll_demographics_sql_linkedservice')]",
+                    "name": "[concat(parameters('factoryName'), '/demographics_sql_linkedservice')]",
                     "type": "Microsoft.DataFactory/factories/linkedServices",
                     "apiVersion": "2018-06-01",
                     "properties": {
@@ -151,7 +151,7 @@
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "linkedServiceName": {
-                            "referenceName": "jll_demographics_blobstorage_linkedservice",
+                            "referenceName": "demographics_blobstorage_linkedservice",
                             "type": "LinkedServiceReference"
                         },
                         "parameters": {
@@ -166,7 +166,7 @@
                             }
                         },
                         "folder": {
-                            "name": "JLL/Demographics-Dataset/Sinks"
+                            "name": "Demographics-Dataset/Sinks"
                         },
                         "annotations": [],
                         "type": "Parquet",
@@ -188,7 +188,7 @@
                     },
                     "dependsOn": [
                         "[parameters('factoryName')]",
-                        "[concat(variables('factoryId'), '/linkedServices/jll_demographics_blobstorage_linkedservice')]"
+                        "[concat(variables('factoryId'), '/linkedServices/demographics_blobstorage_linkedservice')]"
                     ]
                 },
                 {
@@ -197,7 +197,7 @@
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "linkedServiceName": {
-                            "referenceName": "jll_demographics_http_linkedservice",
+                            "referenceName": "demographics_http_linkedservice",
                             "type": "LinkedServiceReference"
                         },
                         "parameters": {
@@ -206,7 +206,7 @@
                             }
                         },
                         "folder": {
-                            "name": "JLL/Demographics-Dataset/Sources"
+                            "name": "Demographics-Dataset/Sources"
                         },
                         "annotations": [],
                         "type": "DelimitedText",
@@ -252,7 +252,7 @@
                     },
                     "dependsOn": [
                         "[parameters('factoryName')]",
-                        "[concat(variables('factoryId'), '/linkedServices/jll_demographics_http_linkedservice')]"
+                        "[concat(variables('factoryId'), '/linkedServices/demographics_http_linkedservice')]"
                     ]
                 },
                 {
@@ -261,7 +261,7 @@
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "linkedServiceName": {
-                            "referenceName": "jll_demographics_blobstorage_linkedservice",
+                            "referenceName": "demographics_blobstorage_linkedservice",
                             "type": "LinkedServiceReference"
                         },
                         "parameters": {
@@ -276,7 +276,7 @@
                             }
                         },
                         "folder": {
-                            "name": "JLL/Demographics-Dataset/Sinks"
+                            "name": "Demographics-Dataset/Sinks"
                         },
                         "annotations": [],
                         "type": "DelimitedText",
@@ -301,7 +301,7 @@
                     },
                     "dependsOn": [
                         "[parameters('factoryName')]",
-                        "[concat(variables('factoryId'), '/linkedServices/jll_demographics_blobstorage_linkedservice')]"
+                        "[concat(variables('factoryId'), '/linkedServices/demographics_blobstorage_linkedservice')]"
                     ]
                 },
                 {
@@ -310,7 +310,7 @@
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "linkedServiceName": {
-                            "referenceName": "jll_demographics_blobstorage_linkedservice",
+                            "referenceName": "demographics_blobstorage_linkedservice",
                             "type": "LinkedServiceReference"
                         },
                         "parameters": {
@@ -325,7 +325,7 @@
                             }
                         },
                         "folder": {
-                            "name": "JLL/Demographics-Dataset/Sinks"
+                            "name": "Demographics-Dataset/Sinks"
                         },
                         "annotations": [],
                         "type": "Json",
@@ -350,7 +350,7 @@
                     },
                     "dependsOn": [
                         "[parameters('factoryName')]",
-                        "[concat(variables('factoryId'), '/linkedServices/jll_demographics_blobstorage_linkedservice')]"
+                        "[concat(variables('factoryId'), '/linkedServices/demographics_blobstorage_linkedservice')]"
                     ]
                 },
                 {
@@ -359,7 +359,7 @@
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "linkedServiceName": {
-                            "referenceName": "jll_demographics_blobstorage_linkedservice",
+                            "referenceName": "demographics_blobstorage_linkedservice",
                             "type": "LinkedServiceReference"
                         },
                         "parameters": {
@@ -374,7 +374,7 @@
                             }
                         },
                         "folder": {
-                            "name": "JLL/Demographics-Dataset/Sources"
+                            "name": "Demographics-Dataset/Sources"
                         },
                         "annotations": [],
                         "type": "DelimitedText",
@@ -428,7 +428,7 @@
                     },
                     "dependsOn": [
                         "[parameters('factoryName')]",
-                        "[concat(variables('factoryId'), '/linkedServices/jll_demographics_blobstorage_linkedservice')]"
+                        "[concat(variables('factoryId'), '/linkedServices/demographics_blobstorage_linkedservice')]"
                     ]
                 },
                 {
@@ -438,10 +438,10 @@
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "folder": {
-                            "name": "JLL/Demographics-Dataset/Sinks"
+                            "name": "Demographics-Dataset/Sinks"
                         },
                         "linkedServiceName": {
-                            "referenceName": "jll_demographics_sql_linkedservice",
+                            "referenceName": "demographics_sql_linkedservice",
                             "type": "LinkedServiceReference"
                         },
                         "annotations": [],
@@ -449,12 +449,12 @@
                         "schema": [],
                         "typeProperties": {
                             "schema": "",
-                            "table": "jll_demographics"
+                            "table": "demographics"
                         }
                     },
                     "dependsOn": [
                         "[parameters('factoryName')]",
-                        "[concat(variables('factoryId'), '/linkedServices/jll_demographics_sql_linkedservice')]"
+                        "[concat(variables('factoryId'), '/linkedServices/demographics_sql_linkedservice')]"
                     ]
                 },
                 {
@@ -463,10 +463,10 @@
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "folder": {
-                            "name": "JLL/Demographics-Dataset/Schema"
+                            "name": "Demographics-Dataset/Schema"
                         },
                         "linkedServiceName": {
-                            "referenceName": "jll_demographics_blobstorage_linkedservice",
+                            "referenceName": "demographics_blobstorage_linkedservice",
                             "type": "LinkedServiceReference"
                         },
                         "annotations": [],
@@ -486,7 +486,7 @@
                     },
                     "dependsOn": [
                         "[parameters('factoryName')]",
-                        "[concat(variables('factoryId'), '/linkedServices/jll_demographics_blobstorage_linkedservice')]"
+                        "[concat(variables('factoryId'), '/linkedServices/demographics_blobstorage_linkedservice')]"
                     ]
                 },
                 {
@@ -495,11 +495,11 @@
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "linkedServiceName": {
-                            "referenceName": "jll_demographics_blobstorage_linkedservice",
+                            "referenceName": "demographics_blobstorage_linkedservice",
                             "type": "LinkedServiceReference"
                         },
                         "folder": {
-                            "name": "JLL/Demographics-Dataset/Schema"
+                            "name": "Demographics-Dataset/Schema"
                         },
                         "annotations": [],
                         "type": "DelimitedText",
@@ -518,7 +518,7 @@
                     },
                     "dependsOn": [
                         "[parameters('factoryName')]",
-                        "[concat(variables('factoryId'), '/linkedServices/jll_demographics_blobstorage_linkedservice')]"
+                        "[concat(variables('factoryId'), '/linkedServices/demographics_blobstorage_linkedservice')]"
                     ]
                 },
                 {
@@ -527,11 +527,11 @@
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "linkedServiceName": {
-                            "referenceName": "jll_demographics_blobstorage_linkedservice",
+                            "referenceName": "demographics_blobstorage_linkedservice",
                             "type": "LinkedServiceReference"
                         },
                         "folder": {
-                            "name": "JLL/Demographics-Dataset/Schema"
+                            "name": "Demographics-Dataset/Schema"
                         },
                         "annotations": [],
                         "type": "DelimitedText",
@@ -539,7 +539,7 @@
                             "location": {
                                 "type": "AzureBlobStorageLocation",
                                 "fileName": "demographics_raw_data.csv",
-                                "folderPath": "raw/JLL/demographics_data/latest",
+                                "folderPath": "raw/demographics_data/latest",
                                 "container": "public"
                             },
                             "columnDelimiter": ",",
@@ -551,7 +551,7 @@
                     },
                     "dependsOn": [
                         "[parameters('factoryName')]",
-                        "[concat(variables('factoryId'), '/linkedServices/jll_demographics_blobstorage_linkedservice')]"
+                        "[concat(variables('factoryId'), '/linkedServices/demographics_blobstorage_linkedservice')]"
                     ]
                 },
                 {
@@ -561,11 +561,11 @@
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "linkedServiceName": {
-                            "referenceName": "jll_demographics_sql_linkedservice",
+                            "referenceName": "demographics_sql_linkedservice",
                             "type": "LinkedServiceReference"
                         },
                         "folder": {
-                            "name": "JLL/Demographics-Dataset/Schema"
+                            "name": "Demographics-Dataset/Schema"
                         },
                         "annotations": [],
                         "type": "AzureSqlTable",
@@ -577,7 +577,7 @@
                     },
                     "dependsOn": [
                         "[parameters('factoryName')]",
-                        "[concat(variables('factoryId'), '/linkedServices/jll_demographics_sql_linkedservice')]"
+                        "[concat(variables('factoryId'), '/linkedServices/demographics_sql_linkedservice')]"
                     ]
                 },
                 {
@@ -587,11 +587,11 @@
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "linkedServiceName": {
-                            "referenceName": "jll_demographics_sql_linkedservice",
+                            "referenceName": "demographics_sql_linkedservice",
                             "type": "LinkedServiceReference"
                         },
                         "folder": {
-                            "name": "JLL/Demographics-Dataset/Schema"
+                            "name": "Demographics-Dataset/Schema"
                         },
                         "annotations": [],
                         "type": "AzureSqlTable",
@@ -603,7 +603,7 @@
                     },
                     "dependsOn": [
                         "[parameters('factoryName')]",
-                        "[concat(variables('factoryId'), '/linkedServices/jll_demographics_sql_linkedservice')]"
+                        "[concat(variables('factoryId'), '/linkedServices/demographics_sql_linkedservice')]"
                     ]
                 },
                 {
@@ -613,7 +613,7 @@
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "folder": {
-                            "name": "JLL"
+                            "name": "Demographics"
                         },
                         "type": "MappingDataFlow",
                         "typeProperties": {
@@ -711,7 +711,7 @@
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "folder": {
-                            "name": "JLL"
+                            "name": "Demographics"
                         },
                         "type": "MappingDataFlow",
                         "typeProperties": {
@@ -812,7 +812,7 @@
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'No')]",
-                    "name": "[concat(parameters('factoryName'), '/JLL_Demographics_Without_Sql_Sink')]",
+                    "name": "[concat(parameters('factoryName'), '/Demographics_Without_Sql_Sink')]",
                     "type": "Microsoft.DataFactory/factories/pipelines",
                     "apiVersion": "2018-06-01",
                     "properties": {
@@ -1642,11 +1642,11 @@
                             },
                             "rawBlobDirectory": {
                                 "type": "string",
-                                "defaultValue": "raw/JLL/demographics_data"
+                                "defaultValue": "raw/demographics_data"
                             },
                             "curatedBlobDirectory": {
                                 "type": "string",
-                                "defaultValue": "curated/JLL/demographics_data"
+                                "defaultValue": "curated/demographics_data"
                             },
                             "filename": {
                                 "type": "string",
@@ -1654,10 +1654,10 @@
                             }
                         },
                         "folder": {
-                            "name": "JLL/BlobStorageDataExtraction"
+                            "name": "Demographics/BlobStorageDataExtraction"
                         },
                         "annotations": [
-                            "jll_demographics"
+                            "demographics"
                         ],
                         "lastPublishTime": "2021-02-22T09:06:22Z"
                     },
@@ -1674,7 +1674,7 @@
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'Yes')]",
-                    "name": "[concat(parameters('factoryName'), '/JLL_Demographics_With_Sql_Sink')]",
+                    "name": "[concat(parameters('factoryName'), '/Demographics_With_Sql_Sink')]",
                     "type": "Microsoft.DataFactory/factories/pipelines",
                     "apiVersion": "2018-06-01",
                     "properties": {
@@ -2817,11 +2817,11 @@
                             },
                             "rawBlobDirectory": {
                                 "type": "string",
-                                "defaultValue": "raw/JLL/demographics_data"
+                                "defaultValue": "raw/demographics_data"
                             },
                             "curatedBlobDirectory": {
                                 "type": "string",
-                                "defaultValue": "curated/JLL/demographics_data"
+                                "defaultValue": "curated/demographics_data"
                             },
                             "filename": {
                                 "type": "string",
@@ -2842,10 +2842,10 @@
                             }
                         },
                         "folder": {
-                            "name": "JLL/BlobStorageDataExtraction"
+                            "name": "Demographics/BlobStorageAndSqlDataExtraction"
                         },
                         "annotations": [
-                            "jll_demographics"
+                            "demographics"
                         ],
                         "lastPublishTime": "2021-02-22T09:06:22Z"
                     },
@@ -2864,7 +2864,7 @@
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'Yes')]",
-                    "name": "[concat(parameters('factoryName'), '/JLL_Demographics_Trigger_With_Sql_Sink')]",
+                    "name": "[concat(parameters('factoryName'), '/Demographics_Trigger_With_Sql_Sink')]",
                     "type": "Microsoft.DataFactory/factories/triggers",
                     "apiVersion": "2018-06-01",
                     "properties": {
@@ -2873,7 +2873,7 @@
                         "pipelines": [
                             {
                                 "pipelineReference": {
-                                    "referenceName": "JLL_Demographics_With_Sql_Sink",
+                                    "referenceName": "Demographics_With_Sql_Sink",
                                     "type": "PipelineReference"
                                 }
                             }
@@ -2890,12 +2890,12 @@
                     },
                     "dependsOn": [
                         "[parameters('factoryName')]",
-                        "[concat(variables('factoryId'), '/pipelines/JLL_Demographics_With_Sql_Sink')]"
+                        "[concat(variables('factoryId'), '/pipelines/Demographics_With_Sql_Sink')]"
                     ]
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'No')]",
-                    "name": "[concat(parameters('factoryName'), '/JLL_Demographics_Trigger_Without_Sql_Sink')]",
+                    "name": "[concat(parameters('factoryName'), '/Demographics_Trigger_Without_Sql_Sink')]",
                     "type": "Microsoft.DataFactory/factories/triggers",
                     "apiVersion": "2018-06-01",
                     "properties": {
@@ -2904,7 +2904,7 @@
                         "pipelines": [
                             {
                                 "pipelineReference": {
-                                    "referenceName": "JLL_Demographics_Without_Sql_Sink",
+                                    "referenceName": "Demographics_Without_Sql_Sink",
                                     "type": "PipelineReference"
                                 }
                             }
@@ -2921,7 +2921,7 @@
                     },
                     "dependsOn": [
                         "[parameters('factoryName')]",
-                        "[concat(variables('factoryId'), '/pipelines/JLL_Demographics_Without_Sql_Sink')]"
+                        "[concat(variables('factoryId'), '/pipelines/Demographics_Without_Sql_Sink')]"
                     ]
                 },
                 {
@@ -2987,8 +2987,8 @@
                                             "name": "PipelineName",
                                             "operator": "Include",
                                             "values": [
-                                                "JLL_Demographics_Without_Sql_Sink",
-                                                "JLL_Demographics_With_Sql_Sink"
+                                                "Demographics_Without_Sql_Sink",
+                                                "Demographics_With_Sql_Sink"
                                             ]
                                         },
                                         {
@@ -3056,8 +3056,8 @@
                                             "name": "PipelineName",
                                             "operator": "Include",
                                             "values": [
-                                                "JLL_Demographics_Without_Sql_Sink",
-                                                "JLL_Demographics_With_Sql_Sink"
+                                                "Demographics_Without_Sql_Sink",
+                                                "Demographics_With_Sql_Sink"
                                             ]
                                         },
                                         {
@@ -3125,8 +3125,8 @@
                                             "name": "PipelineName",
                                             "operator": "Include",
                                             "values": [
-                                                "JLL_Demographics_Without_Sql_Sink",
-                                                "JLL_Demographics_With_Sql_Sink"
+                                                "Demographics_Without_Sql_Sink",
+                                                "Demographics_With_Sql_Sink"
                                             ]
                                         },
                                         {
@@ -3194,7 +3194,7 @@
                                             "name": "PipelineName",
                                             "operator": "Include",
                                             "values": [
-                                                "JLL_Demographics_With_Sql_Sink"
+                                                "Demographics_With_Sql_Sink"
                                             ]
                                         },
                                         {
@@ -3226,7 +3226,7 @@
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'No')]",
-                    "name": "jllDemographicsWithoutSqlPipelineFailedAlertConfig",
+                    "name": "DemographicsWithoutSqlPipelineFailedAlertConfig",
                     "type": "Microsoft.Insights/metricAlerts",
                     "location": "global",
                     "apiVersion": "2018-03-01",
@@ -3248,7 +3248,7 @@
                                         {
                                             "name": "Name",
                                             "operator": "Include",
-                                            "values": [ "JLL_Demographics_Without_Sql_Sink" ]
+                                            "values": [ "Demographics_Without_Sql_Sink" ]
                                         },
                                         {
                                             "name": "FailureType",
@@ -3275,7 +3275,7 @@
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'No')]",
-                    "name": "jllDemographicsWithoutSqlPipelineCancelledAlertConfig",
+                    "name": "DemographicsWithoutSqlPipelineCancelledAlertConfig",
                     "type": "Microsoft.Insights/metricAlerts",
                     "location": "global",
                     "apiVersion": "2018-03-01",
@@ -3297,7 +3297,7 @@
                                         {
                                             "name": "Name",
                                             "operator": "Include",
-                                            "values": [ "JLL_Demographics_Without_Sql_Sink" ]
+                                            "values": [ "Demographics_Without_Sql_Sink" ]
                                         }
                                     ],
                                     "operator": "GreaterThanOrEqual",
@@ -3319,7 +3319,7 @@
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'No')]",
-                    "name": "jllDemographicsWithoutSqlActivityFailedAlertConfig",
+                    "name": "DemographicsWithoutSqlActivityFailedAlertConfig",
                     "type": "Microsoft.Insights/metricAlerts",
                     "location": "global",
                     "apiVersion": "2018-03-01",
@@ -3351,7 +3351,7 @@
                                         {
                                             "name": "PipelineName",
                                             "operator": "Include",
-                                            "values": [ "JLL_Demographics_Without_Sql_Sink" ]
+                                            "values": [ "Demographics_Without_Sql_Sink" ]
                                         },
                                         {
                                             "name": "FailureType",
@@ -3378,7 +3378,7 @@
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'No')]",
-                    "name": "jllDemographicsWithoutSqlActivityCancelledAlertConfig",
+                    "name": "DemographicsWithoutSqlActivityCancelledAlertConfig",
                     "type": "Microsoft.Insights/metricAlerts",
                     "location": "global",
                     "apiVersion": "2018-03-01",
@@ -3410,7 +3410,7 @@
                                         {
                                             "name": "PipelineName",
                                             "operator": "Include",
-                                            "values": [ "JLL_Demographics_Without_Sql_Sink" ]
+                                            "values": [ "Demographics_Without_Sql_Sink" ]
                                         }
                                     ],
                                     "operator": "GreaterThanOrEqual",
@@ -3432,7 +3432,7 @@
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'No')]",
-                    "name": "jllDemographicsWithoutSqlTriggerCancelledAlertConfig",
+                    "name": "DemographicsWithoutSqlTriggerCancelledAlertConfig",
                     "type": "Microsoft.Insights/metricAlerts",
                     "location": "global",
                     "apiVersion": "2018-03-01",
@@ -3454,7 +3454,7 @@
                                         {
                                             "name": "Name",
                                             "operator": "Include",
-                                            "values": [ "JLL_Demographics_Trigger_Without_Sql_Sink" ]
+                                            "values": [ "Demographics_Trigger_Without_Sql_Sink" ]
                                         }
                                     ],
                                     "operator": "GreaterThanOrEqual",
@@ -3476,7 +3476,7 @@
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'No')]",
-                    "name": "jllDemographicsWithoutSqlTriggerFailedAlertConfig",
+                    "name": "DemographicsWithoutSqlTriggerFailedAlertConfig",
                     "type": "Microsoft.Insights/metricAlerts",
                     "location": "global",
                     "apiVersion": "2018-03-01",
@@ -3498,7 +3498,7 @@
                                         {
                                             "name": "Name",
                                             "operator": "Include",
-                                            "values": [ "JLL_Demographics_Trigger_Without_Sql_Sink" ]
+                                            "values": [ "Demographics_Trigger_Without_Sql_Sink" ]
                                         },
                                         {
                                             "name": "FailureType",
@@ -3554,12 +3554,12 @@
                             "values": [
                                 "[concat(resourceGroup().id,'/providers/Microsoft.DataFactory/factories/', parameters('factoryName'))]",
                                 "[concat(resourceGroup().id,'/providers/Microsoft.Insights/actionGroups/', 'NotificationAlertFromADF')]",
-                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'jllDemographicsWithoutSqlActivityFailedAlertConfig')]",
-                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'jllDemographicsWithoutSqlPipelineFailedAlertConfig')]",
-                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'jllDemographicsWithoutSqlTriggerFailedAlertConfig')]",
-                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'jllDemographicsWithoutSqlTriggerCancelledAlertConfig')]",
-                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'jllDemographicsWithoutSqlActivityCancelledAlertConfig')]",
-                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'jllDemographicsWithoutSqlPipelineCancelledAlertConfig')]",
+                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'DemographicsWithoutSqlActivityFailedAlertConfig')]",
+                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'DemographicsWithoutSqlPipelineFailedAlertConfig')]",
+                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'DemographicsWithoutSqlTriggerFailedAlertConfig')]",
+                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'DemographicsWithoutSqlTriggerCancelledAlertConfig')]",
+                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'DemographicsWithoutSqlActivityCancelledAlertConfig')]",
+                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'DemographicsWithoutSqlPipelineCancelledAlertConfig')]",
                                 "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'SourceCurrentSchemaWithLessColumnsAlert')]",
                                 "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'SourceCurrentSchemaWithMoreColumnsAlert')]",
                                 "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'SourceCurrentSchemaWithSameNumberOfColumnsButDifferentNamesOrArrangementAlert')]",
@@ -3570,18 +3570,18 @@
                     "dependsOn": [
                         "[parameters('factoryName')]",
                         "NotificationAlertFromADF",
-                        "jllDemographicsWithoutSqlPipelineFailedAlertConfig",
-                        "jllDemographicsWithoutSqlActivityFailedAlertConfig",
-                        "jllDemographicsWithoutSqlTriggerFailedAlertConfig",
-                        "jllDemographicsWithoutSqlTriggerCancelledAlertConfig",
-                        "jllDemographicsWithoutSqlActivityCancelledAlertConfig",
-                        "jllDemographicsWithoutSqlPipelineCancelledAlertConfig"
+                        "DemographicsWithoutSqlPipelineFailedAlertConfig",
+                        "DemographicsWithoutSqlActivityFailedAlertConfig",
+                        "DemographicsWithoutSqlTriggerFailedAlertConfig",
+                        "DemographicsWithoutSqlTriggerCancelledAlertConfig",
+                        "DemographicsWithoutSqlActivityCancelledAlertConfig",
+                        "DemographicsWithoutSqlPipelineCancelledAlertConfig"
 
                     ]
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'Yes')]",
-                    "name": "jllDemographicsWithSqlPipelineFailedAlertConfig",
+                    "name": "DemographicsWithSqlPipelineFailedAlertConfig",
                     "type": "Microsoft.Insights/metricAlerts",
                     "location": "global",
                     "apiVersion": "2018-03-01",
@@ -3603,7 +3603,7 @@
                                         {
                                             "name": "Name",
                                             "operator": "Include",
-                                            "values": [ "JLL_Demographics_With_Sql_Sink" ]
+                                            "values": [ "Demographics_With_Sql_Sink" ]
                                         },
                                         {
                                             "name": "FailureType",
@@ -3630,7 +3630,7 @@
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'Yes')]",
-                    "name": "jllDemographicsWithSqlPipelineCancelledAlertConfig",
+                    "name": "DemographicsWithSqlPipelineCancelledAlertConfig",
                     "type": "Microsoft.Insights/metricAlerts",
                     "location": "global",
                     "apiVersion": "2018-03-01",
@@ -3652,7 +3652,7 @@
                                         {
                                             "name": "Name",
                                             "operator": "Include",
-                                            "values": [ "JLL_Demographics_With_Sql_Sink" ]
+                                            "values": [ "Demographics_With_Sql_Sink" ]
                                         }
                                     ],
                                     "operator": "GreaterThanOrEqual",
@@ -3674,7 +3674,7 @@
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'Yes')]",
-                    "name": "jllDemographicsWithSqlActivityFailedAlertConfig",
+                    "name": "DemographicsWithSqlActivityFailedAlertConfig",
                     "type": "Microsoft.Insights/metricAlerts",
                     "location": "global",
                     "apiVersion": "2018-03-01",
@@ -3706,7 +3706,7 @@
                                         {
                                             "name": "PipelineName",
                                             "operator": "Include",
-                                            "values": [ "JLL_Demographics_With_Sql_Sink" ]
+                                            "values": [ "Demographics_With_Sql_Sink" ]
                                         },
                                         {
                                             "name": "FailureType",
@@ -3733,7 +3733,7 @@
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'Yes')]",
-                    "name": "jllDemographicsWithSqlActivityCancelledAlertConfig",
+                    "name": "DemographicsWithSqlActivityCancelledAlertConfig",
                     "type": "Microsoft.Insights/metricAlerts",
                     "location": "global",
                     "apiVersion": "2018-03-01",
@@ -3765,7 +3765,7 @@
                                         {
                                             "name": "PipelineName",
                                             "operator": "Include",
-                                            "values": [ "JLL_Demographics_With_Sql_Sink" ]
+                                            "values": [ "Demographics_With_Sql_Sink" ]
                                         }
                                     ],
                                     "operator": "GreaterThanOrEqual",
@@ -3787,7 +3787,7 @@
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'Yes')]",
-                    "name": "jllDemographicsWithSqlTriggerFailedAlertConfig",
+                    "name": "DemographicsWithSqlTriggerFailedAlertConfig",
                     "type": "Microsoft.Insights/metricAlerts",
                     "location": "global",
                     "apiVersion": "2018-03-01",
@@ -3809,7 +3809,7 @@
                                         {
                                             "name": "Name",
                                             "operator": "Include",
-                                            "values": [ "JLL_Demographics_Trigger_With_Sql_Sink" ]
+                                            "values": [ "Demographics_Trigger_With_Sql_Sink" ]
                                         },
                                         {
                                             "name": "FailureType",
@@ -3836,7 +3836,7 @@
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'Yes')]",
-                    "name": "jllDemographicsWithSqlTriggerCancelledAlertConfig",
+                    "name": "DemographicsWithSqlTriggerCancelledAlertConfig",
                     "type": "Microsoft.Insights/metricAlerts",
                     "location": "global",
                     "apiVersion": "2018-03-01",
@@ -3858,7 +3858,7 @@
                                         {
                                             "name": "Name",
                                             "operator": "Include",
-                                            "values": [ "JLL_Demographics_Trigger_With_Sql_Sink" ]
+                                            "values": [ "Demographics_Trigger_With_Sql_Sink" ]
                                         }
                                     ],
                                     "operator": "GreaterThanOrEqual",
@@ -3909,12 +3909,12 @@
                             "values": [
                                 "[concat(resourceGroup().id,'/providers/Microsoft.DataFactory/factories/', parameters('factoryName'))]",
                                 "[concat(resourceGroup().id,'/providers/Microsoft.Insights/actionGroups/', 'NotificationAlertFromADF')]",
-                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'jllDemographicsWithSqlActivityFailedAlertConfig')]",
-                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'jllDemographicsWithSqlPipelineFailedAlertConfig')]",
-                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'jllDemographicsWithSqlPipelineCancelledAlertConfig')]",
-                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'jllDemographicsWithSqlActivityCancelledAlertConfig')]",
-                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'jllDemographicsWithSqlTriggerFailedAlertConfig')]",
-                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'jllDemographicsWithSqlTriggerCancelledAlertConfig')]",
+                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'DemographicsWithSqlActivityFailedAlertConfig')]",
+                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'DemographicsWithSqlPipelineFailedAlertConfig')]",
+                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'DemographicsWithSqlPipelineCancelledAlertConfig')]",
+                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'DemographicsWithSqlActivityCancelledAlertConfig')]",
+                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'DemographicsWithSqlTriggerFailedAlertConfig')]",
+                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'DemographicsWithSqlTriggerCancelledAlertConfig')]",
                                 "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'SourceCurrentSchemaWithLessColumnsAlert')]",
                                 "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'SourceCurrentSchemaWithMoreColumnsAlert')]",
                                 "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'SourceCurrentSchemaWithSameNumberOfColumnsButDifferentNamesOrArrangementAlert')]",
@@ -3925,12 +3925,12 @@
                     "dependsOn": [
                         "[parameters('factoryName')]",
                         "NotificationAlertFromADF",
-                        "jllDemographicsWithSqlPipelineFailedAlertConfig",
-                        "jllDemographicsWithSqlActivityFailedAlertConfig",
-                        "jllDemographicsWithSqlActivityCancelledAlertConfig",
-                        "jllDemographicsWithSqlPipelineCancelledAlertConfig",
-                        "jllDemographicsWithSqlTriggerCancelledAlertConfig",
-                        "jllDemographicsWithSqlTriggerFailedAlertConfig"
+                        "DemographicsWithSqlPipelineFailedAlertConfig",
+                        "DemographicsWithSqlActivityFailedAlertConfig",
+                        "DemographicsWithSqlActivityCancelledAlertConfig",
+                        "DemographicsWithSqlPipelineCancelledAlertConfig",
+                        "DemographicsWithSqlTriggerCancelledAlertConfig",
+                        "DemographicsWithSqlTriggerFailedAlertConfig"
                     ]
                 }
 
