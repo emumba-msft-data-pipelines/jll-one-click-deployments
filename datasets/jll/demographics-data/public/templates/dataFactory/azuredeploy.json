@@ -3272,7 +3272,7 @@
                                             "name": "Name",
                                             "operator": "Include",
                                             "values": [
-                                                "Alert Change In Data Type"
+                                                "WaitTrueChangedDataType"
                                             ]
                                         },
                                         {
