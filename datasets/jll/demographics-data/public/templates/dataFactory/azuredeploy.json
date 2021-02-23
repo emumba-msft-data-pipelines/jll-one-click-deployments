@@ -3786,7 +3786,7 @@
                                         {
                                             "name": "Name",
                                             "operator": "Include",
-                                            "values": [ "To Raw Partition", "To Raw Overwrite", "Reformat Columns", "JSONL to JSON LATEST", "JSONL to JSON" ]
+                                            "values": [ "To Raw Partition", "To Raw Overwrite", "Reformat Columns", "JSONL to JSON LATEST", "JSONL to JSON", "Create Schema if not exists" ]
                                         },
                                         {
                                             "name": "PipelineName",
@@ -3845,7 +3845,7 @@
                                         {
                                             "name": "Name",
                                             "operator": "Include",
-                                            "values": [ "To Raw Partition", "To Raw Overwrite", "Reformat Columns", "JSONL to JSON LATEST", "JSONL to JSON" ]
+                                            "values": [ "To Raw Partition", "To Raw Overwrite", "Reformat Columns", "JSONL to JSON LATEST", "JSONL to JSON", "Create Schema if not exists" ]
                                         },
                                         {
                                             "name": "PipelineName",
