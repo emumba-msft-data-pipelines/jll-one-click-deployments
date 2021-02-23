@@ -440,6 +440,16 @@
                         "folder": {
                             "name": "Demographics-Dataset/Sinks"
                         },
+                        "parameters": {
+                            "tablename": {
+                                "type": "string",
+                                "defaultValue": "curatedTable"
+                            },
+                            "schemaName": {
+                                "type": "string",
+                                "defaultValue": "demographics"
+                            }
+                        },
                         "linkedServiceName": {
                             "referenceName": "demographics_sql_linkedservice",
                             "type": "LinkedServiceReference"
@@ -448,8 +458,14 @@
                         "type": "AzureSqlTable",
                         "schema": [],
                         "typeProperties": {
-                            "schema": "",
-                            "table": "demographics"
+                            "schema": {
+                                "value": "@dataset().schemaName",
+                                "type": "Expression"
+                            },
+                            "table": {
+                                "value": "@dataset().tableName",
+                                "type": "Expression"
+                            }
                         }
                     },
                     "dependsOn": [
@@ -564,6 +580,16 @@
                             "referenceName": "demographics_sql_linkedservice",
                             "type": "LinkedServiceReference"
                         },
+                        "parameters": {
+                            "PreviousTableName": {
+                                "type": "string",
+                                "defaultValue": "previousTable"
+                            },
+                            "schemaName": {
+                                "type": "string",
+                                "defaultValue": "demographics"
+                            }
+                        },
                         "folder": {
                             "name": "Demographics-Dataset/Schema"
                         },
@@ -571,8 +597,14 @@
                         "type": "AzureSqlTable",
                         "schema": [],
                         "typeProperties": {
-                            "schema": "save_schema",
-                            "table": "detect_datatype_change"
+                            "schema": {
+                                "value": "@dataset().schemaName",
+                                "type": "Expression"
+                            },
+                            "table": {
+                                "value": "@dataset().PreviousTableName",
+                                "type": "Expression"
+                            }
                         }
                     },
                     "dependsOn": [
@@ -590,6 +622,16 @@
                             "referenceName": "demographics_sql_linkedservice",
                             "type": "LinkedServiceReference"
                         },
+                        "parameters": {
+                            "previousTableSaveName": {
+                                "type": "string",
+                                "defaultValue": "previousTableSaveCopy"
+                            },
+                            "schemaName": {
+                                "type": "string",
+                                "defaultValue": "demographics"
+                            }
+                        },
                         "folder": {
                             "name": "Demographics-Dataset/Schema"
                         },
@@ -597,8 +639,56 @@
                         "type": "AzureSqlTable",
                         "schema": [],
                         "typeProperties": {
-                            "schema": "retain_schema",
-                            "table": "compare_datatype_change"
+                            "schema": {
+                                "value": "@dataset().schemaName",
+                                "type": "Expression"
+                            },
+                            "table": {
+                                "value": "@dataset().previousTableSaveName",
+                                "type": "Expression"
+                            }
+                        }
+                    },
+                    "dependsOn": [
+                        "[parameters('factoryName')]",
+                        "[concat(variables('factoryId'), '/linkedServices/demographics_sql_linkedservice')]"
+                    ]
+                },
+                {
+                    "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'Yes')]",
+                    "name": "[concat(parameters('factoryName'), '/save_store_proc_result_table')]",
+                    "type": "Microsoft.DataFactory/factories/datasets",
+                    "apiVersion": "2018-06-01",
+                    "properties": {
+                        "linkedServiceName": {
+                            "referenceName": "demographics_sql_linkedservice",
+                            "type": "LinkedServiceReference"
+                        },
+                        "parameters": {
+                            "storeProcTable": {
+                                "type": "string",
+                                "defaultValue": "storeProcTable"
+                            },
+                            "schemaName": {
+                                "type": "string",
+                                "defaultValue": "demographics"
+                            }
+                        },
+                        "folder": {
+                            "name": "Demographics-Dataset/Schema"
+                        },
+                        "annotations": [],
+                        "type": "AzureSqlTable",
+                        "schema": [],
+                        "typeProperties": {
+                            "schema": {
+                                "value": "@dataset().schemaName",
+                                "type": "Expression"
+                            },
+                            "table": {
+                                "value": "@dataset().storeProcTable",
+                                "type": "Expression"
+                            }
                         }
                     },
                     "dependsOn": [
@@ -798,7 +888,7 @@
                                     "name": "FillEmptyFields"
                                 }
                             ],
-                            "script": "parameters{\n\tfilename as string ('demographics_curated_data'),\n\trunid as string ('runtime_guid')\n}\nsource(output(\n\t\t{Data as of} as date 'MM/dd/yyyy',\n\t\t{Start Date} as date 'MM/dd/yyyy',\n\t\t{End Date} as date 'MM/dd/yyyy',\n\t\tState as string,\n\t\tSex as string,\n\t\t{Age group} as string,\n\t\t{COVID-19 Deaths} as long,\n\t\t{Total Deaths} as long,\n\t\t{Pneumonia Deaths} as long,\n\t\t{Pneumonia and COVID-19 Deaths} as long,\n\t\t{Influenza Deaths} as long,\n\t\t{Pneumonia, Influenza, or COVID-19 Deaths} as long,\n\t\tFootnote as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'lineage',\n\tinferDriftedColumnTypes: true) ~> sourceCSV\nFillEmptyFields select(mapColumn(\n\t\tLoad_Date,\n\t\tLoad_Time,\n\t\tData_As_Of,\n\t\tStart_Date,\n\t\tEnd_Date,\n\t\tState,\n\t\tSex,\n\t\tAge_Group,\n\t\tCovid_19_Deaths,\n\t\tTotal_Deaths,\n\t\tPneumonia_Deaths,\n\t\tPneumonia_And_Covid_19_Deaths,\n\t\tInfluenza_Deaths,\n\t\tPneumonia_Influenza_Or_Covid_19_Deaths\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> DropLineageColumn\nsourceCSV derive(Load_time = currentTimestamp(),\n\t\tLoad_date = currentDate()) ~> AddNewColumns\nAddNewColumns select(mapColumn(\n\t\teach(patternMatch(`.*`),\n\t\t\tregexReplace($$,'-','_') = $$)\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RemoveDashes\nRemoveDashes select(mapColumn(\n\t\teach(patternMatch(`.*`),\n\t\t\tregexReplace($$,' ','_') = $$)\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RemoveSpaces\nRemoveSpaces select(mapColumn(\n\t\teach(patternMatch(`.*`),\n\t\t\tregexReplace($$,',','') = $$)\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RemoveCommas\nRemoveCommas select(mapColumn(\n\t\teach(patternMatch(`.*`),\n\t\t\tregexReplace(initCap(regexReplace($$,'_',' ')),' ','_') = $$)\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> CapatalizeInitials\nCapatalizeInitials derive(Influenza_Deaths = iifNull(Influenza_Deaths, toLong(0), Influenza_Deaths),\n\t\tCovid_19_Deaths = iifNull(Covid_19_Deaths, toLong(0), Covid_19_Deaths),\n\t\tTotal_Deaths = iifNull(Total_Deaths, toLong(0), Total_Deaths),\n\t\tPneumonia_Deaths = iifNull(Pneumonia_Deaths, toLong(0), Pneumonia_Deaths),\n\t\tPneumonia_Influenza_Or_Covid_19_Deaths = iifNull(Pneumonia_Influenza_Or_Covid_19_Deaths, toLong(0), Pneumonia_Influenza_Or_Covid_19_Deaths),\n\t\tPneumonia_And_Covid_19_Deaths = iifNull(Pneumonia_And_Covid_19_Deaths, toLong(0), Pneumonia_And_Covid_19_Deaths)) ~> FillEmptyFields\nDropLineageColumn sink(input(\n\t\t{Data as of} as string,\n\t\t{Start Date} as string,\n\t\t{End Date} as string,\n\t\tState as string,\n\t\tSex as string,\n\t\t{Age group} as string,\n\t\t{COVID-19 Deaths} as string,\n\t\t{Total Deaths} as string,\n\t\t{Pneumonia Deaths} as string,\n\t\t{Pneumonia and COVID-19 Deaths} as string,\n\t\t{Influenza Deaths} as string,\n\t\t{Pneumonia, Influenza, or COVID-19 Deaths} as string,\n\t\tFootnote as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:[(concat($filename, '.csv'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SinkLatestCSV\nDropLineageColumn sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:[(concat($filename, '.jsonl'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sinkLatestJsonl\nDropLineageColumn sink(input(\n\t\t{Data as of} as string,\n\t\t{Start Date} as string,\n\t\t{End Date} as string,\n\t\tState as string,\n\t\tSex as string,\n\t\t{Age group} as string,\n\t\t{COVID-19 Deaths} as string,\n\t\t{Total Deaths} as string,\n\t\t{Pneumonia Deaths} as string,\n\t\t{Pneumonia and COVID-19 Deaths} as string,\n\t\t{Influenza Deaths} as string,\n\t\t{Pneumonia, Influenza, or COVID-19 Deaths} as string,\n\t\tFootnote as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:[(concat($filename,'_', $runid,'.csv'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SinkCSV\nDropLineageColumn sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:[(concat($filename,'_', $runid,'.jsonl'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sinkJsonl\nDropLineageColumn sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:[(concat($filename, '.parquet'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sinkLatestParquet\nDropLineageColumn sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:[(concat($filename,'_', $runid,'.parquet'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sinkParquet\nDropLineageColumn sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sinkSQL"
+                            "script": "parameters{\n\tfilename as string ('demographics_curated_data'),\n\trunid as string ('runtime_guid')\n}\nsource(output(\n\t\t{Data as of} as date 'MM/dd/yyyy',\n\t\t{Start Date} as date 'MM/dd/yyyy',\n\t\t{End Date} as date 'MM/dd/yyyy',\n\t\tState as string,\n\t\tSex as string,\n\t\t{Age group} as string,\n\t\t{COVID-19 Deaths} as long,\n\t\t{Total Deaths} as long,\n\t\t{Pneumonia Deaths} as long,\n\t\t{Pneumonia and COVID-19 Deaths} as long,\n\t\t{Influenza Deaths} as long,\n\t\t{Pneumonia, Influenza, or COVID-19 Deaths} as long,\n\t\tFootnote as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'lineage',\n\tinferDriftedColumnTypes: true) ~> sourceCSV\nFillEmptyFields select(mapColumn(\n\t\tLoad_Date,\n\t\tLoad_Time,\n\t\tData_As_Of,\n\t\tStart_Date,\n\t\tEnd_Date,\n\t\tState,\n\t\tSex,\n\t\tAge_Group,\n\t\tCovid_19_Deaths,\n\t\tTotal_Deaths,\n\t\tPneumonia_Deaths,\n\t\tPneumonia_And_Covid_19_Deaths,\n\t\tInfluenza_Deaths,\n\t\tPneumonia_Influenza_Or_Covid_19_Deaths\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> DropLineageColumn\nsourceCSV derive(Load_time = currentTimestamp(),\n\t\tLoad_date = currentDate()) ~> AddNewColumns\nAddNewColumns select(mapColumn(\n\t\teach(patternMatch(`.*`),\n\t\t\tregexReplace($$,'-','_') = $$)\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RemoveDashes\nRemoveDashes select(mapColumn(\n\t\teach(patternMatch(`.*`),\n\t\t\tregexReplace($$,' ','_') = $$)\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RemoveSpaces\nRemoveSpaces select(mapColumn(\n\t\teach(patternMatch(`.*`),\n\t\t\tregexReplace($$,',','') = $$)\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RemoveCommas\nRemoveCommas select(mapColumn(\n\t\teach(patternMatch(`.*`),\n\t\t\tregexReplace(initCap(regexReplace($$,'_',' ')),' ','_') = $$)\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> CapatalizeInitials\nCapatalizeInitials derive(Influenza_Deaths = iifNull(Influenza_Deaths, toLong(0), Influenza_Deaths),\n\t\tCovid_19_Deaths = iifNull(Covid_19_Deaths, toLong(0), Covid_19_Deaths),\n\t\tTotal_Deaths = iifNull(Total_Deaths, toLong(0), Total_Deaths),\n\t\tPneumonia_Deaths = iifNull(Pneumonia_Deaths, toLong(0), Pneumonia_Deaths),\n\t\tPneumonia_Influenza_Or_Covid_19_Deaths = iifNull(Pneumonia_Influenza_Or_Covid_19_Deaths, toLong(0), Pneumonia_Influenza_Or_Covid_19_Deaths),\n\t\tPneumonia_And_Covid_19_Deaths = iifNull(Pneumonia_And_Covid_19_Deaths, toLong(0), Pneumonia_And_Covid_19_Deaths)) ~> FillEmptyFields\nDropLineageColumn sink(input(\n\t\t{Data as of} as string,\n\t\t{Start Date} as string,\n\t\t{End Date} as string,\n\t\tState as string,\n\t\tSex as string,\n\t\t{Age group} as string,\n\t\t{COVID-19 Deaths} as string,\n\t\t{Total Deaths} as string,\n\t\t{Pneumonia Deaths} as string,\n\t\t{Pneumonia and COVID-19 Deaths} as string,\n\t\t{Influenza Deaths} as string,\n\t\t{Pneumonia, Influenza, or COVID-19 Deaths} as string,\n\t\tFootnote as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:[(concat($filename, '.csv'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SinkLatestCSV\nDropLineageColumn sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:[(concat($filename, '.jsonl'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sinkLatestJsonl\nDropLineageColumn sink(input(\n\t\t{Data as of} as string,\n\t\t{Start Date} as string,\n\t\t{End Date} as string,\n\t\tState as string,\n\t\tSex as string,\n\t\t{Age group} as string,\n\t\t{COVID-19 Deaths} as string,\n\t\t{Total Deaths} as string,\n\t\t{Pneumonia Deaths} as string,\n\t\t{Pneumonia and COVID-19 Deaths} as string,\n\t\t{Influenza Deaths} as string,\n\t\t{Pneumonia, Influenza, or COVID-19 Deaths} as string,\n\t\tFootnote as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:[(concat($filename,'_', $runid,'.csv'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SinkCSV\nDropLineageColumn sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:[(concat($filename,'_', $runid,'.jsonl'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sinkJsonl\nDropLineageColumn sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:[(concat($filename, '.parquet'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sinkLatestParquet\nDropLineageColumn sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:[(concat($filename,'_', $runid,'.parquet'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sinkParquet\nDropLineageColumn sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sinkSQL"
                         }
                     },
                     "dependsOn": [
@@ -2484,13 +2574,13 @@
                                 }
                             },
                             {
-                                "name": "Get_Metadata_Of_Current_Table",
-                                "type": "GetMetadata",
+                                "name": "Sql Data Type change detection",
+                                "type": "SqlServerStoredProcedure",
                                 "dependsOn": [
                                     {
                                         "activity": "Reformat Columns",
                                         "dependencyConditions": [
-                                            "Succeeded"
+                                            "Completed"
                                         ]
                                     }
                                 ],
@@ -2503,25 +2593,21 @@
                                 },
                                 "userProperties": [],
                                 "typeProperties": {
-                                    "dataset": {
-                                        "referenceName": "sql_sink_dataset",
-                                        "type": "DatasetReference",
-                                        "parameters": {}
-                                    },
-                                    "fieldList": [
-                                        "columnCount",
-                                        "structure"
-                                    ]
+                                    "storedProcedureName": "[demographics].[DataTypeChangedProc]"
+                                },
+                                "linkedServiceName": {
+                                    "referenceName": "demographics_sql_linkedservice",
+                                    "type": "LinkedServiceReference"
                                 }
                             },
                             {
-                                "name": "Get_Metadata_Of_Previous_Table",
-                                "type": "GetMetadata",
+                                "name": "Get Changed Data Type Columns",
+                                "type": "Lookup",
                                 "dependsOn": [
                                     {
-                                        "activity": "Reformat Columns",
+                                        "activity": "Sql Data Type change detection",
                                         "dependencyConditions": [
-                                            "Succeeded"
+                                            "Completed"
                                         ]
                                     }
                                 ],
@@ -2534,126 +2620,32 @@
                                 },
                                 "userProperties": [],
                                 "typeProperties": {
+                                    "source": {
+                                        "type": "AzureSqlSource",
+                                        "sqlReaderQuery": {
+                                            "value": "select * from demographics.storeProcTable",
+                                            "type": "Expression"
+                                        },
+                                        "queryTimeout": "02:00:00",
+                                        "partitionOption": "None"
+                                    },
                                     "dataset": {
-                                        "referenceName": "save_sql_schema_to_detect_datatype_change",
+                                        "referenceName": "save_store_proc_result_table",
                                         "type": "DatasetReference",
-                                        "parameters": {}
-                                    },
-                                    "fieldList": [
-                                        "columnCount",
-                                        "structure"
-                                    ]
-                                }
-                            },
-                            {
-                                "name": "Compare Data Type",
-                                "type": "Until",
-                                "dependsOn": [
-                                    {
-                                        "activity": "Get_Metadata_Of_Current_Table",
-                                        "dependencyConditions": [
-                                            "Completed"
-                                        ]
-                                    },
-                                    {
-                                        "activity": "Get_Metadata_Of_Previous_Table",
-                                        "dependencyConditions": [
-                                            "Completed"
-                                        ]
-                                    }
-                                ],
-                                "userProperties": [],
-                                "typeProperties": {
-                                    "expression": {
-                                        "value": "@equals(int(variables('index')),min(sub(activity('Get_Metadata_Of_Current_Table').output.columnCount,1),sub(activity('Get_Metadata_Of_Previous_Table').output.columnCount,1)))",
-                                        "type": "Expression"
-                                    },
-                                    "activities": [
-                                        {
-                                            "name": "Increment",
-                                            "type": "SetVariable",
-                                            "dependsOn": [],
-                                            "userProperties": [],
-                                            "typeProperties": {
-                                                "variableName": "increment",
-                                                "value": {
-                                                    "value": "@string(add(int(variables('index')),1))",
-                                                    "type": "Expression"
-                                                }
-                                            }
-                                        },
-                                        {
-                                            "name": "Index",
-                                            "type": "SetVariable",
-                                            "dependsOn": [
-                                                {
-                                                    "activity": "Increment",
-                                                    "dependencyConditions": [
-                                                        "Succeeded"
-                                                    ]
-                                                }
-                                            ],
-                                            "userProperties": [],
-                                            "typeProperties": {
-                                                "variableName": "index",
-                                                "value": {
-                                                    "value": "@variables('increment')",
-                                                    "type": "Expression"
-                                                }
-                                            }
-                                        },
-                                        {
-                                            "name": "Check Data Type Change",
-                                            "type": "IfCondition",
-                                            "dependsOn": [
-                                                {
-                                                    "activity": "Index",
-                                                    "dependencyConditions": [
-                                                        "Succeeded"
-                                                    ]
-                                                }
-                                            ],
-                                            "userProperties": [],
-                                            "typeProperties": {
-                                                "expression": {
-                                                    "value": "@and(equals(activity('Get_Metadata_Of_Current_Table').output.structure[int(variables('index'))].physicalName,activity('Get_Metadata_Of_Previous_Table').output.structure[int(variables('index'))].physicalName),not(equals(activity('Get_Metadata_Of_Current_Table').output.structure[int(variables('index'))].physicalType,activity('Get_Metadata_Of_Previous_Table').output.structure[int(variables('index'))].physicalType)))",
-                                                    "type": "Expression"
-                                                },
-                                                "ifFalseActivities": [
-                                                    {
-                                                        "name": "Wait And Continue 4",
-                                                        "type": "Wait",
-                                                        "dependsOn": [],
-                                                        "userProperties": [],
-                                                        "typeProperties": {
-                                                            "waitTimeInSeconds": 1
-                                                        }
-                                                    }
-                                                ],
-                                                "ifTrueActivities": [
-                                                    {
-                                                        "name": "Change In Data Type",
-                                                        "type": "SetVariable",
-                                                        "dependsOn": [],
-                                                        "userProperties": [],
-                                                        "typeProperties": {
-                                                            "variableName": "dataTypeChange",
-                                                            "value": "True"
-                                                        }
-                                                    }
-                                                ]
-                                            }
+                                        "parameters": {
+                                            "storeProcTable": "storeProcTable",
+                                            "schemaName": "demographics"
                                         }
-                                    ],
-                                    "timeout": "7.00:00:00"
+                                    },
+                                    "firstRowOnly": false
                                 }
                             },
                             {
-                                "name": "Alert If Change In Data Type",
+                                "name": "IfDataTypeChangedAlert",
                                 "type": "IfCondition",
                                 "dependsOn": [
                                     {
-                                        "activity": "Compare Data Type",
+                                        "activity": "Get Changed Data Type Columns",
                                         "dependencyConditions": [
                                             "Completed"
                                         ]
@@ -2662,12 +2654,12 @@
                                 "userProperties": [],
                                 "typeProperties": {
                                     "expression": {
-                                        "value": "@equals(variables('dataTypeChange'),'True')",
+                                        "value": "@greater(activity('Get Changed Data Type Columns').output.count,0)",
                                         "type": "Expression"
                                     },
                                     "ifFalseActivities": [
                                         {
-                                            "name": "Wait And Continue 5",
+                                            "name": "WaitFalseNotChangedDataType",
                                             "type": "Wait",
                                             "dependsOn": [],
                                             "userProperties": [],
@@ -2678,7 +2670,7 @@
                                     ],
                                     "ifTrueActivities": [
                                         {
-                                            "name": "Alert Change In Data Type",
+                                            "name": "WaitTrueChangedDataType",
                                             "type": "Wait",
                                             "dependsOn": [],
                                             "userProperties": [],
@@ -2687,6 +2679,98 @@
                                             }
                                         }
                                     ]
+                                }
+                            },
+                            {
+                                "name": "CreateStoreProcedureIfNotExists",
+                                "type": "Lookup",
+                                "dependsOn": [
+                                    {
+                                        "activity": "CovidTracking_Dataflow",
+                                        "dependencyConditions": [
+                                            "Completed"
+                                        ]
+                                    }
+                                ],
+                                "policy": {
+                                    "timeout": "7.00:00:00",
+                                    "retry": 3,
+                                    "retryIntervalInSeconds": 30,
+                                    "secureOutput": false,
+                                    "secureInput": false
+                                },
+                                "userProperties": [],
+                                "typeProperties": {
+                                    "source": {
+                                        "type": "AzureSqlSource",
+                                        "sqlReaderQuery": {
+                                            "value": "IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'demographics')\nBEGIN\nEXEC('CREATE SCHEMA demographics')\nEND\nIF NOT EXISTS (\n    select * \n    from sys.objects \n    WHERE object_id = OBJECT_ID(N'[demographics].[DataTypeChangedProc]')\n    )\nBEGIN\n    EXEC('CREATE PROCEDURE demographics.DataTypeChangedProc AS IF OBJECT_ID(''demographics.storeProcTable'', ''u'') IS NOT NULL DROP TABLE demographics.storeProcTable; CREATE TABLE demographics.storeProcTable( table1_name varchar(255), Column1_name varchar(255), DATA_TYPE1 varchar(255), table2_name varchar(255), Column2_name varchar(255), DATA_TYPE2 varchar(255) ); INSERT INTO demographics.storeProcTable SELECT c1.table_name, c1.COLUMN_NAME, c1.DATA_TYPE, c2.table_name, c2.COLUMN_NAME, c2.DATA_TYPE FROM [INFORMATION_SCHEMA].[COLUMNS] c1 INNER JOIN [INFORMATION_SCHEMA].[COLUMNS] c2 ON (c1.COLUMN_NAME = c2.COLUMN_NAME AND c1.data_type <> c2.DATA_TYPE) WHERE c1.table_name=''covidDataset'' AND c2.table_name = ''previousTable'';')\n    select Count(*) from sys.symmetric_keys;\nEND\n\nELSE\n\nBEGIN\n    select Count(*) from sys.symmetric_keys;\nEND",
+                                            "type": "Expression"
+                                        },
+                                        "queryTimeout": "02:00:00",
+                                        "partitionOption": "None"
+                                    },
+                                    "dataset": {
+                                        "referenceName": "save_store_proc_result_table",
+                                        "type": "DatasetReference",
+                                        "parameters": {
+                                            "storeProcTable": "storeProcTable",
+                                            "schemaName": "demographics"
+                                        }
+                                    },
+                                    "firstRowOnly": false
+                                }
+                            },
+                            {
+                                "name": "Create Schema if not exists",
+                                "type": "Lookup",
+                                "dependsOn": [
+                                    {
+                                        "activity": "Current Schema Has More Columns",
+                                        "dependencyConditions": [
+                                            "Completed"
+                                        ]
+                                    },
+                                    {
+                                        "activity": "Current Schema Has Same Columns",
+                                        "dependencyConditions": [
+                                            "Completed"
+                                        ]
+                                    },
+                                    {
+                                        "activity": "Current Schema Has Less Columns",
+                                        "dependencyConditions": [
+                                            "Completed"
+                                        ]
+                                    }
+                                ],
+                                "policy": {
+                                    "timeout": "7.00:00:00",
+                                    "retry": 3,
+                                    "retryIntervalInSeconds": 30,
+                                    "secureOutput": false,
+                                    "secureInput": false
+                                },
+                                "userProperties": [],
+                                "typeProperties": {
+                                    "source": {
+                                        "type": "AzureSqlSource",
+                                        "sqlReaderQuery": {
+                                            "value": "IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'demographics')\nBEGIN\nEXEC('CREATE SCHEMA demographics')\nselect Count(*) from sys.symmetric_keys;\nEND\nELSE\nBEGIN\n    select Count(*) from sys.symmetric_keys;\nEND",
+                                            "type": "Expression"
+                                        },
+                                        "queryTimeout": "02:00:00",
+                                        "partitionOption": "None"
+                                    },
+                                    "dataset": {
+                                        "referenceName": "save_store_proc_result_table",
+                                        "type": "DatasetReference",
+                                        "parameters": {
+                                            "storeProcTable": "storeProcTable",
+                                            "schemaName": "demographics"
+                                        }
+                                    },
+                                    "firstRowOnly": false
                                 }
                             },
                             {
@@ -2716,7 +2800,7 @@
                                     },
                                     "sink": {
                                         "type": "AzureSqlSink",
-                                        "preCopyScript": "IF OBJECT_ID('[retain_schema].[compare_datatype_change]', 'U') IS NOT NULL\n\nBEGIN\n\nDROP TABLE [retain_schema].[compare_datatype_change];\n\nEND",
+                                        "preCopyScript": "IF OBJECT_ID('[demographics].[previousTableSaveCopy]', 'U') IS NOT NULL\n\nBEGIN\n\nDROP TABLE [demographics].[previousTableSaveCopy];\n\nEND",
                                         "tableOption": "autoCreate",
                                         "disableMetricsCollection": false
                                     },
@@ -2772,7 +2856,7 @@
                                     },
                                     "sink": {
                                         "type": "AzureSqlSink",
-                                        "preCopyScript": "IF OBJECT_ID('[save_schema].[detect_datatype_change]', 'U') IS NOT NULL\n\nBEGIN\n\nDROP TABLE [save_schema].[detect_datatype_change]; \n\nEND",
+                                        "preCopyScript": "IF OBJECT_ID('[demographics].[previousTable]', 'U') IS NOT NULL\n\nBEGIN\n\nDROP TABLE [demographics].[previousTable]; \n\nEND",
                                         "tableOption": "autoCreate",
                                         "disableMetricsCollection": false
                                     },
@@ -2859,7 +2943,8 @@
                         "[concat(variables('factoryId'), '/datasets/retain_last_schema_dataset')]",
                         "[concat(variables('factoryId'), '/datasets/current_csv_dataset')]",
                         "[concat(variables('factoryId'), '/datasets/retain_sql_schema_to_compare_datatype_change')]",
-                        "[concat(variables('factoryId'), '/datasets/save_sql_schema_to_detect_datatype_change')]"
+                        "[concat(variables('factoryId'), '/datasets/save_sql_schema_to_detect_datatype_change')]",
+                        "[concat(variables('factoryId'), '/datasets/save_store_proc_result_table')]"
                     ]
                 },
                 {
