@@ -2593,7 +2593,7 @@
                                 },
                                 "userProperties": [],
                                 "typeProperties": {
-                                    "storedProcedureName": "[demographics].[DataTypeChangedProc]"
+                                    "storedProcedureName": "demographics.DataTypeChangedProc"
                                 },
                                 "linkedServiceName": {
                                     "referenceName": "demographics_sql_linkedservice",
