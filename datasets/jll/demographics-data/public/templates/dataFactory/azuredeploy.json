@@ -166,7 +166,7 @@
                             }
                         },
                         "folder": {
-                            "name": "Demographics-Dataset/Sinks"
+                            "name": "Demographics/Sinks"
                         },
                         "annotations": [],
                         "type": "Parquet",
@@ -206,7 +206,7 @@
                             }
                         },
                         "folder": {
-                            "name": "Demographics-Dataset/Sources"
+                            "name": "Demographics/Sources"
                         },
                         "annotations": [],
                         "type": "DelimitedText",
@@ -276,7 +276,7 @@
                             }
                         },
                         "folder": {
-                            "name": "Demographics-Dataset/Sinks"
+                            "name": "Demographics/Sinks"
                         },
                         "annotations": [],
                         "type": "DelimitedText",
@@ -325,7 +325,7 @@
                             }
                         },
                         "folder": {
-                            "name": "Demographics-Dataset/Sinks"
+                            "name": "Demographics/Sinks"
                         },
                         "annotations": [],
                         "type": "Json",
@@ -374,7 +374,7 @@
                             }
                         },
                         "folder": {
-                            "name": "Demographics-Dataset/Sources"
+                            "name": "Demographics/Sources"
                         },
                         "annotations": [],
                         "type": "DelimitedText",
@@ -438,7 +438,7 @@
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "folder": {
-                            "name": "Demographics-Dataset/Sinks"
+                            "name": "Demographics/Sinks"
                         },
                         "parameters": {
                             "tablename": {
@@ -479,7 +479,7 @@
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "folder": {
-                            "name": "Demographics-Dataset/Schema"
+                            "name": "Demographics/Schema"
                         },
                         "linkedServiceName": {
                             "referenceName": "demographics_blobstorage_linkedservice",
@@ -515,7 +515,7 @@
                             "type": "LinkedServiceReference"
                         },
                         "folder": {
-                            "name": "Demographics-Dataset/Schema"
+                            "name": "Demographics/Schema"
                         },
                         "annotations": [],
                         "type": "DelimitedText",
@@ -547,7 +547,7 @@
                             "type": "LinkedServiceReference"
                         },
                         "folder": {
-                            "name": "Demographics-Dataset/Schema"
+                            "name": "Demographics/Schema"
                         },
                         "annotations": [],
                         "type": "DelimitedText",
@@ -591,7 +591,7 @@
                             }
                         },
                         "folder": {
-                            "name": "Demographics-Dataset/Schema"
+                            "name": "Demographics/Schema"
                         },
                         "annotations": [],
                         "type": "AzureSqlTable",
@@ -633,7 +633,7 @@
                             }
                         },
                         "folder": {
-                            "name": "Demographics-Dataset/Schema"
+                            "name": "Demographics/Schema"
                         },
                         "annotations": [],
                         "type": "AzureSqlTable",
@@ -675,7 +675,7 @@
                             }
                         },
                         "folder": {
-                            "name": "Demographics-Dataset/Schema"
+                            "name": "Demographics/Schema"
                         },
                         "annotations": [],
                         "type": "AzureSqlTable",
