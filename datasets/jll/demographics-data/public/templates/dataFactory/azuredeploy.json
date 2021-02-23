@@ -2686,7 +2686,7 @@
                                 "type": "Lookup",
                                 "dependsOn": [
                                     {
-                                        "activity": "CovidTracking_Dataflow",
+                                        "activity": "Reformat Columns",
                                         "dependencyConditions": [
                                             "Completed"
                                         ]
