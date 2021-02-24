@@ -1913,21 +1913,9 @@
                                 "type": "ExecuteDataFlow",
                                 "dependsOn": [
                                     {
-                                        "activity": "Current Schema Has More Columns",
+                                        "activity": "Create Schema if not exists",
                                         "dependencyConditions": [
-                                            "Completed"
-                                        ]
-                                    },
-                                    {
-                                        "activity": "Current Schema Has Same Columns",
-                                        "dependencyConditions": [
-                                            "Completed"
-                                        ]
-                                    },
-                                    {
-                                        "activity": "Current Schema Has Less Columns",
-                                        "dependencyConditions": [
-                                            "Completed"
+                                            "Succeeded"
                                         ]
                                     }
                                 ],
@@ -2778,7 +2766,7 @@
                                 "type": "Copy",
                                 "dependsOn": [
                                     {
-                                        "activity": "Alert If Change In Data Type",
+                                        "activity": "IfDataTypeChangedAlert",
                                         "dependencyConditions": [
                                             "Completed"
                                         ]
