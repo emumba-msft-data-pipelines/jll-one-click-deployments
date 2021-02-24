@@ -2593,7 +2593,7 @@
                                 "type": "Lookup",
                                 "dependsOn": [
                                     {
-                                        "activity": "Sql Data Type change detection",
+                                        "activity": "CreateStoreProcedureIfNotExists",
                                         "dependencyConditions": [
                                             "Completed"
                                         ]
