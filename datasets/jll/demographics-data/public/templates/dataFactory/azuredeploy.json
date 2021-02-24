@@ -2566,7 +2566,7 @@
                                 "type": "SqlServerStoredProcedure",
                                 "dependsOn": [
                                     {
-                                        "activity": "Reformat Columns",
+                                        "activity": "CreateStoreProcedureIfNotExists",
                                         "dependencyConditions": [
                                             "Completed"
                                         ]
@@ -2593,7 +2593,7 @@
                                 "type": "Lookup",
                                 "dependsOn": [
                                     {
-                                        "activity": "CreateStoreProcedureIfNotExists",
+                                        "activity": "Sql Data Type change detection",
                                         "dependencyConditions": [
                                             "Completed"
                                         ]
