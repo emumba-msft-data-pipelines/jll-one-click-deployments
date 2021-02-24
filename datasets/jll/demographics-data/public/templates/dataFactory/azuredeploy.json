@@ -2906,19 +2906,7 @@
                                 "defaultValue": "demographics_curated_data"
                             }
                         },
-                        "variables": {
-                            "index": {
-                                "type": "String",
-                                "defaultValue": "-1"
-                            },
-                            "increment": {
-                                "type": "String"
-                            },
-                            "dataTypeChange": {
-                                "type": "String",
-                                "defaultValue": "False"
-                            }
-                        },
+                        "variables": {},
                         "folder": {
                             "name": "Demographics/BlobStorageAndSqlDataExtraction"
                         },
