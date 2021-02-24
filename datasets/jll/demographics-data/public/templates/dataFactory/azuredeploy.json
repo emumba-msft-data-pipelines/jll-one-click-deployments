@@ -1932,8 +1932,14 @@
                                         "referenceName": "Transformations_With_SQL_Sink",
                                         "type": "DataFlowReference",
                                         "parameters": {
-                                            "filename": "'demographics_curated_data'",
-                                            "runid": "'runtime_guid'"
+                                            "filename": {
+                                                "value": "'@{pipeline().parameters.filename}'",
+                                                "type": "Expression"
+                                            },
+                                            "runid": {
+                                                "value": "'@{pipeline().RunId}'",
+                                                "type": "Expression"
+                                            }
                                         },
                                         "datasetParameters": {
                                             "sourceCSV": {
