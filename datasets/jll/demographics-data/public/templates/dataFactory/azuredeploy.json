@@ -3223,7 +3223,7 @@
                         "NotificationAlertFromADF"
                     ]
                 },
-                {
+                {   "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'Yes')]",
                     "type": "Microsoft.Insights/metricalerts",
                     "apiVersion": "2018-03-01",
                     "name": "DataTypeChangeAlert",
@@ -3629,8 +3629,7 @@
                                 "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'DemographicsWithoutSqlPipelineCancelledAlertConfig')]",
                                 "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'SourceCurrentSchemaWithLessColumnsAlert')]",
                                 "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'SourceCurrentSchemaWithMoreColumnsAlert')]",
-                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'SourceCurrentSchemaWithSameNumberOfColumnsButDifferentNamesOrArrangementAlert')]",
-                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'DataTypeChangeAlert')]"       
+                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'SourceCurrentSchemaWithSameNumberOfColumnsButDifferentNamesOrArrangementAlert')]"  
                             ]
                         }
                     },
