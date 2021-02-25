@@ -223,32 +223,7 @@
                             "firstRowAsHeader": true,
                             "quoteChar": "\""
                         },
-                        "schema": [
-                            {
-                                "name": "Date",
-                                "type": "String"
-                            },
-                            {
-                                "name": "Region",
-                                "type": "String"
-                            },
-                            {
-                                "name": "New_Tests",
-                                "type": "String"
-                            },
-                            {
-                                "name": "Total_Tests",
-                                "type": "String"
-                            },
-                            {
-                                "name": "Positivity",
-                                "type": "String"
-                            },
-                            {
-                                "name": "Turn_Around",
-                                "type": "String"
-                            }
-                        ]
+                        "schema": []
                     },
                     "dependsOn": [
                         "[parameters('factoryName')]",
@@ -399,32 +374,7 @@
                             "firstRowAsHeader": true,
                             "quoteChar": "\""
                         },
-                        "schema": [
-                            {
-                                "name": "Date",
-                                "type": "String"
-                            },
-                            {
-                                "name": "Region",
-                                "type": "String"
-                            },
-                            {
-                                "name": "New_Tests",
-                                "type": "String"
-                            },
-                            {
-                                "name": "Total_Tests",
-                                "type": "String"
-                            },
-                            {
-                                "name": "Positivity",
-                                "type": "String"
-                            },
-                            {
-                                "name": "Turn_Around",
-                                "type": "String"
-                            }
-                        ]
+                        "schema": []
                     },
                     "dependsOn": [
                         "[parameters('factoryName')]",
