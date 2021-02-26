@@ -117,13 +117,13 @@
         "serverName": "[concat(parameters('serverName'), uniquestring(resourceGroup().id))]",
         "webHookUri": "https://null",
         "dataShareAccountName": "[concat(parameters('dataShareAccountName'), uniquestring(resourceGroup().id))]",
-        "storageTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/demographics-data/public/templates/storageAccount/azuredeploy.json",
-        "sqlServerTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/demographics-data/public/templates/sqlServer/azuredeploy.json",
-        "dataShareTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/demographics-data/public/templates/dataShare/azuredeploy.json",
-        "logicAppTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/demographics-data/public/templates/logicApp/azuredeploy.json",
-        "dataFactoryTemplateWithTeamsNotifUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/demographics-data/public/templates/dataFactory/azuredeploy.json",
-        "dataFactoryTemplateWithoutTeamsNotifUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/demographics-data/public/templates/dataFactory/azuredeploy.json",
-        "shareTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/demographics-data/public/templates/share/azuredeploy.json"
+        "storageTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/covidnyc/datasets/jll/covid-nyc/public/templates/storageAccount/azuredeploy.json",
+        "sqlServerTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/covidnyc/datasets/jll/covid-nyc/public/templates/sqlServer/azuredeploy.json",
+        "dataShareTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/covidnyc/datasets/jll/covid-nyc/public/templates/dataShare/azuredeploy.json",
+        "logicAppTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/covidnyc/datasets/jll/covid-nyc/public/templates/logicApp/azuredeploy.json",
+        "dataFactoryTemplateWithTeamsNotifUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/covidnyc/datasets/jll/covid-nyc/public/templates/dataFactory/azuredeploy.json",
+        "dataFactoryTemplateWithoutTeamsNotifUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/covidnyc/datasets/jll/covid-nyc/public/templates/dataFactory/azuredeploy.json",
+        "shareTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/covidnyc/datasets/jll/covid-nyc/public/templates/share/azuredeploy.json"
     },
     "resources": [
         {

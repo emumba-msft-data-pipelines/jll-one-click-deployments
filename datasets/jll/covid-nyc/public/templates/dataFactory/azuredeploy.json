@@ -48,9 +48,9 @@
                 "description": "Your login name must not contain a SQL Identifier or a typical system name (like admin, administrator, sa, root, dbmanager, loginmanager, etc.) or a built-in database user or role (like dbo, guest, public, etc.)"
             }
         },
-        "demographics_http_linkedservice_properties_typeProperties_url": {
+        "covidnyc_http_linkedservice_properties_typeProperties_url": {
             "type": "string",
-            "defaultValue": "https://data.cdc.gov"
+            "defaultValue": "https://data.cityofnewyork.us/"
         },
         "sqlAdministratorLoginPassword": {
             "type": "securestring",
@@ -87,7 +87,7 @@
             "location": "[parameters('location')]",
             "tags": {
                 "Environment": "Public",
-                "AssociatedDataSet": "Demographics"
+                "AssociatedDataSet": "CovidNYC"
             },
             "identity": {
                 "type": "SystemAssigned"
@@ -98,7 +98,7 @@
 
 
                 {
-                    "name": "[concat(parameters('factoryName'), '/demographics_blobstorage_linkedservice')]",
+                    "name": "[concat(parameters('factoryName'), '/covidnyc_blobstorage_linkedservice')]",
                     "type": "Microsoft.DataFactory/factories/linkedServices",
                     "apiVersion": "2018-06-01",
                     "properties": {
@@ -113,14 +113,14 @@
                     ]
                 },
                 {
-                    "name": "[concat(parameters('factoryName'), '/demographics_http_linkedservice')]",
+                    "name": "[concat(parameters('factoryName'), '/covidnyc_http_linkedservice')]",
                     "type": "Microsoft.DataFactory/factories/linkedServices",
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "annotations": [],
                         "type": "HttpServer",
                         "typeProperties": {
-                            "url": "[parameters('demographics_http_linkedservice_properties_typeProperties_url')]",
+                            "url": "[parameters('covidnyc_http_linkedservice_properties_typeProperties_url')]",
                             "enableServerCertificateValidation": true,
                             "authenticationType": "Anonymous"
                         }
@@ -131,7 +131,7 @@
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'Yes')]",
-                    "name": "[concat(parameters('factoryName'), '/demographics_sql_linkedservice')]",
+                    "name": "[concat(parameters('factoryName'), '/covidnyc_sql_linkedservice')]",
                     "type": "Microsoft.DataFactory/factories/linkedServices",
                     "apiVersion": "2018-06-01",
                     "properties": {
@@ -151,7 +151,7 @@
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "linkedServiceName": {
-                            "referenceName": "demographics_blobstorage_linkedservice",
+                            "referenceName": "covidnyc_blobstorage_linkedservice",
                             "type": "LinkedServiceReference"
                         },
                         "parameters": {
@@ -166,7 +166,7 @@
                             }
                         },
                         "folder": {
-                            "name": "Demographics/Sinks"
+                            "name": "CovidNYC/Sinks"
                         },
                         "annotations": [],
                         "type": "Parquet",
@@ -188,7 +188,7 @@
                     },
                     "dependsOn": [
                         "[parameters('factoryName')]",
-                        "[concat(variables('factoryId'), '/linkedServices/demographics_blobstorage_linkedservice')]"
+                        "[concat(variables('factoryId'), '/linkedServices/covidnyc_blobstorage_linkedservice')]"
                     ]
                 },
                 {
@@ -197,7 +197,7 @@
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "linkedServiceName": {
-                            "referenceName": "demographics_http_linkedservice",
+                            "referenceName": "covidnyc_http_linkedservice",
                             "type": "LinkedServiceReference"
                         },
                         "parameters": {
@@ -206,7 +206,7 @@
                             }
                         },
                         "folder": {
-                            "name": "Demographics/Sources"
+                            "name": "CovidNYC/Sources"
                         },
                         "annotations": [],
                         "type": "DelimitedText",
@@ -227,7 +227,7 @@
                     },
                     "dependsOn": [
                         "[parameters('factoryName')]",
-                        "[concat(variables('factoryId'), '/linkedServices/demographics_http_linkedservice')]"
+                        "[concat(variables('factoryId'), '/linkedServices/covidnyc_http_linkedservice')]"
                     ]
                 },
                 {
@@ -236,7 +236,7 @@
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "linkedServiceName": {
-                            "referenceName": "demographics_blobstorage_linkedservice",
+                            "referenceName": "covidnyc_blobstorage_linkedservice",
                             "type": "LinkedServiceReference"
                         },
                         "parameters": {
@@ -251,7 +251,7 @@
                             }
                         },
                         "folder": {
-                            "name": "Demographics/Sinks"
+                            "name": "CovidNYC/Sinks"
                         },
                         "annotations": [],
                         "type": "DelimitedText",
@@ -276,7 +276,7 @@
                     },
                     "dependsOn": [
                         "[parameters('factoryName')]",
-                        "[concat(variables('factoryId'), '/linkedServices/demographics_blobstorage_linkedservice')]"
+                        "[concat(variables('factoryId'), '/linkedServices/covidnyc_blobstorage_linkedservice')]"
                     ]
                 },
                 {
@@ -285,7 +285,7 @@
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "linkedServiceName": {
-                            "referenceName": "demographics_blobstorage_linkedservice",
+                            "referenceName": "covidnyc_blobstorage_linkedservice",
                             "type": "LinkedServiceReference"
                         },
                         "parameters": {
@@ -300,7 +300,7 @@
                             }
                         },
                         "folder": {
-                            "name": "Demographics/Sinks"
+                            "name": "CovidNYC/Sinks"
                         },
                         "annotations": [],
                         "type": "Json",
@@ -325,7 +325,7 @@
                     },
                     "dependsOn": [
                         "[parameters('factoryName')]",
-                        "[concat(variables('factoryId'), '/linkedServices/demographics_blobstorage_linkedservice')]"
+                        "[concat(variables('factoryId'), '/linkedServices/covidnyc_blobstorage_linkedservice')]"
                     ]
                 },
                 {
@@ -334,7 +334,7 @@
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "linkedServiceName": {
-                            "referenceName": "demographics_blobstorage_linkedservice",
+                            "referenceName": "covidnyc_blobstorage_linkedservice",
                             "type": "LinkedServiceReference"
                         },
                         "parameters": {
@@ -349,7 +349,7 @@
                             }
                         },
                         "folder": {
-                            "name": "Demographics/Sources"
+                            "name": "CovidNYC/Sources"
                         },
                         "annotations": [],
                         "type": "DelimitedText",
@@ -378,7 +378,7 @@
                     },
                     "dependsOn": [
                         "[parameters('factoryName')]",
-                        "[concat(variables('factoryId'), '/linkedServices/demographics_blobstorage_linkedservice')]"
+                        "[concat(variables('factoryId'), '/linkedServices/covidnyc_blobstorage_linkedservice')]"
                     ]
                 },
                 {
@@ -388,7 +388,7 @@
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "folder": {
-                            "name": "Demographics/Sinks"
+                            "name": "CovidNYC/Sinks"
                         },
                         "parameters": {
                             "tablename": {
@@ -397,11 +397,11 @@
                             },
                             "schemaName": {
                                 "type": "string",
-                                "defaultValue": "demographics"
+                                "defaultValue": "covidnyc"
                             }
                         },
                         "linkedServiceName": {
-                            "referenceName": "demographics_sql_linkedservice",
+                            "referenceName": "covidnyc_sql_linkedservice",
                             "type": "LinkedServiceReference"
                         },
                         "annotations": [],
@@ -420,7 +420,7 @@
                     },
                     "dependsOn": [
                         "[parameters('factoryName')]",
-                        "[concat(variables('factoryId'), '/linkedServices/demographics_sql_linkedservice')]"
+                        "[concat(variables('factoryId'), '/linkedServices/covidnyc_sql_linkedservice')]"
                     ]
                 },
                 {
@@ -429,10 +429,10 @@
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "folder": {
-                            "name": "Demographics/Schema"
+                            "name": "CovidNYC/Schema"
                         },
                         "linkedServiceName": {
-                            "referenceName": "demographics_blobstorage_linkedservice",
+                            "referenceName": "covidnyc_blobstorage_linkedservice",
                             "type": "LinkedServiceReference"
                         },
                         "annotations": [],
@@ -452,7 +452,7 @@
                     },
                     "dependsOn": [
                         "[parameters('factoryName')]",
-                        "[concat(variables('factoryId'), '/linkedServices/demographics_blobstorage_linkedservice')]"
+                        "[concat(variables('factoryId'), '/linkedServices/covidnyc_blobstorage_linkedservice')]"
                     ]
                 },
                 {
@@ -461,11 +461,11 @@
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "linkedServiceName": {
-                            "referenceName": "demographics_blobstorage_linkedservice",
+                            "referenceName": "covidnyc_blobstorage_linkedservice",
                             "type": "LinkedServiceReference"
                         },
                         "folder": {
-                            "name": "Demographics/Schema"
+                            "name": "CovidNYC/Schema"
                         },
                         "annotations": [],
                         "type": "DelimitedText",
@@ -484,7 +484,7 @@
                     },
                     "dependsOn": [
                         "[parameters('factoryName')]",
-                        "[concat(variables('factoryId'), '/linkedServices/demographics_blobstorage_linkedservice')]"
+                        "[concat(variables('factoryId'), '/linkedServices/covidnyc_blobstorage_linkedservice')]"
                     ]
                 },
                 {
@@ -493,19 +493,19 @@
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "linkedServiceName": {
-                            "referenceName": "demographics_blobstorage_linkedservice",
+                            "referenceName": "covidnyc_blobstorage_linkedservice",
                             "type": "LinkedServiceReference"
                         },
                         "folder": {
-                            "name": "Demographics/Schema"
+                            "name": "CovidNYC/Schema"
                         },
                         "annotations": [],
                         "type": "DelimitedText",
                         "typeProperties": {
                             "location": {
                                 "type": "AzureBlobStorageLocation",
-                                "fileName": "demographics_raw_data.csv",
-                                "folderPath": "raw/demographics_data/latest",
+                                "fileName": "covidnyc_raw_data.csv",
+                                "folderPath": "raw/covidnyc_data/latest",
                                 "container": "public"
                             },
                             "columnDelimiter": ",",
@@ -517,7 +517,7 @@
                     },
                     "dependsOn": [
                         "[parameters('factoryName')]",
-                        "[concat(variables('factoryId'), '/linkedServices/demographics_blobstorage_linkedservice')]"
+                        "[concat(variables('factoryId'), '/linkedServices/covidnyc_blobstorage_linkedservice')]"
                     ]
                 },
                 {
@@ -527,7 +527,7 @@
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "linkedServiceName": {
-                            "referenceName": "demographics_sql_linkedservice",
+                            "referenceName": "covidnyc_sql_linkedservice",
                             "type": "LinkedServiceReference"
                         },
                         "parameters": {
@@ -537,11 +537,11 @@
                             },
                             "schemaName": {
                                 "type": "string",
-                                "defaultValue": "demographics"
+                                "defaultValue": "covidnyc"
                             }
                         },
                         "folder": {
-                            "name": "Demographics/Schema"
+                            "name": "CovidNYC/Schema"
                         },
                         "annotations": [],
                         "type": "AzureSqlTable",
@@ -559,7 +559,7 @@
                     },
                     "dependsOn": [
                         "[parameters('factoryName')]",
-                        "[concat(variables('factoryId'), '/linkedServices/demographics_sql_linkedservice')]"
+                        "[concat(variables('factoryId'), '/linkedServices/covidnyc_sql_linkedservice')]"
                     ]
                 },
                 {
@@ -569,7 +569,7 @@
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "linkedServiceName": {
-                            "referenceName": "demographics_sql_linkedservice",
+                            "referenceName": "covidnyc_sql_linkedservice",
                             "type": "LinkedServiceReference"
                         },
                         "parameters": {
@@ -579,11 +579,11 @@
                             },
                             "schemaName": {
                                 "type": "string",
-                                "defaultValue": "demographics"
+                                "defaultValue": "covidnyc"
                             }
                         },
                         "folder": {
-                            "name": "Demographics/Schema"
+                            "name": "CovidNYC/Schema"
                         },
                         "annotations": [],
                         "type": "AzureSqlTable",
@@ -601,7 +601,7 @@
                     },
                     "dependsOn": [
                         "[parameters('factoryName')]",
-                        "[concat(variables('factoryId'), '/linkedServices/demographics_sql_linkedservice')]"
+                        "[concat(variables('factoryId'), '/linkedServices/covidnyc_sql_linkedservice')]"
                     ]
                 },
                 {
@@ -611,7 +611,7 @@
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "linkedServiceName": {
-                            "referenceName": "demographics_sql_linkedservice",
+                            "referenceName": "covidnyc_sql_linkedservice",
                             "type": "LinkedServiceReference"
                         },
                         "parameters": {
@@ -621,11 +621,11 @@
                             },
                             "schemaName": {
                                 "type": "string",
-                                "defaultValue": "demographics"
+                                "defaultValue": "covidnyc"
                             }
                         },
                         "folder": {
-                            "name": "Demographics/Schema"
+                            "name": "CovidNYC/Schema"
                         },
                         "annotations": [],
                         "type": "AzureSqlTable",
@@ -643,7 +643,7 @@
                     },
                     "dependsOn": [
                         "[parameters('factoryName')]",
-                        "[concat(variables('factoryId'), '/linkedServices/demographics_sql_linkedservice')]"
+                        "[concat(variables('factoryId'), '/linkedServices/covidnyc_sql_linkedservice')]"
                     ]
                 },
                 {
@@ -653,7 +653,7 @@
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "folder": {
-                            "name": "Demographics"
+                            "name": "CovidNYC"
                         },
                         "type": "MappingDataFlow",
                         "typeProperties": {
@@ -712,28 +712,13 @@
                             ],
                             "transformations": [
                                 {
-                                    "name": "DropUnwantedColumns"
+                                    "name": "DropLineageColumn"
                                 },
                                 {
-                                    "name": "AddNewColumns"
-                                },
-                                {
-                                    "name": "RemoveDashes"
-                                },
-                                {
-                                    "name": "RemoveSpaces"
-                                },
-                                {
-                                    "name": "RemoveCommas"
-                                },
-                                {
-                                    "name": "CapatalizeInitials"
-                                },
-                                {
-                                    "name": "FillEmptyFields"
+                                    "name": "LoadDateAndISOCountry"
                                 }
                             ],
-                            "script": "parameters{\n\tfilename as string ('demographics_curated_data'),\n\trunid as string ('runtime_guid')\n}\nsource(output(\n\t\t{Data as of} as date 'MM/dd/yyyy',\n\t\t{Start Date} as date 'MM/dd/yyyy',\n\t\t{End Date} as date 'MM/dd/yyyy',\n\t\tState as string,\n\t\tSex as string,\n\t\t{Age group} as string,\n\t\t{COVID-19 Deaths} as long,\n\t\t{Total Deaths} as long,\n\t\t{Pneumonia Deaths} as long,\n\t\t{Pneumonia and COVID-19 Deaths} as long,\n\t\t{Influenza Deaths} as long,\n\t\t{Pneumonia, Influenza, or COVID-19 Deaths} as long,\n\t\tFootnote as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'lineage',\n\tinferDriftedColumnTypes: true) ~> sourceCSV\nFillEmptyFields select(mapColumn(\n\t\tLoad_Date,\n\t\tLoad_Time,\n\t\tData_As_Of,\n\t\tStart_Date,\n\t\tEnd_Date,\n\t\tState,\n\t\tSex,\n\t\tAge_Group,\n\t\tCovid_19_Deaths,\n\t\tTotal_Deaths,\n\t\tPneumonia_Deaths,\n\t\tPneumonia_And_Covid_19_Deaths,\n\t\tInfluenza_Deaths,\n\t\tPneumonia_Influenza_Or_Covid_19_Deaths\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> DropUnwantedColumns\nsourceCSV derive(Load_time = currentTimestamp(),\n\t\tLoad_date = currentDate()) ~> AddNewColumns\nAddNewColumns select(mapColumn(\n\t\teach(patternMatch(`.*`),\n\t\t\tregexReplace($$,'-','_') = $$)\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RemoveDashes\nRemoveDashes select(mapColumn(\n\t\teach(patternMatch(`.*`),\n\t\t\tregexReplace($$,' ','_') = $$)\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RemoveSpaces\nRemoveSpaces select(mapColumn(\n\t\teach(patternMatch(`.*`),\n\t\t\tregexReplace($$,',','') = $$)\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RemoveCommas\nRemoveCommas select(mapColumn(\n\t\teach(patternMatch(`.*`),\n\t\t\tregexReplace(initCap(regexReplace($$,'_',' ')),' ','_') = $$)\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> CapatalizeInitials\nCapatalizeInitials derive(Influenza_Deaths = iifNull(Influenza_Deaths, toLong(0), Influenza_Deaths),\n\t\tCovid_19_Deaths = iifNull(Covid_19_Deaths, toLong(0), Covid_19_Deaths),\n\t\tTotal_Deaths = iifNull(Total_Deaths, toLong(0), Total_Deaths),\n\t\tPneumonia_Deaths = iifNull(Pneumonia_Deaths, toLong(0), Pneumonia_Deaths),\n\t\tPneumonia_Influenza_Or_Covid_19_Deaths = iifNull(Pneumonia_Influenza_Or_Covid_19_Deaths, toLong(0), Pneumonia_Influenza_Or_Covid_19_Deaths),\n\t\tPneumonia_And_Covid_19_Deaths = iifNull(Pneumonia_And_Covid_19_Deaths, toLong(0), Pneumonia_And_Covid_19_Deaths)) ~> FillEmptyFields\nDropUnwantedColumns sink(input(\n\t\t{Data as of} as string,\n\t\t{Start Date} as string,\n\t\t{End Date} as string,\n\t\tState as string,\n\t\tSex as string,\n\t\t{Age group} as string,\n\t\t{COVID-19 Deaths} as string,\n\t\t{Total Deaths} as string,\n\t\t{Pneumonia Deaths} as string,\n\t\t{Pneumonia and COVID-19 Deaths} as string,\n\t\t{Influenza Deaths} as string,\n\t\t{Pneumonia, Influenza, or COVID-19 Deaths} as string,\n\t\tFootnote as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:[(concat($filename, '.csv'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SinkLatestCSV\nDropUnwantedColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:[(concat($filename, '.jsonl'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sinkLatestJsonl\nDropUnwantedColumns sink(input(\n\t\t{Data as of} as string,\n\t\t{Start Date} as string,\n\t\t{End Date} as string,\n\t\tState as string,\n\t\tSex as string,\n\t\t{Age group} as string,\n\t\t{COVID-19 Deaths} as string,\n\t\t{Total Deaths} as string,\n\t\t{Pneumonia Deaths} as string,\n\t\t{Pneumonia and COVID-19 Deaths} as string,\n\t\t{Influenza Deaths} as string,\n\t\t{Pneumonia, Influenza, or COVID-19 Deaths} as string,\n\t\tFootnote as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:[(concat($filename,'_', $runid,'.csv'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SinkCSV\nDropUnwantedColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:[(concat($filename,'_', $runid,'.jsonl'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sinkJsonl\nDropUnwantedColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:[(concat($filename, '.parquet'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sinkLatestParquet\nDropUnwantedColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:[(concat($filename,'_', $runid,'.parquet'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sinkParquet"
+                            "script": "parameters{\n\tfilename as string ('covid_tracking'),\n\trunid as string ('runtime_guid')\n}\nsource(output(\n\t\tDATE_OF_INTEREST as date 'MM/dd/yyyy',\n\t\tCASE_COUNT as long,\n\t\tHOSPITALIZED_COUNT as long,\n\t\tDEATH_COUNT as long,\n\t\tDEATH_COUNT_PROBABLE as long,\n\t\tCASE_COUNT_7DAY_AVG as long,\n\t\tHOSP_COUNT_7DAY_AVG as long,\n\t\tDEATH_COUNT_7DAY_AVG as long,\n\t\tBX_CASE_COUNT as long,\n\t\tBX_HOSPITALIZED_COUNT as long,\n\t\tBX_DEATH_COUNT as long,\n\t\tBX_CASE_COUNT_7DAY_AVG as long,\n\t\tBX_HOSPITALIZED_COUNT_7DAY_AVG as long,\n\t\tBX_DEATH_COUNT_7DAY_AVG as long,\n\t\tBK_CASE_COUNT as long,\n\t\tBK_HOSPITALIZED_COUNT as long,\n\t\tBK_DEATH_COUNT as long,\n\t\tBK_CASE_COUNT_7DAY_AVG as long,\n\t\tBK_HOSPITALIZED_COUNT_7DAY_AVG as long,\n\t\tBK_DEATH_COUNT_7DAY_AVG as long,\n\t\tMN_CASE_COUNT as long,\n\t\tMN_HOSPITALIZED_COUNT as long,\n\t\tMN_DEATH_COUNT as long,\n\t\tMN_CASE_COUNT_7DAY_AVG as long,\n\t\tMN_HOSPITALIZED_COUNT_7DAY_AVG as long,\n\t\tMN_DEATH_COUNT_7DAY_AVG as long,\n\t\tQN_CASE_COUNT as long,\n\t\tQN_HOSPITALIZED_COUNT as long,\n\t\tQN_DEATH_COUNT as long,\n\t\tQN_CASE_COUNT_7DAY_AVG as long,\n\t\tQN_HOSPITALIZED_COUNT_7DAY_AVG as long,\n\t\tQN_DEATH_COUNT_7DAY_AVG as long,\n\t\tSI_CASE_COUNT as long,\n\t\tSI_HOSPITALIZED_COUNT as long,\n\t\tSI_DEATH_COUNT as long,\n\t\tSI_CASE_COUNT_7DAY_AVG as long,\n\t\tSI_HOSPITALIZED_COUNT_7DAY_AVG as long,\n\t\tSI_DEATH_COUNT_7DAY_AVG as long,\n\t\tINCOMPLETE as long\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'lineage') ~> sourceCSV\nLoadDateAndISOCountry select(mapColumn(\n\t\tLOAD_DATE = Load_Date,\n\t\tLOAD_TIME = Load_Time,\n\t\tDATE_OF_INTEREST,\n\t\tCASE_COUNT,\n\t\tHOSPITALIZED_COUNT,\n\t\tDEATH_COUNT,\n\t\tDEATH_COUNT_PROBABLE,\n\t\tCASE_COUNT_7DAY_AVG,\n\t\tHOSP_COUNT_7DAY_AVG,\n\t\tDEATH_COUNT_7DAY_AVG,\n\t\tBX_CASE_COUNT,\n\t\tBX_HOSPITALIZED_COUNT,\n\t\tBX_DEATH_COUNT,\n\t\tBX_CASE_COUNT_7DAY_AVG,\n\t\tBX_HOSPITALIZED_COUNT_7DAY_AVG,\n\t\tBX_DEATH_COUNT_7DAY_AVG,\n\t\tBK_CASE_COUNT,\n\t\tBK_HOSPITALIZED_COUNT,\n\t\tBK_DEATH_COUNT,\n\t\tBK_CASE_COUNT_7DAY_AVG,\n\t\tBK_HOSPITALIZED_COUNT_7DAY_AVG,\n\t\tBK_DEATH_COUNT_7DAY_AVG,\n\t\tMN_CASE_COUNT,\n\t\tMN_HOSPITALIZED_COUNT,\n\t\tMN_DEATH_COUNT,\n\t\tMN_CASE_COUNT_7DAY_AVG,\n\t\tMN_HOSPITALIZED_COUNT_7DAY_AVG,\n\t\tMN_DEATH_COUNT_7DAY_AVG,\n\t\tQN_CASE_COUNT,\n\t\tQN_HOSPITALIZED_COUNT,\n\t\tQN_DEATH_COUNT,\n\t\tQN_CASE_COUNT_7DAY_AVG,\n\t\tQN_HOSPITALIZED_COUNT_7DAY_AVG,\n\t\tQN_DEATH_COUNT_7DAY_AVG,\n\t\tSI_CASE_COUNT,\n\t\tSI_HOSPITALIZED_COUNT,\n\t\tSI_DEATH_COUNT,\n\t\tSI_CASE_COUNT_7DAY_AVG,\n\t\tSI_HOSPITALIZED_COUNT_7DAY_AVG,\n\t\tSI_DEATH_COUNT_7DAY_AVG,\n\t\tINCOMPLETE\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> DropLineageColumn\nsourceCSV derive(Load_Time = currentTimestamp(),\n\t\tLoad_Date = currentDate()) ~> LoadDateAndISOCountry\nDropLineageColumn sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:[(concat($filename, '.csv'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SinkLatestCSV\nDropLineageColumn sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:[(concat($filename, '.jsonl'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sinkLatestJsonl\nDropLineageColumn sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:[(concat($filename,'_', $runid,'.csv'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SinkCSV\nDropLineageColumn sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:[(concat($filename,'_', $runid,'.jsonl'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sinkJsonl\nDropLineageColumn sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:[(concat($filename, '.parquet'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sinkLatestParquet\nDropLineageColumn sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:[(concat($filename,'_', $runid,'.parquet'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sinkParquet"
                         }
                     },
                     "dependsOn": [
@@ -751,7 +736,7 @@
                     "apiVersion": "2018-06-01",
                     "properties": {
                         "folder": {
-                            "name": "Demographics"
+                            "name": "CovidNYC"
                         },
                         "type": "MappingDataFlow",
                         "typeProperties": {
@@ -817,28 +802,13 @@
                             ],
                             "transformations": [
                                 {
-                                    "name": "DropUnwantedColumns"
+                                    "name": "DropLineageColumn"
                                 },
                                 {
-                                    "name": "AddNewColumns"
-                                },
-                                {
-                                    "name": "RemoveDashes"
-                                },
-                                {
-                                    "name": "RemoveSpaces"
-                                },
-                                {
-                                    "name": "RemoveCommas"
-                                },
-                                {
-                                    "name": "CapatalizeInitials"
-                                },
-                                {
-                                    "name": "FillEmptyFields"
+                                    "name": "LoadDateAndISOCountry"
                                 }
                             ],
-                            "script": "parameters{\n\tfilename as string ('demographics_curated_data'),\n\trunid as string ('runtime_guid')\n}\nsource(output(\n\t\t{Data as of} as date 'MM/dd/yyyy',\n\t\t{Start Date} as date 'MM/dd/yyyy',\n\t\t{End Date} as date 'MM/dd/yyyy',\n\t\tState as string,\n\t\tSex as string,\n\t\t{Age group} as string,\n\t\t{COVID-19 Deaths} as long,\n\t\t{Total Deaths} as long,\n\t\t{Pneumonia Deaths} as long,\n\t\t{Pneumonia and COVID-19 Deaths} as long,\n\t\t{Influenza Deaths} as long,\n\t\t{Pneumonia, Influenza, or COVID-19 Deaths} as long,\n\t\tFootnote as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'lineage',\n\tinferDriftedColumnTypes: true) ~> sourceCSV\nFillEmptyFields select(mapColumn(\n\t\tLoad_Date,\n\t\tLoad_Time,\n\t\tData_As_Of,\n\t\tStart_Date,\n\t\tEnd_Date,\n\t\tState,\n\t\tSex,\n\t\tAge_Group,\n\t\tCovid_19_Deaths,\n\t\tTotal_Deaths,\n\t\tPneumonia_Deaths,\n\t\tPneumonia_And_Covid_19_Deaths,\n\t\tInfluenza_Deaths,\n\t\tPneumonia_Influenza_Or_Covid_19_Deaths\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> DropUnwantedColumns\nsourceCSV derive(Load_time = currentTimestamp(),\n\t\tLoad_date = currentDate()) ~> AddNewColumns\nAddNewColumns select(mapColumn(\n\t\teach(patternMatch(`.*`),\n\t\t\tregexReplace($$,'-','_') = $$)\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RemoveDashes\nRemoveDashes select(mapColumn(\n\t\teach(patternMatch(`.*`),\n\t\t\tregexReplace($$,' ','_') = $$)\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RemoveSpaces\nRemoveSpaces select(mapColumn(\n\t\teach(patternMatch(`.*`),\n\t\t\tregexReplace($$,',','') = $$)\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RemoveCommas\nRemoveCommas select(mapColumn(\n\t\teach(patternMatch(`.*`),\n\t\t\tregexReplace(initCap(regexReplace($$,'_',' ')),' ','_') = $$)\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> CapatalizeInitials\nCapatalizeInitials derive(Influenza_Deaths = iifNull(Influenza_Deaths, toLong(0), Influenza_Deaths),\n\t\tCovid_19_Deaths = iifNull(Covid_19_Deaths, toLong(0), Covid_19_Deaths),\n\t\tTotal_Deaths = iifNull(Total_Deaths, toLong(0), Total_Deaths),\n\t\tPneumonia_Deaths = iifNull(Pneumonia_Deaths, toLong(0), Pneumonia_Deaths),\n\t\tPneumonia_Influenza_Or_Covid_19_Deaths = iifNull(Pneumonia_Influenza_Or_Covid_19_Deaths, toLong(0), Pneumonia_Influenza_Or_Covid_19_Deaths),\n\t\tPneumonia_And_Covid_19_Deaths = iifNull(Pneumonia_And_Covid_19_Deaths, toLong(0), Pneumonia_And_Covid_19_Deaths)) ~> FillEmptyFields\nDropUnwantedColumns sink(input(\n\t\t{Data as of} as string,\n\t\t{Start Date} as string,\n\t\t{End Date} as string,\n\t\tState as string,\n\t\tSex as string,\n\t\t{Age group} as string,\n\t\t{COVID-19 Deaths} as string,\n\t\t{Total Deaths} as string,\n\t\t{Pneumonia Deaths} as string,\n\t\t{Pneumonia and COVID-19 Deaths} as string,\n\t\t{Influenza Deaths} as string,\n\t\t{Pneumonia, Influenza, or COVID-19 Deaths} as string,\n\t\tFootnote as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:[(concat($filename, '.csv'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SinkLatestCSV\nDropUnwantedColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:[(concat($filename, '.jsonl'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sinkLatestJsonl\nDropUnwantedColumns sink(input(\n\t\t{Data as of} as string,\n\t\t{Start Date} as string,\n\t\t{End Date} as string,\n\t\tState as string,\n\t\tSex as string,\n\t\t{Age group} as string,\n\t\t{COVID-19 Deaths} as string,\n\t\t{Total Deaths} as string,\n\t\t{Pneumonia Deaths} as string,\n\t\t{Pneumonia and COVID-19 Deaths} as string,\n\t\t{Influenza Deaths} as string,\n\t\t{Pneumonia, Influenza, or COVID-19 Deaths} as string,\n\t\tFootnote as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:[(concat($filename,'_', $runid,'.csv'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SinkCSV\nDropUnwantedColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:[(concat($filename,'_', $runid,'.jsonl'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sinkJsonl\nDropUnwantedColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:[(concat($filename, '.parquet'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sinkLatestParquet\nDropUnwantedColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:[(concat($filename,'_', $runid,'.parquet'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sinkParquet\nDropUnwantedColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sinkSQL"
+                            "script": "parameters{\n\tfilename as string ('covid_tracking'),\n\trunid as string ('runtime_guid')\n}\nsource(output(\n\t\tDATE_OF_INTEREST as date 'MM/dd/yyyy',\n\t\tCASE_COUNT as long,\n\t\tHOSPITALIZED_COUNT as long,\n\t\tDEATH_COUNT as long,\n\t\tDEATH_COUNT_PROBABLE as long,\n\t\tCASE_COUNT_7DAY_AVG as long,\n\t\tHOSP_COUNT_7DAY_AVG as long,\n\t\tDEATH_COUNT_7DAY_AVG as long,\n\t\tBX_CASE_COUNT as long,\n\t\tBX_HOSPITALIZED_COUNT as long,\n\t\tBX_DEATH_COUNT as long,\n\t\tBX_CASE_COUNT_7DAY_AVG as long,\n\t\tBX_HOSPITALIZED_COUNT_7DAY_AVG as long,\n\t\tBX_DEATH_COUNT_7DAY_AVG as long,\n\t\tBK_CASE_COUNT as long,\n\t\tBK_HOSPITALIZED_COUNT as long,\n\t\tBK_DEATH_COUNT as long,\n\t\tBK_CASE_COUNT_7DAY_AVG as long,\n\t\tBK_HOSPITALIZED_COUNT_7DAY_AVG as long,\n\t\tBK_DEATH_COUNT_7DAY_AVG as long,\n\t\tMN_CASE_COUNT as long,\n\t\tMN_HOSPITALIZED_COUNT as long,\n\t\tMN_DEATH_COUNT as long,\n\t\tMN_CASE_COUNT_7DAY_AVG as long,\n\t\tMN_HOSPITALIZED_COUNT_7DAY_AVG as long,\n\t\tMN_DEATH_COUNT_7DAY_AVG as long,\n\t\tQN_CASE_COUNT as long,\n\t\tQN_HOSPITALIZED_COUNT as long,\n\t\tQN_DEATH_COUNT as long,\n\t\tQN_CASE_COUNT_7DAY_AVG as long,\n\t\tQN_HOSPITALIZED_COUNT_7DAY_AVG as long,\n\t\tQN_DEATH_COUNT_7DAY_AVG as long,\n\t\tSI_CASE_COUNT as long,\n\t\tSI_HOSPITALIZED_COUNT as long,\n\t\tSI_DEATH_COUNT as long,\n\t\tSI_CASE_COUNT_7DAY_AVG as long,\n\t\tSI_HOSPITALIZED_COUNT_7DAY_AVG as long,\n\t\tSI_DEATH_COUNT_7DAY_AVG as long,\n\t\tINCOMPLETE as long\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'lineage') ~> sourceCSV\nLoadDateAndISOCountry select(mapColumn(\n\t\tLOAD_DATE = Load_Date,\n\t\tLOAD_TIME = Load_Time,\n\t\tDATE_OF_INTEREST,\n\t\tCASE_COUNT,\n\t\tHOSPITALIZED_COUNT,\n\t\tDEATH_COUNT,\n\t\tDEATH_COUNT_PROBABLE,\n\t\tCASE_COUNT_7DAY_AVG,\n\t\tHOSP_COUNT_7DAY_AVG,\n\t\tDEATH_COUNT_7DAY_AVG,\n\t\tBX_CASE_COUNT,\n\t\tBX_HOSPITALIZED_COUNT,\n\t\tBX_DEATH_COUNT,\n\t\tBX_CASE_COUNT_7DAY_AVG,\n\t\tBX_HOSPITALIZED_COUNT_7DAY_AVG,\n\t\tBX_DEATH_COUNT_7DAY_AVG,\n\t\tBK_CASE_COUNT,\n\t\tBK_HOSPITALIZED_COUNT,\n\t\tBK_DEATH_COUNT,\n\t\tBK_CASE_COUNT_7DAY_AVG,\n\t\tBK_HOSPITALIZED_COUNT_7DAY_AVG,\n\t\tBK_DEATH_COUNT_7DAY_AVG,\n\t\tMN_CASE_COUNT,\n\t\tMN_HOSPITALIZED_COUNT,\n\t\tMN_DEATH_COUNT,\n\t\tMN_CASE_COUNT_7DAY_AVG,\n\t\tMN_HOSPITALIZED_COUNT_7DAY_AVG,\n\t\tMN_DEATH_COUNT_7DAY_AVG,\n\t\tQN_CASE_COUNT,\n\t\tQN_HOSPITALIZED_COUNT,\n\t\tQN_DEATH_COUNT,\n\t\tQN_CASE_COUNT_7DAY_AVG,\n\t\tQN_HOSPITALIZED_COUNT_7DAY_AVG,\n\t\tQN_DEATH_COUNT_7DAY_AVG,\n\t\tSI_CASE_COUNT,\n\t\tSI_HOSPITALIZED_COUNT,\n\t\tSI_DEATH_COUNT,\n\t\tSI_CASE_COUNT_7DAY_AVG,\n\t\tSI_HOSPITALIZED_COUNT_7DAY_AVG,\n\t\tSI_DEATH_COUNT_7DAY_AVG,\n\t\tINCOMPLETE\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> DropLineageColumn\nsourceCSV derive(Load_Time = currentTimestamp(),\n\t\tLoad_Date = currentDate()) ~> LoadDateAndISOCountry\nDropLineageColumn sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:[(concat($filename, '.csv'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SinkLatestCSV\nDropLineageColumn sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:[(concat($filename, '.jsonl'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sinkLatestJsonl\nDropLineageColumn sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:[(concat($filename,'_', $runid,'.csv'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SinkCSV\nDropLineageColumn sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:[(concat($filename,'_', $runid,'.jsonl'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sinkJsonl\nDropLineageColumn sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:[(concat($filename, '.parquet'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sinkLatestParquet\nDropLineageColumn sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:[(concat($filename,'_', $runid,'.parquet'))],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sinkParquet\nDropLineageColumn sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sinkSQL"
                         }
                     },
                     "dependsOn": [
@@ -852,7 +822,7 @@
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'No')]",
-                    "name": "[concat(parameters('factoryName'), '/Demographics_Without_Sql_Sink')]",
+                    "name": "[concat(parameters('factoryName'), '/CovidNYC_Without_Sql_Sink')]",
                     "type": "Microsoft.DataFactory/factories/pipelines",
                     "apiVersion": "2018-06-01",
                     "properties": {
@@ -1670,11 +1640,11 @@
                         "parameters": {
                             "sourceFilename": {
                                 "type": "string",
-                                "defaultValue": "demographics_raw_data"
+                                "defaultValue": "covidnyc_raw_data"
                             },
                             "sourceRelativeUrl": {
                                 "type": "string",
-                                "defaultValue": "/api/views/9bhg-hcku/rows.csv?accessType=DOWNLOAD"
+                                "defaultValue": "/api/views/rc75-m7u3/rows.csv?accessType=DOWNLOAD"
                             },
                             "blobContainer": {
                                 "type": "string",
@@ -1682,22 +1652,22 @@
                             },
                             "rawBlobDirectory": {
                                 "type": "string",
-                                "defaultValue": "raw/demographics_data"
+                                "defaultValue": "raw/covidnyc_data"
                             },
                             "curatedBlobDirectory": {
                                 "type": "string",
-                                "defaultValue": "curated/demographics_data"
+                                "defaultValue": "curated/covidnyc_data"
                             },
                             "filename": {
                                 "type": "string",
-                                "defaultValue": "demographics_curated_data"
+                                "defaultValue": "covidnyc_curated_data"
                             }
                         },
                         "folder": {
-                            "name": "Demographics/BlobStorageDataExtraction"
+                            "name": "CovidNYC/BlobStorageDataExtraction"
                         },
                         "annotations": [
-                            "demographics"
+                            "covidnyc"
                         ],
                         "lastPublishTime": "2021-02-22T09:06:22Z"
                     },
@@ -1714,7 +1684,7 @@
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'Yes')]",
-                    "name": "[concat(parameters('factoryName'), '/Demographics_With_Sql_Sink')]",
+                    "name": "[concat(parameters('factoryName'), '/CovidNYC_With_Sql_Sink')]",
                     "type": "Microsoft.DataFactory/factories/pipelines",
                     "apiVersion": "2018-06-01",
                     "properties": {
@@ -2537,10 +2507,10 @@
                                 },
                                 "userProperties": [],
                                 "typeProperties": {
-                                    "storedProcedureName": "demographics.DataTypeChangedProc"
+                                    "storedProcedureName": "covidnyc.DataTypeChangedProc"
                                 },
                                 "linkedServiceName": {
-                                    "referenceName": "demographics_sql_linkedservice",
+                                    "referenceName": "covidnyc_sql_linkedservice",
                                     "type": "LinkedServiceReference"
                                 }
                             },
@@ -2567,7 +2537,7 @@
                                     "source": {
                                         "type": "AzureSqlSource",
                                         "sqlReaderQuery": {
-                                            "value": "select * from demographics.storeProcTable",
+                                            "value": "select * from covidnyc.storeProcTable",
                                             "type": "Expression"
                                         },
                                         "queryTimeout": "02:00:00",
@@ -2578,7 +2548,7 @@
                                         "type": "DatasetReference",
                                         "parameters": {
                                             "storeProcTable": "storeProcTable",
-                                            "schemaName": "demographics"
+                                            "schemaName": "covidnyc"
                                         }
                                     },
                                     "firstRowOnly": false
@@ -2648,7 +2618,7 @@
                                     "source": {
                                         "type": "AzureSqlSource",
                                         "sqlReaderQuery": {
-                                            "value": "IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'demographics')\nBEGIN\nEXEC('CREATE SCHEMA demographics')\nEND\nIF NOT EXISTS (\n    select * \n    from sys.objects \n    WHERE object_id = OBJECT_ID(N'[demographics].[DataTypeChangedProc]')\n    )\nBEGIN\n    EXEC('CREATE PROCEDURE demographics.DataTypeChangedProc AS IF OBJECT_ID(''demographics.storeProcTable'', ''u'') IS NOT NULL DROP TABLE demographics.storeProcTable; CREATE TABLE demographics.storeProcTable( table1_name varchar(255), Column1_name varchar(255), DATA_TYPE1 varchar(255), table2_name varchar(255), Column2_name varchar(255), DATA_TYPE2 varchar(255) ); INSERT INTO demographics.storeProcTable SELECT c1.table_name, c1.COLUMN_NAME, c1.DATA_TYPE, c2.table_name, c2.COLUMN_NAME, c2.DATA_TYPE FROM [INFORMATION_SCHEMA].[COLUMNS] c1 INNER JOIN [INFORMATION_SCHEMA].[COLUMNS] c2 ON (c1.COLUMN_NAME = c2.COLUMN_NAME AND c1.data_type <> c2.DATA_TYPE) WHERE c1.table_name=''curatedTable'' AND c2.table_name = ''previousTable'';')\n    select Count(*) from sys.symmetric_keys;\nEND\n\nELSE\n\nBEGIN\n    select Count(*) from sys.symmetric_keys;\nEND",
+                                            "value": "IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'covidnyc')\nBEGIN\nEXEC('CREATE SCHEMA covidnyc')\nEND\nIF NOT EXISTS (\n    select * \n    from sys.objects \n    WHERE object_id = OBJECT_ID(N'[covidnyc].[DataTypeChangedProc]')\n    )\nBEGIN\n    EXEC('CREATE PROCEDURE covidnyc.DataTypeChangedProc AS IF OBJECT_ID(''covidnyc.storeProcTable'', ''u'') IS NOT NULL DROP TABLE covidnyc.storeProcTable; CREATE TABLE covidnyc.storeProcTable( table1_name varchar(255), Column1_name varchar(255), DATA_TYPE1 varchar(255), table2_name varchar(255), Column2_name varchar(255), DATA_TYPE2 varchar(255) ); INSERT INTO covidnyc.storeProcTable SELECT c1.table_name, c1.COLUMN_NAME, c1.DATA_TYPE, c2.table_name, c2.COLUMN_NAME, c2.DATA_TYPE FROM [INFORMATION_SCHEMA].[COLUMNS] c1 INNER JOIN [INFORMATION_SCHEMA].[COLUMNS] c2 ON (c1.COLUMN_NAME = c2.COLUMN_NAME AND c1.data_type <> c2.DATA_TYPE) WHERE c1.table_name=''curatedTable'' AND c2.table_name = ''previousTable'';')\n    select Count(*) from sys.symmetric_keys;\nEND\n\nELSE\n\nBEGIN\n    select Count(*) from sys.symmetric_keys;\nEND",
                                             "type": "Expression"
                                         },
                                         "queryTimeout": "02:00:00",
@@ -2659,7 +2629,7 @@
                                         "type": "DatasetReference",
                                         "parameters": {
                                             "storeProcTable": "storeProcTable",
-                                            "schemaName": "demographics"
+                                            "schemaName": "covidnyc"
                                         }
                                     },
                                     "firstRowOnly": false
@@ -2700,7 +2670,7 @@
                                     "source": {
                                         "type": "AzureSqlSource",
                                         "sqlReaderQuery": {
-                                            "value": "IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'demographics')\nBEGIN\nEXEC('CREATE SCHEMA demographics')\nselect Count(*) from sys.symmetric_keys;\nEND\nELSE\nBEGIN\n    select Count(*) from sys.symmetric_keys;\nEND",
+                                            "value": "IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'covidnyc')\nBEGIN\nEXEC('CREATE SCHEMA covidnyc')\nselect Count(*) from sys.symmetric_keys;\nEND\nELSE\nBEGIN\n    select Count(*) from sys.symmetric_keys;\nEND",
                                             "type": "Expression"
                                         },
                                         "queryTimeout": "02:00:00",
@@ -2711,7 +2681,7 @@
                                         "type": "DatasetReference",
                                         "parameters": {
                                             "storeProcTable": "storeProcTable",
-                                            "schemaName": "demographics"
+                                            "schemaName": "covidnyc"
                                         }
                                     },
                                     "firstRowOnly": false
@@ -2744,7 +2714,7 @@
                                     },
                                     "sink": {
                                         "type": "AzureSqlSink",
-                                        "preCopyScript": "IF OBJECT_ID('[demographics].[previousTableSaveCopy]', 'U') IS NOT NULL\n\nBEGIN\n\nDROP TABLE [demographics].[previousTableSaveCopy];\n\nEND",
+                                        "preCopyScript": "IF OBJECT_ID('[covidnyc].[previousTableSaveCopy]', 'U') IS NOT NULL\n\nBEGIN\n\nDROP TABLE [covidnyc].[previousTableSaveCopy];\n\nEND",
                                         "tableOption": "autoCreate",
                                         "disableMetricsCollection": false
                                     },
@@ -2800,7 +2770,7 @@
                                     },
                                     "sink": {
                                         "type": "AzureSqlSink",
-                                        "preCopyScript": "IF OBJECT_ID('[demographics].[previousTable]', 'U') IS NOT NULL\n\nBEGIN\n\nDROP TABLE [demographics].[previousTable]; \n\nEND",
+                                        "preCopyScript": "IF OBJECT_ID('[covidnyc].[previousTable]', 'U') IS NOT NULL\n\nBEGIN\n\nDROP TABLE [covidnyc].[previousTable]; \n\nEND",
                                         "tableOption": "autoCreate",
                                         "disableMetricsCollection": false
                                     },
@@ -2833,11 +2803,11 @@
                         "parameters": {
                             "sourceFilename": {
                                 "type": "string",
-                                "defaultValue": "demographics_raw_data"
+                                "defaultValue": "covidnyc_raw_data"
                             },
                             "sourceRelativeUrl": {
                                 "type": "string",
-                                "defaultValue": "/api/views/9bhg-hcku/rows.csv?accessType=DOWNLOAD"
+                                "defaultValue": "/api/views/rc75-m7u3/rows.csv?accessType=DOWNLOAD"
                             },
                             "blobContainer": {
                                 "type": "string",
@@ -2845,23 +2815,23 @@
                             },
                             "rawBlobDirectory": {
                                 "type": "string",
-                                "defaultValue": "raw/demographics_data"
+                                "defaultValue": "raw/covidnyc_data"
                             },
                             "curatedBlobDirectory": {
                                 "type": "string",
-                                "defaultValue": "curated/demographics_data"
+                                "defaultValue": "curated/covidnyc_data"
                             },
                             "filename": {
                                 "type": "string",
-                                "defaultValue": "demographics_curated_data"
+                                "defaultValue": "covidnyc_curated_data"
                             }
                         },
                         "variables": {},
                         "folder": {
-                            "name": "Demographics/BlobStorageAndSqlDataExtraction"
+                            "name": "CovidNYC/BlobStorageAndSqlDataExtraction"
                         },
                         "annotations": [
-                            "demographics"
+                            "covidnyc"
                         ],
                         "lastPublishTime": "2021-02-22T09:06:22Z"
                     },
@@ -2881,7 +2851,7 @@
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'Yes')]",
-                    "name": "[concat(parameters('factoryName'), '/Demographics_Trigger_With_Sql_Sink')]",
+                    "name": "[concat(parameters('factoryName'), '/CovidNYC_Trigger_With_Sql_Sink')]",
                     "type": "Microsoft.DataFactory/factories/triggers",
                     "apiVersion": "2018-06-01",
                     "properties": {
@@ -2890,7 +2860,7 @@
                         "pipelines": [
                             {
                                 "pipelineReference": {
-                                    "referenceName": "Demographics_With_Sql_Sink",
+                                    "referenceName": "CovidNYC_With_Sql_Sink",
                                     "type": "PipelineReference"
                                 }
                             }
@@ -2907,12 +2877,12 @@
                     },
                     "dependsOn": [
                         "[parameters('factoryName')]",
-                        "[concat(variables('factoryId'), '/pipelines/Demographics_With_Sql_Sink')]"
+                        "[concat(variables('factoryId'), '/pipelines/CovidNYC_With_Sql_Sink')]"
                     ]
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'No')]",
-                    "name": "[concat(parameters('factoryName'), '/Demographics_Trigger_Without_Sql_Sink')]",
+                    "name": "[concat(parameters('factoryName'), '/CovidNYC_Trigger_Without_Sql_Sink')]",
                     "type": "Microsoft.DataFactory/factories/triggers",
                     "apiVersion": "2018-06-01",
                     "properties": {
@@ -2921,7 +2891,7 @@
                         "pipelines": [
                             {
                                 "pipelineReference": {
-                                    "referenceName": "Demographics_Without_Sql_Sink",
+                                    "referenceName": "CovidNYC_Without_Sql_Sink",
                                     "type": "PipelineReference"
                                 }
                             }
@@ -2938,7 +2908,7 @@
                     },
                     "dependsOn": [
                         "[parameters('factoryName')]",
-                        "[concat(variables('factoryId'), '/pipelines/Demographics_Without_Sql_Sink')]"
+                        "[concat(variables('factoryId'), '/pipelines/CovidNYC_Without_Sql_Sink')]"
                     ]
                 },
                 {
@@ -3004,8 +2974,8 @@
                                             "name": "PipelineName",
                                             "operator": "Include",
                                             "values": [
-                                                "Demographics_Without_Sql_Sink",
-                                                "Demographics_With_Sql_Sink"
+                                                "CovidNYC_Without_Sql_Sink",
+                                                "CovidNYC_With_Sql_Sink"
                                             ]
                                         },
                                         {
@@ -3073,8 +3043,8 @@
                                             "name": "PipelineName",
                                             "operator": "Include",
                                             "values": [
-                                                "Demographics_Without_Sql_Sink",
-                                                "Demographics_With_Sql_Sink"
+                                                "CovidNYC_Without_Sql_Sink",
+                                                "CovidNYC_With_Sql_Sink"
                                             ]
                                         },
                                         {
@@ -3142,8 +3112,8 @@
                                             "name": "PipelineName",
                                             "operator": "Include",
                                             "values": [
-                                                "Demographics_Without_Sql_Sink",
-                                                "Demographics_With_Sql_Sink"
+                                                "CovidNYC_Without_Sql_Sink",
+                                                "CovidNYC_With_Sql_Sink"
                                             ]
                                         },
                                         {
@@ -3211,7 +3181,7 @@
                                             "name": "PipelineName",
                                             "operator": "Include",
                                             "values": [
-                                                "Demographics_With_Sql_Sink"
+                                                "CovidNYC_With_Sql_Sink"
                                             ]
                                         },
                                         {
@@ -3243,7 +3213,7 @@
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'No')]",
-                    "name": "DemographicsWithoutSqlPipelineFailedAlertConfig",
+                    "name": "CovidNYCWithoutSqlPipelineFailedAlertConfig",
                     "type": "Microsoft.Insights/metricAlerts",
                     "location": "global",
                     "apiVersion": "2018-03-01",
@@ -3265,7 +3235,7 @@
                                         {
                                             "name": "Name",
                                             "operator": "Include",
-                                            "values": [ "Demographics_Without_Sql_Sink" ]
+                                            "values": [ "CovidNYC_Without_Sql_Sink" ]
                                         },
                                         {
                                             "name": "FailureType",
@@ -3292,7 +3262,7 @@
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'No')]",
-                    "name": "DemographicsWithoutSqlPipelineCancelledAlertConfig",
+                    "name": "CovidNYCWithoutSqlPipelineCancelledAlertConfig",
                     "type": "Microsoft.Insights/metricAlerts",
                     "location": "global",
                     "apiVersion": "2018-03-01",
@@ -3314,7 +3284,7 @@
                                         {
                                             "name": "Name",
                                             "operator": "Include",
-                                            "values": [ "Demographics_Without_Sql_Sink" ]
+                                            "values": [ "CovidNYC_Without_Sql_Sink" ]
                                         }
                                     ],
                                     "operator": "GreaterThanOrEqual",
@@ -3336,7 +3306,7 @@
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'No')]",
-                    "name": "DemographicsWithoutSqlActivityFailedAlertConfig",
+                    "name": "CovidNYCWithoutSqlActivityFailedAlertConfig",
                     "type": "Microsoft.Insights/metricAlerts",
                     "location": "global",
                     "apiVersion": "2018-03-01",
@@ -3368,7 +3338,7 @@
                                         {
                                             "name": "PipelineName",
                                             "operator": "Include",
-                                            "values": [ "Demographics_Without_Sql_Sink" ]
+                                            "values": [ "CovidNYC_Without_Sql_Sink" ]
                                         },
                                         {
                                             "name": "FailureType",
@@ -3395,7 +3365,7 @@
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'No')]",
-                    "name": "DemographicsWithoutSqlActivityCancelledAlertConfig",
+                    "name": "CovidNYCWithoutSqlActivityCancelledAlertConfig",
                     "type": "Microsoft.Insights/metricAlerts",
                     "location": "global",
                     "apiVersion": "2018-03-01",
@@ -3427,7 +3397,7 @@
                                         {
                                             "name": "PipelineName",
                                             "operator": "Include",
-                                            "values": [ "Demographics_Without_Sql_Sink" ]
+                                            "values": [ "CovidNYC_Without_Sql_Sink" ]
                                         }
                                     ],
                                     "operator": "GreaterThanOrEqual",
@@ -3449,7 +3419,7 @@
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'No')]",
-                    "name": "DemographicsWithoutSqlTriggerCancelledAlertConfig",
+                    "name": "CovidNYCWithoutSqlTriggerCancelledAlertConfig",
                     "type": "Microsoft.Insights/metricAlerts",
                     "location": "global",
                     "apiVersion": "2018-03-01",
@@ -3471,7 +3441,7 @@
                                         {
                                             "name": "Name",
                                             "operator": "Include",
-                                            "values": [ "Demographics_Trigger_Without_Sql_Sink" ]
+                                            "values": [ "CovidNYC_Trigger_Without_Sql_Sink" ]
                                         }
                                     ],
                                     "operator": "GreaterThanOrEqual",
@@ -3493,7 +3463,7 @@
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'No')]",
-                    "name": "DemographicsWithoutSqlTriggerFailedAlertConfig",
+                    "name": "CovidNYCWithoutSqlTriggerFailedAlertConfig",
                     "type": "Microsoft.Insights/metricAlerts",
                     "location": "global",
                     "apiVersion": "2018-03-01",
@@ -3515,7 +3485,7 @@
                                         {
                                             "name": "Name",
                                             "operator": "Include",
-                                            "values": [ "Demographics_Trigger_Without_Sql_Sink" ]
+                                            "values": [ "CovidNYC_Trigger_Without_Sql_Sink" ]
                                         },
                                         {
                                             "name": "FailureType",
@@ -3571,12 +3541,12 @@
                             "values": [
                                 "[concat(resourceGroup().id,'/providers/Microsoft.DataFactory/factories/', parameters('factoryName'))]",
                                 "[concat(resourceGroup().id,'/providers/Microsoft.Insights/actionGroups/', 'NotificationAlertFromADF')]",
-                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'DemographicsWithoutSqlActivityFailedAlertConfig')]",
-                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'DemographicsWithoutSqlPipelineFailedAlertConfig')]",
-                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'DemographicsWithoutSqlTriggerFailedAlertConfig')]",
-                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'DemographicsWithoutSqlTriggerCancelledAlertConfig')]",
-                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'DemographicsWithoutSqlActivityCancelledAlertConfig')]",
-                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'DemographicsWithoutSqlPipelineCancelledAlertConfig')]",
+                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'CovidNYCWithoutSqlActivityFailedAlertConfig')]",
+                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'CovidNYCWithoutSqlPipelineFailedAlertConfig')]",
+                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'CovidNYCWithoutSqlTriggerFailedAlertConfig')]",
+                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'CovidNYCWithoutSqlTriggerCancelledAlertConfig')]",
+                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'CovidNYCWithoutSqlActivityCancelledAlertConfig')]",
+                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'CovidNYCWithoutSqlPipelineCancelledAlertConfig')]",
                                 "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'SourceCurrentSchemaWithLessColumnsAlert')]",
                                 "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'SourceCurrentSchemaWithMoreColumnsAlert')]",
                                 "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'SourceCurrentSchemaWithSameNumberOfColumnsButDifferentNamesOrArrangementAlert')]"  
@@ -3586,18 +3556,18 @@
                     "dependsOn": [
                         "[parameters('factoryName')]",
                         "NotificationAlertFromADF",
-                        "DemographicsWithoutSqlPipelineFailedAlertConfig",
-                        "DemographicsWithoutSqlActivityFailedAlertConfig",
-                        "DemographicsWithoutSqlTriggerFailedAlertConfig",
-                        "DemographicsWithoutSqlTriggerCancelledAlertConfig",
-                        "DemographicsWithoutSqlActivityCancelledAlertConfig",
-                        "DemographicsWithoutSqlPipelineCancelledAlertConfig"
+                        "CovidNYCWithoutSqlPipelineFailedAlertConfig",
+                        "CovidNYCWithoutSqlActivityFailedAlertConfig",
+                        "CovidNYCWithoutSqlTriggerFailedAlertConfig",
+                        "CovidNYCWithoutSqlTriggerCancelledAlertConfig",
+                        "CovidNYCWithoutSqlActivityCancelledAlertConfig",
+                        "CovidNYCWithoutSqlPipelineCancelledAlertConfig"
 
                     ]
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'Yes')]",
-                    "name": "DemographicsWithSqlPipelineFailedAlertConfig",
+                    "name": "CovidNYCWithSqlPipelineFailedAlertConfig",
                     "type": "Microsoft.Insights/metricAlerts",
                     "location": "global",
                     "apiVersion": "2018-03-01",
@@ -3619,7 +3589,7 @@
                                         {
                                             "name": "Name",
                                             "operator": "Include",
-                                            "values": [ "Demographics_With_Sql_Sink" ]
+                                            "values": [ "CovidNYC_With_Sql_Sink" ]
                                         },
                                         {
                                             "name": "FailureType",
@@ -3646,7 +3616,7 @@
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'Yes')]",
-                    "name": "DemographicsWithSqlPipelineCancelledAlertConfig",
+                    "name": "CovidNYCWithSqlPipelineCancelledAlertConfig",
                     "type": "Microsoft.Insights/metricAlerts",
                     "location": "global",
                     "apiVersion": "2018-03-01",
@@ -3668,7 +3638,7 @@
                                         {
                                             "name": "Name",
                                             "operator": "Include",
-                                            "values": [ "Demographics_With_Sql_Sink" ]
+                                            "values": [ "CovidNYC_With_Sql_Sink" ]
                                         }
                                     ],
                                     "operator": "GreaterThanOrEqual",
@@ -3690,7 +3660,7 @@
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'Yes')]",
-                    "name": "DemographicsWithSqlActivityFailedAlertConfig",
+                    "name": "CovidNYCWithSqlActivityFailedAlertConfig",
                     "type": "Microsoft.Insights/metricAlerts",
                     "location": "global",
                     "apiVersion": "2018-03-01",
@@ -3722,7 +3692,7 @@
                                         {
                                             "name": "PipelineName",
                                             "operator": "Include",
-                                            "values": [ "Demographics_With_Sql_Sink" ]
+                                            "values": [ "CovidNYC_With_Sql_Sink" ]
                                         },
                                         {
                                             "name": "FailureType",
@@ -3749,7 +3719,7 @@
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'Yes')]",
-                    "name": "DemographicsWithSqlActivityCancelledAlertConfig",
+                    "name": "CovidNYCWithSqlActivityCancelledAlertConfig",
                     "type": "Microsoft.Insights/metricAlerts",
                     "location": "global",
                     "apiVersion": "2018-03-01",
@@ -3781,7 +3751,7 @@
                                         {
                                             "name": "PipelineName",
                                             "operator": "Include",
-                                            "values": [ "Demographics_With_Sql_Sink" ]
+                                            "values": [ "CovidNYC_With_Sql_Sink" ]
                                         }
                                     ],
                                     "operator": "GreaterThanOrEqual",
@@ -3803,7 +3773,7 @@
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'Yes')]",
-                    "name": "DemographicsWithSqlTriggerFailedAlertConfig",
+                    "name": "CovidNYCWithSqlTriggerFailedAlertConfig",
                     "type": "Microsoft.Insights/metricAlerts",
                     "location": "global",
                     "apiVersion": "2018-03-01",
@@ -3825,7 +3795,7 @@
                                         {
                                             "name": "Name",
                                             "operator": "Include",
-                                            "values": [ "Demographics_Trigger_With_Sql_Sink" ]
+                                            "values": [ "CovidNYC_Trigger_With_Sql_Sink" ]
                                         },
                                         {
                                             "name": "FailureType",
@@ -3852,7 +3822,7 @@
                 },
                 {
                     "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'Yes')]",
-                    "name": "DemographicsWithSqlTriggerCancelledAlertConfig",
+                    "name": "CovidNYCWithSqlTriggerCancelledAlertConfig",
                     "type": "Microsoft.Insights/metricAlerts",
                     "location": "global",
                     "apiVersion": "2018-03-01",
@@ -3874,7 +3844,7 @@
                                         {
                                             "name": "Name",
                                             "operator": "Include",
-                                            "values": [ "Demographics_Trigger_With_Sql_Sink" ]
+                                            "values": [ "CovidNYC_Trigger_With_Sql_Sink" ]
                                         }
                                     ],
                                     "operator": "GreaterThanOrEqual",
@@ -3925,12 +3895,12 @@
                             "values": [
                                 "[concat(resourceGroup().id,'/providers/Microsoft.DataFactory/factories/', parameters('factoryName'))]",
                                 "[concat(resourceGroup().id,'/providers/Microsoft.Insights/actionGroups/', 'NotificationAlertFromADF')]",
-                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'DemographicsWithSqlActivityFailedAlertConfig')]",
-                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'DemographicsWithSqlPipelineFailedAlertConfig')]",
-                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'DemographicsWithSqlPipelineCancelledAlertConfig')]",
-                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'DemographicsWithSqlActivityCancelledAlertConfig')]",
-                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'DemographicsWithSqlTriggerFailedAlertConfig')]",
-                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'DemographicsWithSqlTriggerCancelledAlertConfig')]",
+                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'CovidNYCWithSqlActivityFailedAlertConfig')]",
+                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'CovidNYCWithSqlPipelineFailedAlertConfig')]",
+                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'CovidNYCWithSqlPipelineCancelledAlertConfig')]",
+                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'CovidNYCWithSqlActivityCancelledAlertConfig')]",
+                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'CovidNYCWithSqlTriggerFailedAlertConfig')]",
+                                "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'CovidNYCWithSqlTriggerCancelledAlertConfig')]",
                                 "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'SourceCurrentSchemaWithLessColumnsAlert')]",
                                 "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'SourceCurrentSchemaWithMoreColumnsAlert')]",
                                 "[concat(resourceGroup().id,'/providers/Microsoft.Insights/metricAlerts/', 'SourceCurrentSchemaWithSameNumberOfColumnsButDifferentNamesOrArrangementAlert')]",
@@ -3941,12 +3911,12 @@
                     "dependsOn": [
                         "[parameters('factoryName')]",
                         "NotificationAlertFromADF",
-                        "DemographicsWithSqlPipelineFailedAlertConfig",
-                        "DemographicsWithSqlActivityFailedAlertConfig",
-                        "DemographicsWithSqlActivityCancelledAlertConfig",
-                        "DemographicsWithSqlPipelineCancelledAlertConfig",
-                        "DemographicsWithSqlTriggerCancelledAlertConfig",
-                        "DemographicsWithSqlTriggerFailedAlertConfig"
+                        "CovidNYCWithSqlPipelineFailedAlertConfig",
+                        "CovidNYCWithSqlActivityFailedAlertConfig",
+                        "CovidNYCWithSqlActivityCancelledAlertConfig",
+                        "CovidNYCWithSqlPipelineCancelledAlertConfig",
+                        "CovidNYCWithSqlTriggerCancelledAlertConfig",
+                        "CovidNYCWithSqlTriggerFailedAlertConfig"
                     ]
                 }
 

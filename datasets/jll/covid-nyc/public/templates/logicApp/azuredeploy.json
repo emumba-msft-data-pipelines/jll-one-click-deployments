@@ -24,7 +24,7 @@
             "name": "msftTeamsConnectionAuth",
             "tags": {
                 "Environment": "Public",
-                "AssociatedDataSet": "Demographics"
+                "AssociatedDataSet": "CovidNYC"
             },
             "properties": {
                 "api": {
@@ -43,7 +43,7 @@
             ],
             "tags": {
                 "Environment": "Public",
-                "AssociatedDataSet": "Demographics"
+                "AssociatedDataSet": "CovidNYC"
             },
             "properties": {
                 "state": "Enabled",

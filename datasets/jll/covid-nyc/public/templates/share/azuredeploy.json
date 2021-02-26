@@ -38,7 +38,7 @@
             "dependsOn": [],
             "tags": {
                 "Environment": "Public",
-                "AssociatedDataSet": "Demographics"
+                "AssociatedDataSet": "CovidNYC"
             },
             "properties": {
                 "shareKind": "CopyBased"
@@ -54,7 +54,7 @@
             ],
             "tags": {
                 "Environment": "Public",
-                "AssociatedDataSet": "Demographics"
+                "AssociatedDataSet": "CovidNYC"
             },
             "kind": "ScheduleBased",
             "properties": {
