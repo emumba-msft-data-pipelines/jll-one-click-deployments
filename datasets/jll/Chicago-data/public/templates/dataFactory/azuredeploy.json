@@ -1679,7 +1679,7 @@
                             },
                             "sourceRelativeUrl": {
                                 "type": "string",
-                                "defaultValue": "/api/views/9bhg-hcku/rows.csv?accessType=DOWNLOAD"
+                                "defaultValue": "/api/views/yhhz-zm2v/rows.csv?accessType=DOWNLOAD"
                             },
                             "blobContainer": {
                                 "type": "string",
