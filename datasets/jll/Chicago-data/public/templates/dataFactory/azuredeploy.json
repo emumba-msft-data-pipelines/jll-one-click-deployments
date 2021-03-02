@@ -48,10 +48,7 @@
                 "description": "Your login name must not contain a SQL Identifier or a typical system name (like admin, administrator, sa, root, dbmanager, loginmanager, etc.) or a built-in database user or role (like dbo, guest, public, etc.)"
             }
         },
-        "chicago_http_linkedservice_properties_typeProperties_url": {
-            "type": "string",
-            "defaultValue": "https://data.cityofchicago.org/"
-        },
+      
         "sqlAdministratorLoginPassword": {
             "type": "securestring",
             "metadata": {
@@ -77,7 +74,9 @@
         "storageAccountId": "[concat(resourceGroup().id,'/providers/Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]",
         "dataflowWithSqlName": "Transformations_With_SQL_Sink",
         "dataflowWithoutSqlName": "Transformations_Without_SQL_Sink",
-        "databaseCollation": "SQL_Latin1_General_CP1_CI_AS"
+        "databaseCollation": "SQL_Latin1_General_CP1_CI_AS",
+        "chicago_http_linkedservice_properties_typeProperties_url":"https://data.cityofchicago.org/"
+        
     },
     "resources": [
         {
@@ -120,7 +119,7 @@
                         "annotations": [],
                         "type": "HttpServer",
                         "typeProperties": {
-                            "url": "[parameters('chicago_http_linkedservice_properties_typeProperties_url')]",
+                            "url": "[variables('chicago_http_linkedservice_properties_typeProperties_url')]",
                             "enableServerCertificateValidation": true,
                             "authenticationType": "Anonymous"
                         }
