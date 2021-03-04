@@ -75,7 +75,8 @@
         "dataflowWithSqlName": "Transformations_With_SQL_Sink",
         "dataflowWithoutSqlName": "Transformations_Without_SQL_Sink",
         "databaseCollation": "SQL_Latin1_General_CP1_CI_AS",
-        "chicago_http_linkedservice_properties_typeProperties_url": "https://data.cityofchicago.org/"
+        "chicago_http_linkedservice_properties_typeProperties_url": "https://data.cityofchicago.org/",
+        "keyVaultbaseUrl":"[concat('https://',parameters('keyVaultName'),'.vault.azure.net')]"
 
     },
     "resources": [
@@ -137,7 +138,32 @@
                         "annotations": [],
                         "type": "AzureSqlDatabase",
                         "typeProperties": {
-                            "connectionString": "[concat('Server=tcp:',parameters('serverName'),'.database.windows.net,1433;Initial Catalog=',parameters('databaseName'),';Persist Security Info=False;User ID=',parameters('sqlAdministratorLogin'),';Password=',parameters('sqlAdministratorLoginPassword'),';MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;')]"
+                            "connectionString": "[concat('Server=tcp:',parameters('serverName'),'.database.windows.net,1433;Initial Catalog=',parameters('databaseName'),';Persist Security Info=False;User ID=',parameters('sqlAdministratorLogin'),';MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;')]",
+                            "password": {
+                                "type": "AzureKeyVaultSecret",
+                                "store": {
+                                    "referenceName": "chicago_keyvault_linkedservice",
+                                    "type": "LinkedServiceReference"
+                                },
+                                "secretName": "sqlAdministratorLoginPassword"
+                            }
+                        }
+                    },
+                    "dependsOn": [
+                        "[concat(variables('factoryId'), '/linkedServices/chicago_keyvault_linkedservice')]",
+                        "[parameters('factoryName')]"
+                    ]
+                },
+                {
+                    "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'Yes')]",
+                    "name": "[concat(parameters('factoryName'), '/chicago_keyvault_linkedservice')]",
+                    "type": "Microsoft.DataFactory/factories/linkedServices",
+                    "apiVersion": "2018-06-01",
+                    "properties": {
+                        "annotations": [],
+                        "type": "AzureKeyVault",
+                        "typeProperties": {
+                            "baseUrl": "[concat('https://',parameters('keyVaultName'),'.vault.azure.net')]"
                         }
                     },
                     "dependsOn": [

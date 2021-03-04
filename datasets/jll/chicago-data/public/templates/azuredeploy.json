@@ -109,48 +109,180 @@
             "metadata": {
                 "description": "Name can only contain alphanumeric characters, hyphen and underscore"
             }
-        }
+        },
+        "keyVaultName": {
+            "type": "string",
+            "defaultValue": "demokv",
+            "metadata": {
+              "description": "Specifies the name of the key vault."
+            }
+          },
+          "yourObjectId": {
+              "type": "string",
+              "defaultValue": "",
+              "metadata": {
+                  "description": "Kindly give your Object Id so that full permissions to key vault can be assigned to you"
+                }
+          }
     },
     "variables": {
         "factoryName": "[concat(parameters('factoryName'), uniquestring(resourceGroup().id))]",
-        "storageAccountName": "[concat(parameters('storageAccountName'), uniquestring(resourceGroup().id))]",
+        "keyVaultName": "[concat(parameters('keyVaultName'), uniquestring(resourceGroup().id))]",
         "serverName": "[concat(parameters('serverName'), uniquestring(resourceGroup().id))]",
         "webHookUri": "https://null",
-        "dataShareAccountName": "[concat(parameters('dataShareAccountName'), uniquestring(resourceGroup().id))]",
-        "storageTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/Chicago-data/public/templates/storageAccount/azuredeploy.json",
-        "sqlServerTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/Chicago-data/public/templates/sqlServer/azuredeploy.json",
-        "dataShareTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/Chicago-data/public/templates/dataShare/azuredeploy.json",
-        "logicAppTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/Chicago-data/public/templates/logicApp/azuredeploy.json",
-        "dataFactoryTemplateWithTeamsNotifUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/Chicago-data/public/templates/dataFactory/azuredeploy.json",
-        "dataFactoryTemplateWithoutTeamsNotifUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/Chicago-data/public/templates/dataFactory/azuredeploy.json",
-        "shareTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/Chicago-data/public/templates/share/azuredeploy.json"
+        "keyVaultTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/chicago-keyvault/datasets/jll/chicago-data/public/templates/keyVault/azuredeploy.json",
+        "keyVaultPermissionsUpdateTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/chicago-keyvault/datasets/jll/chicago-data/public/templates/keyVaultPermissionsUpdate/azuredeploy.json",
+        "linkedTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/chicago-keyvault/datasets/jll/chicago-data/public/templates/linkedTemplate/azuredeploy.json",
+        "emptyDataFactoryTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/chicago-keyvault/datasets/jll/chicago-data/public/templates/dataFactory/azuredeploy.json",
+        "sqlServerTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/chicago-keyvault/datasets/jll/chicago-data/public/templates/sqlServer/azuredeploy.json"
     },
     "resources": [
         {
-            "name": "storageTemplate",
+            "name": "keyVaultTemplate",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-05-01",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('storageTemplateUri')]"
+                    "uri": "[variables('keyVaultTemplateUri')]"
                 },
                 "parameters": {
-                    "storageAccountName": {
-                        "value": "[variables('storageAccountName')]"
+                    "doYouWantToWriteCuratedDataToSQLDatabase": {
+                        "value": "[parameters('doYouWantToWriteCuratedDataToSQLDatabase')]"
                     },
                     "location": {
                         "value": "[parameters('location')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[variables('keyVaultName')]"
+                    },
+                    "sqlAdministratorLoginPassword": {
+                        "value": "[parameters('sqlAdministratorLoginPassword')]"
                     }
                 }
             }
         },
         {
-            "name": "sqlServerTemplate",
+            "name": "keyVaultPermissionsUpdateTemplate",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-05-01",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments','dataShareTemplate')]"
+                "[resourceId('Microsoft.Resources/deployments','emptyDataFactory')]",
+                "[resourceId('Microsoft.Resources/deployments','sqlServer')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('keyVaultPermissionsUpdateTemplateUri')]"
+                },
+                "parameters": {
+                    "doYouWantToWriteCuratedDataToSQLDatabase": {
+                        "value": "[parameters('doYouWantToWriteCuratedDataToSQLDatabase')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[variables('keyVaultName')]"
+                    },
+                    "factoryName": {
+                        "value": "[variables('factoryName')]"
+                    },
+                    "yourObjectId": {
+                        "value": "[parameters('yourObjectId')]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "linkedTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','keyVaultPermissionsUpdateTemplate')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('linkedTemplateUri')]"
+                },
+                "parameters": {
+                    "doYouWantToWriteCuratedDataToSQLDatabase": {
+                        "value": "[parameters('doYouWantToWriteCuratedDataToSQLDatabase')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "storageAccountName": {
+                        "value": "[parameters('storageAccountName')]"
+                    },
+                    "factoryName": {
+                        "value": "[parameters('factoryName')]"
+                    },
+                    "sqlAdministratorLogin": {
+                        "value": "[parameters('sqlAdministratorLogin')]"
+                    },
+                    "serverName": {
+                        "value": "[parameters('serverName')]"
+                    },
+                    "databaseName": {
+                        "value": "[parameters('databaseName')]"
+                    },
+                    "currentTime": {
+                        "value": "[parameters('currentTime')]"
+                    },
+                    "notificationEmail": {
+                        "value": "[parameters('notificationEmail')]"
+                    },
+                    "enableMicrosoftTeamsNotification": {
+                        "value": "[parameters('enableMicrosoftTeamsNotification')]"
+                    },
+                    "logicAppName": {
+                        "value": "[parameters('logicAppName')]"
+                    },
+                    "deployAndUseDataShare": {
+                        "value": "[parameters('deployAndUseDataShare')]"
+                    },
+                    "dataShareAccountName": {
+                        "value": "[parameters('dataShareAccountName')]"
+                    },
+                    "shareName": {
+                        "value": "[parameters('shareName')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[parameters('keyVaultName')]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "emptyDataFactory",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','keyVaultTemplate')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('emptyDataFactoryTemplateUri')]"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "factoryName": {
+                        "value": "[variables('factoryName')]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "sqlServer",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','keyVaultTemplate')]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -158,11 +290,11 @@
                     "uri": "[variables('sqlServerTemplateUri')]"
                 },
                 "parameters": {
-                    "doYouWantToWriteCuratedDataToSQLDatabase": {
-                        "value": "[parameters('doYouWantToWriteCuratedDataToSQLDatabase')]"
-                    },
                     "location": {
                         "value": "[parameters('location')]"
+                    },
+                    "serverName": {
+                        "value": "[variables('serverName')]"
                     },
                     "sqlAdministratorLogin": {
                         "value": "[parameters('sqlAdministratorLogin')]"
@@ -170,187 +302,11 @@
                     "sqlAdministratorLoginPassword": {
                         "value": "[parameters('sqlAdministratorLoginPassword')]"
                     },
-                    "databaseName": {
-                        "value": "[parameters('databaseName')]"
-                    },
-                    "serverName": {
-                        "value": "[variables('serverName')]"
-                    }
-                }
-            }
-        },
-        {
-            "name": "dataShareTemplate",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2018-05-01",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments','storageTemplate')]"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('dataShareTemplateUri')]"
-                },
-                "parameters": {
-                    "dataShareAccountName": {
-                        "value": "[variables('dataShareAccountName')]"
-                    },
-                    "location": {
-                        "value": "[parameters('location')]"
-                    },
-                    "deployAndUseDataShare": {
-                        "value": "[parameters('deployAndUseDataShare')]"
-                    }
-                }
-            }
-        },
-        {
-            "condition": "[equals(parameters('enableMicrosoftTeamsNotification'),'Yes')]",
-            "name": "logicAppTemplate",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2018-05-01",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('logicAppTemplateUri')]"
-                },
-                "parameters": {
-                    "location": {
-                        "value": "[parameters('location')]"
-                    },
-                    "logicAppName": {
-                        "value": "[parameters('logicAppName')]"
-                    }
-                }
-            }
-        },
-        {
-            "condition": "[equals(parameters('enableMicrosoftTeamsNotification'),'Yes')]",
-            "name": "dataFactoryTemplateWithTeamsNotif",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2018-05-01",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments','logicAppTemplate')]",
-                "[resourceId('Microsoft.Resources/deployments','storageTemplate')]"
-
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('dataFactoryTemplateWithTeamsNotifUri')]"
-                },
-                "parameters": {
-                    "factoryName": {
-                        "value": "[variables('factoryName')]"
-                    },
-                    "storageAccountName": {
-                        "value": "[variables('storageAccountName')]"
-                    },
                     "doYouWantToWriteCuratedDataToSQLDatabase": {
                         "value": "[parameters('doYouWantToWriteCuratedDataToSQLDatabase')]"
                     },
-                    "location": {
-                        "value": "[parameters('location')]"
-                    },
-                    "sqlAdministratorLogin": {
-                        "value": "[parameters('sqlAdministratorLogin')]"
-                    },
-                    "sqlAdministratorLoginPassword": {
-                        "value": "[parameters('sqlAdministratorLoginPassword')]"
-                    },
                     "databaseName": {
                         "value": "[parameters('databaseName')]"
-                    },
-                    "serverName": {
-                        "value": "[variables('serverName')]"
-                    },
-                    "currentTime": {
-                        "value": "[parameters('currentTime')]"
-                    },
-                    "notificationEmail": {
-                        "value": "[parameters('notificationEmail')]"
-                    },
-                    "webHookUri": {
-                        "value": "[if(equals(parameters('enableMicrosoftTeamsNotification'),'Yes'), reference('logicAppTemplate','2018-05-01').outputs.WebHookURI.value, 'http://example.com')]"
-                    }
-                }
-            }
-        },
-        {
-            "condition": "[equals(parameters('enableMicrosoftTeamsNotification'),'No')]",
-            "name": "dataFactoryTemplateWithoutTeamsNotif",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2018-05-01",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments','logicAppTemplate')]",
-                "[resourceId('Microsoft.Resources/deployments','storageTemplate')]"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('dataFactoryTemplateWithoutTeamsNotifUri')]"
-                },
-                "parameters": {
-                    "factoryName": {
-                        "value": "[variables('factoryName')]"
-                    },
-                    "storageAccountName": {
-                        "value": "[variables('storageAccountName')]"
-                    },
-                    "doYouWantToWriteCuratedDataToSQLDatabase": {
-                        "value": "[parameters('doYouWantToWriteCuratedDataToSQLDatabase')]"
-                    },
-                    "location": {
-                        "value": "[parameters('location')]"
-                    },
-                    "sqlAdministratorLogin": {
-                        "value": "[parameters('sqlAdministratorLogin')]"
-                    },
-                    "sqlAdministratorLoginPassword": {
-                        "value": "[parameters('sqlAdministratorLoginPassword')]"
-                    },
-                    "databaseName": {
-                        "value": "[parameters('databaseName')]"
-                    },
-                    "serverName": {
-                        "value": "[variables('serverName')]"
-                    },
-                    "currentTime": {
-                        "value": "[parameters('currentTime')]"
-                    },
-                    "notificationEmail": {
-                        "value": "[parameters('notificationEmail')]"
-                    },
-                    "webHookUri": {
-                        "value": "http://example.com"
-                    }
-                }
-            }
-        },
-        {
-            "name": "shareTemplate",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2018-05-01",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments','dataShareTemplate')]"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('shareTemplateUri')]"
-                },
-                "parameters": {
-                    "dataShareAccountName": {
-                        "value": "[variables('dataShareAccountName')]"
-                    },
-                    "currentTime": {
-                        "value": "[parameters('currentTime')]"
-                    },
-                    "shareName": {
-                        "value": "[parameters('shareName')]"
-                    },
-                    "deployAndUseDataShare": {
-                        "value": "[parameters('deployAndUseDataShare')]"
                     }
                 }
             }
