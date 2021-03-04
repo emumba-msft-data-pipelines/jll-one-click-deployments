@@ -67,7 +67,13 @@
         "webHookUri": {
             "type": "string"
 
-        }
+        },
+        "keyVaultName": {
+            "type": "string",
+            "metadata": {
+              "description": "Specifies the name of the key vault."
+            }
+          }
     },
     "variables": {
         "factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]",
