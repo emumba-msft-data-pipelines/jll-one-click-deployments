@@ -48,10 +48,6 @@
                 "description": "Your login name must not contain a SQL Identifier or a typical system name (like admin, administrator, sa, root, dbmanager, loginmanager, etc.) or a built-in database user or role (like dbo, guest, public, etc.)"
             }
         },
-        "covidnyc_http_linkedservice_properties_typeProperties_url": {
-            "type": "string",
-            "defaultValue": "https://data.cityofnewyork.us/"
-        },
         "sqlAdministratorLoginPassword": {
             "type": "securestring",
             "metadata": {
@@ -77,7 +73,9 @@
         "storageAccountId": "[concat(resourceGroup().id,'/providers/Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]",
         "dataflowWithSqlName": "Transformations_With_SQL_Sink",
         "dataflowWithoutSqlName": "Transformations_Without_SQL_Sink",
-        "databaseCollation": "SQL_Latin1_General_CP1_CI_AS"
+        "databaseCollation": "SQL_Latin1_General_CP1_CI_AS",
+        "covidnyc_http_linkedservice_properties_typeProperties_url": "https://data.cityofnewyork.us/",
+        "keyVaultbaseUrl":"[concat('https://',parameters('keyVaultName'),'.vault.azure.net')]"
     },
     "resources": [
         {
@@ -120,7 +118,7 @@
                         "annotations": [],
                         "type": "HttpServer",
                         "typeProperties": {
-                            "url": "[parameters('covidnyc_http_linkedservice_properties_typeProperties_url')]",
+                            "url": "[variables('covidnyc_http_linkedservice_properties_typeProperties_url')]",
                             "enableServerCertificateValidation": true,
                             "authenticationType": "Anonymous"
                         }
@@ -138,7 +136,32 @@
                         "annotations": [],
                         "type": "AzureSqlDatabase",
                         "typeProperties": {
-                            "connectionString": "[concat('Server=tcp:',parameters('serverName'),'.database.windows.net,1433;Initial Catalog=',parameters('databaseName'),';Persist Security Info=False;User ID=',parameters('sqlAdministratorLogin'),';Password=',parameters('sqlAdministratorLoginPassword'),';MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;')]"
+                            "connectionString": "[concat('Server=tcp:',parameters('serverName'),'.database.windows.net,1433;Initial Catalog=',parameters('databaseName'),';Persist Security Info=False;User ID=',parameters('sqlAdministratorLogin'),';MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;')]",
+                            "password": {
+                                "type": "AzureKeyVaultSecret",
+                                "store": {
+                                    "referenceName": "covidnyc_keyvault_linkedservice",
+                                    "type": "LinkedServiceReference"
+                                },
+                                "secretName": "sqlAdministratorLoginPassword"
+                            }
+                        }
+                    },
+                    "dependsOn": [
+                        "[concat(variables('factoryId'), '/linkedServices/covidnyc_keyvault_linkedservice')]",
+                        "[parameters('factoryName')]"
+                    ]
+                },
+                {
+                    "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'Yes')]",
+                    "name": "[concat(parameters('factoryName'), '/covidnyc_keyvault_linkedservice')]",
+                    "type": "Microsoft.DataFactory/factories/linkedServices",
+                    "apiVersion": "2018-06-01",
+                    "properties": {
+                        "annotations": [],
+                        "type": "AzureKeyVault",
+                        "typeProperties": {
+                            "baseUrl": "[concat('https://',parameters('keyVaultName'),'.vault.azure.net')]"
                         }
                     },
                     "dependsOn": [

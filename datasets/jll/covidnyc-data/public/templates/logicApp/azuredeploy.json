@@ -43,7 +43,7 @@
             ],
             "tags": {
                 "Environment": "Public",
-                "AssociatedDataSet": "CovidNYC"
+                "AssociatedDataSet": "Demographics"
             },
             "properties": {
                 "state": "Enabled",
