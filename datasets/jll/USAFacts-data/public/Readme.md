@@ -66,7 +66,7 @@ If trigger is deployed along with the pipeline, you have to explicitly activate 
 
 
 
-#### Step 1: Deploy the templates
+##### Step 1: Deploy the templates
 
 1. Open git repository for the project and click on **Deploy to Azure**, this will open up a new window.
 
