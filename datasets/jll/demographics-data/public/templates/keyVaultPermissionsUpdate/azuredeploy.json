@@ -98,7 +98,8 @@
                         "Delete",
                         "Recover",
                         "Backup",
-                        "Restore"
+                        "Restore",
+                        "Purge"
                     ],
                     "certificates": [
                         "Get",
