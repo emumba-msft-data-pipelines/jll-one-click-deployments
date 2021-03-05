@@ -1909,96 +1909,95 @@
                                                 "type": "Expression"
                                             }
                                         },
-                                        "datasetParameters": {
-                                            "sourceCSV": {
-                                                "directory": {
-                                                    "value": "@concat(pipeline().parameters.rawBlobDirectory, '/latest')",
-                                                    "type": "Expression"
-                                                },
-                                                "file": {
-                                                    "value": "@concat(pipeline().parameters.sourceFilename,'.csv')",
-                                                    "type": "Expression"
-                                                },
-                                                "container": {
-                                                    "value": "@pipeline().parameters.blobContainer",
-                                                    "type": "Expression"
-                                                }
-                                            },
-                                            "SinkLatestCSV": {
-                                                "directory": {
-                                                    "value": "@concat(pipeline().parameters.curatedBlobDirectory,'/latest')",
-                                                    "type": "Expression"
-                                                },
-                                                "file": {
-                                                    "value": "@concat(pipeline().parameters.filename,'.csv')",
-                                                    "type": "Expression"
-                                                },
-                                                "container": {
-                                                    "value": "@pipeline().parameters.blobContainer",
-                                                    "type": "Expression"
-                                                }
-                                            },
-                                            "sinkLatestJsonl": {
-                                                "container": {
-                                                    "value": "@pipeline().parameters.blobContainer",
-                                                    "type": "Expression"
-                                                },
-                                                "directory": {
-                                                    "value": "@concat(pipeline().parameters.curatedBlobDirectory,'/latest')",
-                                                    "type": "Expression"
-                                                },
-                                                "file": {
-                                                    "value": "@concat(pipeline().parameters.filename,'.jsonl')",
-                                                    "type": "Expression"
-                                                }
-                                            },
-                                            "SinkCSV": {
-                                                "directory": {
-                                                    "value": "@concat(pipeline().parameters.curatedBlobDirectory,'/',formatdatetime(utcnow(),'yyyy/MM/dd'))",
-                                                    "type": "Expression"
-                                                },
-                                                "file": "specified in data flow",
-                                                "container": {
-                                                    "value": "@pipeline().parameters.blobContainer",
-                                                    "type": "Expression"
-                                                }
-                                            },
-                                            "sinkJsonl": {
-                                                "container": {
-                                                    "value": "@pipeline().parameters.blobContainer",
-                                                    "type": "Expression"
-                                                },
-                                                "directory": {
-                                                    "value": "@concat(pipeline().parameters.curatedBlobDirectory,'/',formatdatetime(utcnow(),'yyyy/MM/dd'))",
-                                                    "type": "Expression"
-                                                },
-                                                "file": "specified in data flow"
-                                            },
-                                            "sinkLatestParquet": {
-                                                "container": {
-                                                    "value": "@pipeline().parameters.blobContainer",
-                                                    "type": "Expression"
-                                                },
-                                                "directory": {
-                                                    "value": "@concat(pipeline().parameters.curatedBlobDirectory,'/latest')",
-                                                    "type": "Expression"
-                                                },
-                                                "file": "specified in data flow"
-                                            },
-                                            "sinkParquet": {
-                                                "container": {
-                                                    "value": "@pipeline().parameters.blobContainer",
-                                                    "type": "Expression"
-                                                },
-                                                "directory": {
-                                                    "value": "@concat(pipeline().parameters.curatedBlobDirectory,'/',formatdatetime(utcnow(),'yyyy/MM/dd'))",
-                                                    "type": "Expression"
-                                                },
-                                                "file": "specified in data flow"
-                                            },
-                                            "sinkSQL": {}
+                                               "datasetParameters":{
+                                    "sourceCSV":{
+                                        "directory":{
+                                            "value":"@concat(pipeline().parameters.rawBlobDirectory, '/latest')",
+                                            "type":"Expression"
+                                        },
+                                        "file":{
+                                            "value":"@concat(pipeline().parameters.sourceFilename,'.csv')",
+                                            "type":"Expression"
+                                        },
+                                        "container":{
+                                            "value":"@pipeline().parameters.blobContainer",
+                                            "type":"Expression"
                                         }
                                     },
+                                    "sinkLatestJsonl":{
+                                        "container":{
+                                            "value":"@pipeline().parameters.blobContainer",
+                                            "type":"Expression"
+                                        },
+                                        "directory":{
+                                            "value":"@concat(pipeline().parameters.curatedBlobDirectory,'/latest')",
+                                            "type":"Expression"
+                                        },
+                                        "file":{
+                                            "value":"@concat(pipeline().parameters.filename,'.jsonl')",
+                                            "type":"Expression"
+                                        }
+                                    },
+                                    "sinkLatestCSV":{
+                                        "directory":{
+                                            "value":"@concat(pipeline().parameters.curatedBlobDirectory,'/latest')",
+                                            "type":"Expression"
+                                        },
+                                        "file":{
+                                            "value":"@concat(pipeline().parameters.filename,'.csv')",
+                                            "type":"Expression"
+                                        },
+                                        "container":{
+                                            "value":"@pipeline().parameters.blobContainer",
+                                            "type":"Expression"
+                                        }
+                                    },
+                                    "sinkCSV":{
+                                        "directory":{
+                                            "value":"@concat(pipeline().parameters.curatedBlobDirectory,'/',formatdatetime(utcnow(),'yyyy/MM/dd'))",
+                                            "type":"Expression"
+                                        },
+                                        "file":"specified in data flow",
+                                        "container":{
+                                            "value":"@pipeline().parameters.blobContainer",
+                                            "type":"Expression"
+                                        }
+                                    },
+                                    "sinkJsonl":{
+                                        "container":{
+                                            "value":"@pipeline().parameters.blobContainer",
+                                            "type":"Expression"
+                                        },
+                                        "directory":{
+                                            "value":"@concat(pipeline().parameters.curatedBlobDirectory,'/',formatdatetime(utcnow(),'yyyy/MM/dd'))",
+                                            "type":"Expression"
+                                        },
+                                        "file":"specified in data flow"
+                                    },
+                                    "SinkLatestParquet":{
+                                        "container":{
+                                            "value":"@pipeline().parameters.blobContainer",
+                                            "type":"Expression"
+                                        },
+                                        "directory":{
+                                            "value":"@concat(pipeline().parameters.curatedBlobDirectory,'/latest')",
+                                            "type":"Expression"
+                                        },
+                                        "file":"specified in data flow"
+                                    },
+                                    "SinkParquet":{
+                                        "container":{
+                                            "value":"@pipeline().parameters.blobContainer",
+                                            "type":"Expression"
+                                        },
+                                        "directory":{
+                                            "value":"@concat(pipeline().parameters.curatedBlobDirectory,'/',formatdatetime(utcnow(),'yyyy/MM/dd'))",
+                                            "type":"Expression"
+                                        },
+                                        "file":"specified in data flow"
+                                    }
+                                }
+                            },
                                     "staging": {},
                                     "compute": {
                                         "coreCount": 8,
