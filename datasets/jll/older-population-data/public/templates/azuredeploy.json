@@ -123,7 +123,7 @@
         "logicAppTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/older-population-data/public/templates/logicApp/azuredeploy.json",
         "dataFactoryTemplateWithTeamsNotifUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/older-population-data/public/templates/dataFactory/azuredeploy.json",
         "dataFactoryTemplateWithoutTeamsNotifUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/older-population-data/public/templates/dataFactory/azuredeploy.json",
-        "shareTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/older-population-data/datasets/jll/main/public/templates/share/azuredeploy.json"
+        "shareTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/older-population-data/public/templates/share/azuredeploy.json"
     },
     "resources": [
         {
