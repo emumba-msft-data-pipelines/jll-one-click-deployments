@@ -33,7 +33,7 @@
 12. Option (Yes or No) to deploy and use data share.
 
 
-**NOTE** - If you go with SQL sink, the name of the table where data is written is _**lowerincome.curatedTable**_.
+**NOTE** - If you go with SQL sink, the name of the table where data is written is _**lowerIncome.curatedTable**_.
 
 Click the following button to deploy all the resources.
 
