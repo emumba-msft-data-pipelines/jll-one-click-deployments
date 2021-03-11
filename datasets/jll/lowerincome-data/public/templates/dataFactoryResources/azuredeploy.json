@@ -232,8 +232,9 @@
                             "name": "lowerIncome/Sources"
                         },
                         "annotations": [],
-                        "type": "DelimitedText",
+                        "type": "Excel",
                         "typeProperties": {
+                            "sheetName": "Table",
                             "location": {
                                 "type": "HttpServerLocation",
                                 "relativeUrl": {
@@ -241,10 +242,8 @@
                                     "type": "Expression"
                                 }
                             },
-                            "columnDelimiter": ",",
-                            "escapeChar": "\\",
-                            "firstRowAsHeader": true,
-                            "quoteChar": "\""
+                            "range": "A5:H3221",
+                            "firstRowAsHeader": false
                         },
                         "schema": []
                     },
@@ -871,13 +870,10 @@
                                 "userProperties": [],
                                 "typeProperties": {
                                     "source": {
-                                        "type": "DelimitedTextSource",
+                                        "type": "ExcelSource",
                                         "storeSettings": {
                                             "type": "HttpReadSettings",
                                             "requestMethod": "GET"
-                                        },
-                                        "formatSettings": {
-                                            "type": "DelimitedTextReadSettings"
                                         }
                                     },
                                     "sink": {
@@ -1025,13 +1021,10 @@
                                 "userProperties": [],
                                 "typeProperties": {
                                     "source": {
-                                        "type": "DelimitedTextSource",
+                                        "type": "ExcelSource",
                                         "storeSettings": {
                                             "type": "HttpReadSettings",
                                             "requestMethod": "GET"
-                                        },
-                                        "formatSettings": {
-                                            "type": "DelimitedTextReadSettings"
                                         }
                                     },
                                     "sink": {
@@ -1903,13 +1896,10 @@
                                 "userProperties": [],
                                 "typeProperties": {
                                     "source": {
-                                        "type": "DelimitedTextSource",
+                                        "type": "ExcelSource",
                                         "storeSettings": {
                                             "type": "HttpReadSettings",
                                             "requestMethod": "GET"
-                                        },
-                                        "formatSettings": {
-                                            "type": "DelimitedTextReadSettings"
                                         }
                                     },
                                     "sink": {
@@ -2057,13 +2047,10 @@
                                 "userProperties": [],
                                 "typeProperties": {
                                     "source": {
-                                        "type": "DelimitedTextSource",
+                                        "type": "ExcelSource",
                                         "storeSettings": {
                                             "type": "HttpReadSettings",
                                             "requestMethod": "GET"
-                                        },
-                                        "formatSettings": {
-                                            "type": "DelimitedTextReadSettings"
                                         }
                                     },
                                     "sink": {
