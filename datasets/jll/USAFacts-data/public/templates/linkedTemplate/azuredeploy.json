@@ -1,5 +1,5 @@
 {
-    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "factoryName": {
@@ -104,12 +104,12 @@
         "keyVaultName": "[concat(parameters('keyVaultName'), uniquestring(resourceGroup().id))]",
         "webHookUri": "https://null",
         "dataShareAccountName": "[concat(parameters('dataShareAccountName'), uniquestring(resourceGroup().id))]",
-        "storageTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/USAFacts/datasets/jll/USAFacts-data/public/templates/storageAccount/azuredeploy.json",
-        "dataShareTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/USAFacts/datasets/jll/USAFacts-data/public/templates/dataShare/azuredeploy.json",
-        "logicAppTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/USAFacts/datasets/jll/USAFacts-data/public/templates/logicApp/azuredeploy.json",
-        "dataFactoryTemplateWithTeamsNotifUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/USAFacts/datasets/jll/USAFacts-data/public/templates/dataFactoryResources/azuredeploy.json",
-        "dataFactoryTemplateWithoutTeamsNotifUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/USAFacts/datasets/jll/USAFacts-data/public/templates/dataFactoryResources/azuredeploy.json",
-        "shareTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/USAFacts/datasets/jll/USAFacts-data/public/templates/share/azuredeploy.json"
+        "storageTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFacts-data/public/templates/storageAccount/azuredeploy.json",
+        "dataShareTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFacts-data/public/templates/dataShare/azuredeploy.json",
+        "logicAppTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFacts-data/public/templates/logicApp/azuredeploy.json",
+        "dataFactoryTemplateWithTeamsNotifUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFacts-data/public/templates/dataFactoryResources/azuredeploy.json",
+        "dataFactoryTemplateWithoutTeamsNotifUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFacts-data/public/templates/dataFactoryResources/azuredeploy.json",
+        "shareTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFacts-data/public/templates/share/azuredeploy.json"
     },
     "resources": [
         {
