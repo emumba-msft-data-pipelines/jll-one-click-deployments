@@ -1,0 +1,39 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "factoryName": {
+        "type": "string",
+        "metadata": {
+          "description": "The name of data factory can contain only letters, numbers and hyphens. The first and last characters must be a letter or number. Spaces are not allowed."
+        }
+    },
+    "location": {
+        "type": "string",
+        "metadata": {
+          "description": "Location of your resources. Default location is eastUS"
+          }
+         }
+  },
+   "variables": {
+    },
+  "resources": [
+    {
+            "type": "Microsoft.DataFactory/factories",
+            "apiVersion": "2018-06-01",
+            "name": "[parameters('factoryName')]",
+            "location": "[parameters('location')]",
+            "properties": {},
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "tags": {
+                "Environment": "Customer",
+                "AssociatedDataSet": "USAFactsKnownCases"
+            }
+    }
+
+
+   
+  ]
+}

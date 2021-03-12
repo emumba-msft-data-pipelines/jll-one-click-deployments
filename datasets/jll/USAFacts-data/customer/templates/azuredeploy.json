@@ -1,0 +1,225 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "factoryName": {
+            "type": "string",
+             "defaultValue": "testadfcustomer",
+             "metadata": {
+                "description":"The name of data factory can contain only letters, numbers and hyphens. The first and last characters must be a letter or number. Spaces are not allowed."
+            }
+           
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "eastus",
+            "metadata": {
+            "description": "Location of your resources. Default location is eastUS"
+            }
+         },
+
+          "existingOrNewStorage": {
+            "allowedValues": [ "new", "existing" ],
+            "type": "string",
+            "metadata": {
+                "description": "Do you want to create new storage account or use same storage account?"
+            }
+        },
+
+        "storageAccountName": {
+            "type": "string",
+            "defaultValue": "demoenvsa",
+            "metadata": {
+                 "description": "The storage account name can contain only lowercase letters and numbers. Name must be between 1 and 11 characters"
+            }
+        },
+
+        "keyVaultName": {
+            "type": "string",
+            "defaultValue": "keyvault",
+            "metadata": {
+                "description": "Specifies the name of the key vault."
+            }
+        },
+        "SASBlobUriValue": {
+          "type": "securestring",
+          "metadata": {
+            "description": "Specifies the value of the SAS Blob URI that you want to create."
+          }
+         },
+
+        "enableMicrosoftTeamsNotification":{
+            "allowedValues": [ "Yes", "No" ],
+            "type": "string",
+            "metadata": {
+                "description": "Do you want to create new storage account or use same storage account?"
+            }
+
+        },
+
+        "logicAppName": {
+            "defaultValue": "MSTeamsNotifications",
+            "type": "String",
+            "metadata": {
+            "description": "The name can only contain letters, numbers, and '-', '(', ')', '_' or '.'"
+                }
+            },
+        "actionGroupsName": {
+            "defaultValue": "NotificationAlert",
+            "type": "String",
+            "metadata": {
+                "description": "The name can contain letters, numbers, and special characters, this can start or end with any number, letter or other special charactor"
+                }
+            },
+        "emailForAlerts": {
+            "defaultValue": "assadullah@emumba.com",
+            "type": "String"
+            },
+        "yourObjectId": {
+          "type": "string",
+          "metadata": {
+              "description": "Kindly give your Object Id so that full permissions to key vault can be assigned to you"
+            }
+      },
+      "StartTriggerTime": {
+            "type": "string",
+            "defaultValue": "[utcNow('u')]"
+            
+        }
+},
+
+    "variables": {
+        "dataFactoryUniqueName": "[concat(parameters('factoryName'), uniquestring(resourceGroup().id))]",
+        "keyVaultName": "[concat(parameters('keyVaultName'), uniquestring(resourceGroup().id))]",
+        "webHookUri": "",
+        "keyVaultTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFacts-data/customer/templates/keyVault/azuredeploy.json",
+        "keyVaultPermissionsUpdateTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFacts-data/customer/templates/keyVaultPermissionsUpdate/azuredeploy.json",
+        "linkedTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFacts-data/customer/templates/linkedTemplate/azuredeploy.json",
+        "emptyDataFactoryTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFacts-data/customer/templates/dataFactory/azuredeploy.json"
+    },
+    "resources": [
+        {
+            "name": "keyVaultTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('keyVaultTemplateUri')]"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[variables('keyVaultName')]"
+                    },
+                    "SASBlobUriValue": {
+                        "value": "[parameters('SASBlobUriValue')]"
+                    }
+                }
+            }
+        },
+
+         {
+            "name": "keyVaultPermissionsUpdateTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','emptyDataFactory')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('keyVaultPermissionsUpdateTemplateUri')]"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[variables('keyVaultName')]"
+                    },
+                    "factoryName": {
+                        "value": "[variables('dataFactoryUniqueName')]"
+                    },
+                    "yourObjectId": {
+                        "value": "[parameters('yourObjectId')]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "linkedTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','keyVaultPermissionsUpdateTemplate')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('linkedTemplateUri')]"
+                },
+                "parameters": {
+                    "factoryName": {
+                        "value": "[parameters('factoryName')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "existingOrNewStorage": {
+                        "value": "[parameters('existingOrNewStorage')]"
+                    },
+                    "storageAccountName": {
+                        "value": "[parameters('storageAccountName')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[parameters('keyVaultName')]"
+                    },
+                    "SASBlobUriValue": {
+                        "value": "[parameters('SASBlobUriValue')]"
+                    },
+                    "enableMicrosoftTeamsNotification": {
+                        "value": "[parameters('enableMicrosoftTeamsNotification')]"
+                    },
+                    "logicAppName": {
+                        "value": "[parameters('logicAppName')]"
+                    },
+                    "actionGroupsName": {
+                        "value": "[parameters('actionGroupsName')]"
+                    },
+                    "emailForAlerts": {
+                        "value": "[parameters('emailForAlerts')]"
+                    },
+                    "StartTriggerTime": {
+                        "value": "[parameters('StartTriggerTime')]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "emptyDataFactory",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','keyVaultTemplate')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('emptyDataFactoryTemplateUri')]"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "factoryName": {
+                        "value": "[variables('dataFactoryUniqueName')]"
+                    }
+                }
+            }
+        } 
+  
+    ]
+}
