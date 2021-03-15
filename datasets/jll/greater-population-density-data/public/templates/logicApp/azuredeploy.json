@@ -24,7 +24,7 @@
             "name": "msftTeamsConnectionAuth",
             "tags": {
                 "Environment": "Public",
-                "AssociatedDataSet": "OlderPopulation"
+                "AssociatedDataSet": "GreaterPopulationDensity"
             },
             "properties": {
                 "api": {
@@ -43,7 +43,7 @@
             ],
             "tags": {
                 "Environment": "Public",
-                "AssociatedDataSet": "OlderPopulation"
+                "AssociatedDataSet": "GreaterPopulationDensity"
             },
             "properties": {
                 "state": "Enabled",

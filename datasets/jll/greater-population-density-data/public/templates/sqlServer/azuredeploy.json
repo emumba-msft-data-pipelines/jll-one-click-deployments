@@ -56,7 +56,7 @@
             "location": "[parameters('location')]",
             "tags": {
                 "Environment": "Public",
-                "AssociatedDataSet": "OlderPopulation"
+                "AssociatedDataSet": "GreaterPopulationDensity"
             },
             "properties": {
               "administratorLogin": "[parameters('sqlAdministratorLogin')]",
@@ -72,7 +72,7 @@
                     "location": "[parameters('location')]",
                     "tags": {
                         "Environment": "Public",
-                        "AssociatedDataSet": "OlderPopulation"
+                        "AssociatedDataSet": "GreaterPopulationDensity"
                     },
                     "sku": {
                         "name": "Basic",
@@ -94,7 +94,7 @@
                     "location": "[parameters('location')]",
                     "tags": {
                         "Environment": "Public",
-                        "AssociatedDataSet": "OlderPopulation"
+                        "AssociatedDataSet": "GreaterPopulationDensity"
                     },
                     "properties": {
                         "endIpAddress": "0.0.0.0",

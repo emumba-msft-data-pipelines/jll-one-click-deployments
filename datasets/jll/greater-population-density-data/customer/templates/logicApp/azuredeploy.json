@@ -23,8 +23,8 @@
             "location": "[parameters('location')]",
             "name": "msftTeamsConnectionAuth",
             "tags": {
-                "Environment": "Public",
-                "AssociatedDataSet": "OlderPopulation"
+                "Environment": "Customer",
+                "AssociatedDataSet": "CovidBritishColumbia"
             },
             "properties": {
                 "api": {
@@ -42,8 +42,8 @@
                 "[resourceId('Microsoft.Web/connections/', 'msftTeamsConnectionAuth')]"
             ],
             "tags": {
-                "Environment": "Public",
-                "AssociatedDataSet": "OlderPopulation"
+                "Environment": "Customer",
+                "AssociatedDataSet": "CovidBritishColumbia"
             },
             "properties": {
                 "state": "Enabled",
