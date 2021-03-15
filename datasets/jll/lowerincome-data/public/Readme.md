@@ -33,11 +33,11 @@
 12. Option (Yes or No) to deploy and use data share.
 
 
-**NOTE** - If you go with SQL sink, the name of the table where data is written is _**olderpopulation.curatedTable**_.
+**NOTE** - If you go with SQL sink, the name of the table where data is written is _**lowerIncome.curatedTable**_.
 
 Click the following button to deploy all the resources.
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Femumba-msft-data-pipelines%2Fjll-one-click-deployments%2Fgreater-population-density%2Fdatasets%2Fjll%2Folder-population-data%2Fpublic%2Ftemplates%2Fazuredeploy.json%3Ftoken%3DALH4GFNIJZ7F3COKWD5OTGTAGTDQW)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Femumba-msft-data-pipelines%2Fjll-one-click-deployments%2Fmain%2Fdatasets%2Fjll%2Flowerincome-data%2Fpublic%2Ftemplates%2Fazuredeploy.json%3Ftoken%3DALH4GFNIJZ7F3COKWD5OTGTAGTDQW)
 
 
 #### Configure Firewall Rule
