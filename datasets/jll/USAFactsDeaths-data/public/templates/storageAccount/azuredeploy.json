@@ -26,7 +26,7 @@
             "location": "[parameters('location')]",
             "tags": {
                 "Environment": "Public",
-                "AssociatedDataSet": "USAFacts"
+                "AssociatedDataSet": "USAFactsDeaths"
             },
             "sku": {
                 "name": "Standard_LRS",
