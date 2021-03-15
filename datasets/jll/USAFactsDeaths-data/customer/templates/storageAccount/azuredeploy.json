@@ -1,0 +1,44 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "storageAccountName": {
+          "type": "string",
+          "metadata": {
+            "description": "The storage account name can contain only lowercase letters and numbers. Name must be between 1 and 11 characters"
+            }
+        },
+    "location": {
+          "type": "string",
+            "metadata": {
+            "description": "Location of your resources. Default location is eastUS"
+            }
+         },    
+
+    "existingOrNewStorage": {
+            "allowedValues": [ "new", "existing" ],
+            "type": "string",
+            "metadata": {
+                "description": "Do you want to create new storage account or use same storage account?"
+            }
+        }
+  },
+  "resources": [
+    {
+            "condition": "[equals(parameters('existingOrNewStorage'),'new')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
+            "name": "[parameters('storageAccountName')]",
+            "location": "[parameters('location')]",
+            "tags": {
+                "Environment": "Customer",
+                "AssociatedDataSet": "USAFactsKnownCases"
+            },
+            "sku": {
+                 "name": "Standard_LRS"
+                },
+            "kind": "StorageV2",
+            "properties": {}
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "keyVaultName": {
+        "type": "string",
+        "metadata": {
+          "description": "Specifies the name of the key vault."
+        }
+      },
+      "location": {
+        "type": "string",
+        "metadata": {
+          "description": "Specifies the Azure location where the key vault should be created."
+        }
+      },
+      "factoryName": {
+        "type": "string",
+        "metadata": {
+            "description": "The name you provide will be appended with a unique sting to make it globally available. The name can contain only letters, numbers and hyphens. The first and last characters must be a letter or number. Spaces are not allowed."
+        }
+      },
+      "yourObjectId": {
+          "type": "string",
+          "metadata": {
+              "description": "Kindly give your Object Id so that full permissions to key vault can be assigned to you"
+            }
+      }
+    },
+
+    "variables": {
+        "secretName": "SASURiSecret",
+        "tenantId": "[subscription().tenantId]"
+    },
+
+    "resources": [
+      {
+        "type": "Microsoft.KeyVault/vaults",
+        "apiVersion": "2019-09-01",
+        "name": "[parameters('keyVaultName')]",
+        "location": "[parameters('location')]",
+        "tags": {
+            "Environment": "Public",
+            "AssociatedDataSet": "USAFacts"
+        },
+        "properties": {
+          "tenantId": "[variables('tenantId')]",
+          "accessPolicies": [
+            {
+                "tenantId": "[variables('tenantId')]",
+                "objectId": "[reference(concat('Microsoft.DataFactory/factories/', parameters('factoryName')), '2018-06-01', 'Full').identity.principalId]",
+                "permissions": {
+                    "keys": [],
+                    "secrets": [
+                        "Get"
+                    ],
+                    "certificates": []
+                }
+            },
+            {
+                "tenantId": "[variables('tenantId')]",
+                "objectId": "[parameters('yourObjectId')]",
+                "permissions": {
+                    "keys": [
+                        "Get",
+                        "List",
+                        "Update",
+                        "Create",
+                        "Import",
+                        "Delete",
+                        "Recover",
+                        "Backup",
+                        "Restore",
+                        "Decrypt",
+                        "Encrypt",
+                        "UnwrapKey",
+                        "WrapKey",
+                        "Verify",
+                        "Sign",
+                        "Purge"
+                    ],
+                    "secrets": [
+                        "Get",
+                        "List",
+                        "Set",
+                        "Delete",
+                        "Recover",
+                        "Backup",
+                        "Restore"
+                    ],
+                    "certificates": [
+                        "Get",
+                        "List",
+                        "Update",
+                        "Create",
+                        "Import",
+                        "Delete",
+                        "Recover",
+                        "Backup",
+                        "Restore",
+                        "ManageContacts",
+                        "ManageIssuers",
+                        "GetIssuers",
+                        "ListIssuers",
+                        "SetIssuers",
+                        "DeleteIssuers",
+                        "Purge"
+                    ]
+                }
+            }
+        ],
+          "sku": {
+            "name": "Standard",
+            "family": "A"
+          },
+          "networkAcls": {
+            "defaultAction": "Allow",
+            "bypass": "AzureServices"
+          }
+        }
+      }
+    ]
+  }
