@@ -38,7 +38,7 @@
             "dependsOn": [],
             "tags": {
                 "Environment": "Public",
-                "AssociatedDataSet": "OlderPopulationData"
+                "AssociatedDataSet": "OlderPopulation"
             },
             "properties": {
                 "shareKind": "CopyBased"
@@ -54,7 +54,7 @@
             ],
             "tags": {
                 "Environment": "Public",
-                "AssociatedDataSet": "OlderPopulationData"
+                "AssociatedDataSet": "OlderPopulation"
             },
             "kind": "ScheduleBased",
             "properties": {

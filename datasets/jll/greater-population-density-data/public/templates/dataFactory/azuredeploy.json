@@ -24,7 +24,7 @@
             "location": "[parameters('location')]",
             "tags": {
                 "Environment": "Public",
-                "AssociatedDataSet": "OlderPopulation"
+                "AssociatedDataSet": "GreaterPopulationDensity"
             },
             "identity": {
                 "type": "SystemAssigned"
