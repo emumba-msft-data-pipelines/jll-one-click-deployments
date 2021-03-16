@@ -107,6 +107,7 @@
                         }
                     },
                     "dependsOn": [
+                        "[concat(variables('factoryId'), '/linkedServices/demographics_keyvault_linkedservice')]",
                         "[parameters('factoryName')]"
                     ]
                 },
@@ -153,7 +154,6 @@
                     ]
                 },
                 {
-                    "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'Yes')]",
                     "name": "[concat(parameters('factoryName'), '/demographics_keyvault_linkedservice')]",
                     "type": "Microsoft.DataFactory/factories/linkedServices",
                     "apiVersion": "2018-06-01",

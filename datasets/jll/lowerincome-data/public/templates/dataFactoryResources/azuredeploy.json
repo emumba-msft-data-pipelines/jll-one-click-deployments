@@ -153,7 +153,6 @@
                     ]
                 },
                 {
-                    "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'Yes')]",
                     "name": "[concat(parameters('factoryName'), '/lowerIncome_keyvault_linkedservice')]",
                     "type": "Microsoft.DataFactory/factories/linkedServices",
                     "apiVersion": "2018-06-01",

@@ -40,13 +40,11 @@
     },
 
     "variables": {
-        "secretName": "sqlAdministratorLoginPassword",
         "tenantId": "[subscription().tenantId]"
     },
 
     "resources": [
       {
-        "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'Yes')]",
         "type": "Microsoft.KeyVault/vaults",
         "apiVersion": "2019-09-01",
         "name": "[parameters('keyVaultName')]",
@@ -98,7 +96,8 @@
                         "Delete",
                         "Recover",
                         "Backup",
-                        "Restore"
+                        "Restore",
+                        "Purge"
                     ],
                     "certificates": [
                         "Get",
