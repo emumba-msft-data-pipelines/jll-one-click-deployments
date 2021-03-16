@@ -127,9 +127,11 @@
     },
     "variables": {
         "factoryName": "[concat(parameters('factoryName'), uniquestring(resourceGroup().id))]",
+        "storageAccountName": "[concat(parameters('storageAccountName'), uniquestring(resourceGroup().id))]",
         "keyVaultName": "[concat(parameters('keyVaultName'), uniquestring(resourceGroup().id))]",
         "serverName": "[concat(parameters('serverName'), uniquestring(resourceGroup().id))]",
         "webHookUri": "https://null",
+        "storageTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv/datasets/jll/demographics-data/public/templates/storageAccount/azuredeploy.json",
         "keyVaultTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv/datasets/jll/demographics-data/public/templates/keyVault/azuredeploy.json",
         "keyVaultPermissionsUpdateTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv/datasets/jll/demographics-data/public/templates/keyVaultPermissionsUpdate/azuredeploy.json",
         "linkedTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv/datasets/jll/demographics-data/public/templates/linkedTemplate/azuredeploy.json",
@@ -138,9 +140,31 @@
     },
     "resources": [
         {
+            "name": "storageTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('storageTemplateUri')]"
+                },
+                "parameters": {
+                    "storageAccountName": {
+                        "value": "[variables('storageAccountName')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    }
+                }
+            }
+        },
+        {
             "name": "keyVaultTemplate",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-05-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','storageTemplate')]"
+            ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -160,7 +184,7 @@
                         "value": "[parameters('sqlAdministratorLoginPassword')]"
                     },
                     "storageAccountConnectionStringValue": {
-                        "value": "[reference('linkedTemplate').outputs.storageAccountConnectionString.value]"
+                        "value": "[reference('storageTemplate').outputs.storageAccountConnectionString.value]"
                     }
                 }
             }
@@ -171,7 +195,8 @@
             "apiVersion": "2018-05-01",
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/deployments','emptyDataFactory')]",
-                "[resourceId('Microsoft.Resources/deployments','sqlServer')]"
+                "[resourceId('Microsoft.Resources/deployments','sqlServer')]",
+                "[resourceId('Microsoft.Resources/deployments','storageTemplate')]"
             ],
             "properties": {
                 "mode": "Incremental",

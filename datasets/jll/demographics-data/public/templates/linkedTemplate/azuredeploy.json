@@ -99,12 +99,10 @@
     },
     "variables": {
         "factoryName": "[concat(parameters('factoryName'), uniquestring(resourceGroup().id))]",
-        "storageAccountName": "[concat(parameters('storageAccountName'), uniquestring(resourceGroup().id))]",
         "serverName": "[concat(parameters('serverName'), uniquestring(resourceGroup().id))]",
         "keyVaultName": "[concat(parameters('keyVaultName'), uniquestring(resourceGroup().id))]",
         "webHookUri": "https://null",
         "dataShareAccountName": "[concat(parameters('dataShareAccountName'), uniquestring(resourceGroup().id))]",
-        "storageTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv/datasets/jll/demographics-data/public/templates/storageAccount/azuredeploy.json",
         "dataShareTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv/datasets/jll/demographics-data/public/templates/dataShare/azuredeploy.json",
         "logicAppTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv/datasets/jll/demographics-data/public/templates/logicApp/azuredeploy.json",
         "dataFactoryTemplateWithTeamsNotifUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv/datasets/jll/demographics-data/public/templates/dataFactoryResources/azuredeploy.json",
@@ -112,25 +110,7 @@
         "shareTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv/datasets/jll/demographics-data/public/templates/share/azuredeploy.json"
     },
     "resources": [
-        {
-            "name": "storageTemplate",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2018-05-01",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('storageTemplateUri')]"
-                },
-                "parameters": {
-                    "storageAccountName": {
-                        "value": "[variables('storageAccountName')]"
-                    },
-                    "location": {
-                        "value": "[parameters('location')]"
-                    }
-                }
-            }
-        },
+        
         {
             "condition": "[equals(parameters('enableMicrosoftTeamsNotification'),'Yes')]",
             "name": "logicAppTemplate",
@@ -157,8 +137,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-05-01",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments','logicAppTemplate')]",
-                "[resourceId('Microsoft.Resources/deployments','storageTemplate')]"
+                "[resourceId('Microsoft.Resources/deployments','logicAppTemplate')]"
 
             ],
             "properties": {
@@ -209,8 +188,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-05-01",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments','logicAppTemplate')]",
-                "[resourceId('Microsoft.Resources/deployments','storageTemplate')]"
+                "[resourceId('Microsoft.Resources/deployments','logicAppTemplate')]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -305,12 +283,5 @@
                 }
             }
         }
-    ],
-    "outputs": {
-        "storageAccountConnectionString": {
-            "type": "string",
-            "value": "[reference('storageTemplate').outputs.storageAccountConnectionString.value]"
-
-          }
-      }
+    ]
 }
