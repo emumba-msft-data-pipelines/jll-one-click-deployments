@@ -135,50 +135,62 @@
                             }
                         ]
                     },
-                    {
-                        "name": "GetMetadataCurrentSchema",
-                        "type": "GetMetadata",
-                        "dependsOn": [
-                            {
-                                "activity": "CopyDataFromPublicToCustomer",
-                                "dependencyConditions": [
-                                    "Succeeded"
-                                ]
-                            }
-                        ],
-                        "policy": {
-                            "timeout": "7.00:00:00",
-                            "retry": 0,
-                            "retryIntervalInSeconds": 30,
-                            "secureOutput": false,
-                            "secureInput": false
-                        },
-                        "userProperties": [],
-                        "typeProperties": {
-                            "dataset": {
-                                "referenceName": "csv_source_dataset",
-                                "type": "DatasetReference",
-                                "parameters": {
-                                    "container": "customer",
-                                    "directory": "curated/USAFacts_data/latest",
-                                    "file": "USAFacts_curated_data.csv"
-                                }
-                            },
-                            "fieldList": [
-                                "itemName",
-                                "columnCount",
-                                "structure"
-                            ],
-                            "storeSettings": {
-                                "type": "AzureBlobStorageReadSettings",
-                                "recursive": true,
-                                "enablePartitionDiscovery": false
-                            },
-                            "formatSettings": {
-                                "type": "DelimitedTextReadSettings"
-                            }
+                     {
+                    "name":"GetMetadataCurrentSchema",
+                    "type":"GetMetadata",
+                    "dependsOn":[
+                        {
+                            "activity":"CopyDataFromPublicToCustomer",
+                            "dependencyConditions":[
+                            "Succeeded"
+                            ]
                         }
+                    ],
+                    "policy":{
+                        "timeout":"7.00:00:00",
+                        "retry":0,
+                        "retryIntervalInSeconds":30,
+                        "secureOutput":false,
+                        "secureInput":false
                     },
+                    "userProperties":[
+                        
+                    ],
+                    "typeProperties":{
+                        "dataset":{
+                            "referenceName":"csv_source_dataset",
+                            "type":"DatasetReference",
+                            "parameters":{
+                            "container":{
+                                "value":"@pipeline().parameters.container",
+                                "type":"Expression"
+                            },
+                            "directory":{
+                                "value":"@pipeline().parameters.directory",
+                                "type":"Expression"
+                            },
+                            "file":{
+                                "value":"@pipeline().parameters.file",
+                                "type":"Expression"
+                            }
+                            }
+                        },
+                        "fieldList":[
+                            "itemName",
+                            "columnCount",
+                            "structure"
+                        ],
+                        "storeSettings":{
+                            "type":"AzureBlobStorageReadSettings",
+                            "recursive":true,
+                            "enablePartitionDiscovery":false
+                        },
+                        "formatSettings":{
+                            "type":"DelimitedTextReadSettings"
+                        }
+                    }
+                },
+                    
                     {
                         "name": "GetMetadataPrevSchema",
                         "type": "GetMetadata",
@@ -505,15 +517,24 @@
                         },
                         "inputs": [
                             {
-                                "referenceName": "csv_source_dataset",
-                                "type": "DatasetReference",
-                                "parameters": {
-                                    "container": "customer",
-                                    "directory": "curated/USAFacts_data/latest",
-                                    "file": "USAFacts_curated_data.csv"
-                                }
-                            }
-                        ],
+                                "referenceName":"csv_source_dataset",
+                                "type":"DatasetReference",
+                                "parameters":{
+                                "container":{
+                                    "value":"@pipeline().parameters.container",
+                                    "type":"Expression"
+                                },
+                                "directory":{
+                                    "value":"@pipeline().parameters.directory",
+                                    "type":"Expression"
+                                },
+                                "file":{
+                                    "value":"@pipeline().parameters.file",
+                                    "type":"Expression"
+                           }
+                        }
+                     }
+                    ],
                         "outputs": [
                             {
                                 "referenceName": "previous_dataset",
@@ -527,6 +548,20 @@
                         ]
                     }
                 ],
+                "parameters":{
+                    "container":{
+                        "type":"string",
+                        "defaultValue":"customer"
+                    },
+                    "directory":{
+                        "type":"string",
+                        "defaultValue":"curated/USAFacts_data/latest"
+                    },
+                    "file":{
+                        "type":"string",
+                        "defaultValue":"USAFacts_curated_data.csv"
+               }
+            },
                 "folder": {
                     "name": "JLL/BlobStorageDataExtraction"
                 },
