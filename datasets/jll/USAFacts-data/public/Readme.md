@@ -33,11 +33,11 @@
 12. Option (Yes or No) to deploy and use data share.
 
 
-**NOTE** - If you go with SQL sink, the name of the table where data is written is _**demographics.curatedTable**_.
+**NOTE** - If you go with SQL sink, the name of the table where data is written is _**USAFacts.curatedTable**_.
 
 Click the following button to deploy all the resources.
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Femumba-msft-data-pipelines%2Fjll-one-click-deployments%2Fmain%2Fdatasets%2Fjll%2FUSAFacts-data%2Fpublic%2Ftemplates%2Fazuredeploy.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Femumba-msft-data-pipelines%2Fjll-one-click-deployments%2Fsa-kv%2Fdatasets%2Fjll%2FUSAFacts-data%2Fpublic%2Ftemplates%2Fazuredeploy.json)
 
 
 #### Configure Firewall Rule
