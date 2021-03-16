@@ -22,7 +22,7 @@
             "name": "msftTeamsConnectionAuth",
             "tags": {
                 "Environment": "Customer",
-                "AssociatedDataSet": "USAFactsKnownCases"
+                "AssociatedDataSet": "USAFactsDeaths"
             },
             "location": "eastus",
             "kind": "V1",
@@ -45,7 +45,7 @@
             ],
             "tags": {
                 "Environment": "Customer",
-                "AssociatedDataSet": "USAFactsKnownCases"
+                "AssociatedDataSet": "USAFactsDeaths"
             },
             "properties": {
                 "state": "Enabled",

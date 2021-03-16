@@ -56,7 +56,7 @@
   "resources": [
      
         {
-            "name": "[concat(parameters('factoryName'), '/USAFactsKnownCases_publicToCustomerEnvironmentCopyData')]",
+            "name": "[concat(parameters('factoryName'), '/USAFactsDeaths_publicToCustomerEnvironmentCopyData')]",
             "type": "Microsoft.DataFactory/factories/pipelines",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -135,50 +135,62 @@
                             }
                         ]
                     },
-                    {
-                        "name": "GetMetadataCurrentSchema",
-                        "type": "GetMetadata",
-                        "dependsOn": [
-                            {
-                                "activity": "CopyDataFromPublicToCustomer",
-                                "dependencyConditions": [
-                                    "Succeeded"
-                                ]
-                            }
-                        ],
-                        "policy": {
-                            "timeout": "7.00:00:00",
-                            "retry": 0,
-                            "retryIntervalInSeconds": 30,
-                            "secureOutput": false,
-                            "secureInput": false
-                        },
-                        "userProperties": [],
-                        "typeProperties": {
-                            "dataset": {
-                                "referenceName": "csv_source_dataset",
-                                "type": "DatasetReference",
-                                "parameters": {
-                                    "container": "customer",
-                                    "directory": "curated/USAFacts_data/latest",
-                                    "file": "USAFacts_curated_data.csv"
-                                }
-                            },
-                            "fieldList": [
-                                "itemName",
-                                "columnCount",
-                                "structure"
-                            ],
-                            "storeSettings": {
-                                "type": "AzureBlobStorageReadSettings",
-                                "recursive": true,
-                                "enablePartitionDiscovery": false
-                            },
-                            "formatSettings": {
-                                "type": "DelimitedTextReadSettings"
-                            }
+                     {
+                    "name":"GetMetadataCurrentSchema",
+                    "type":"GetMetadata",
+                    "dependsOn":[
+                        {
+                            "activity":"CopyDataFromPublicToCustomer",
+                            "dependencyConditions":[
+                            "Succeeded"
+                            ]
                         }
+                    ],
+                    "policy":{
+                        "timeout":"7.00:00:00",
+                        "retry":0,
+                        "retryIntervalInSeconds":30,
+                        "secureOutput":false,
+                        "secureInput":false
                     },
+                    "userProperties":[
+                        
+                    ],
+                    "typeProperties":{
+                        "dataset":{
+                            "referenceName":"csv_source_dataset",
+                            "type":"DatasetReference",
+                            "parameters":{
+                            "container":{
+                                "value":"@pipeline().parameters.container",
+                                "type":"Expression"
+                            },
+                            "directory":{
+                                "value":"@pipeline().parameters.directory",
+                                "type":"Expression"
+                            },
+                            "file":{
+                                "value":"@pipeline().parameters.file",
+                                "type":"Expression"
+                            }
+                            }
+                        },
+                        "fieldList":[
+                            "itemName",
+                            "columnCount",
+                            "structure"
+                        ],
+                        "storeSettings":{
+                            "type":"AzureBlobStorageReadSettings",
+                            "recursive":true,
+                            "enablePartitionDiscovery":false
+                        },
+                        "formatSettings":{
+                            "type":"DelimitedTextReadSettings"
+                        }
+                    }
+                },
+                    
                     {
                         "name": "GetMetadataPrevSchema",
                         "type": "GetMetadata",
@@ -505,15 +517,24 @@
                         },
                         "inputs": [
                             {
-                                "referenceName": "csv_source_dataset",
-                                "type": "DatasetReference",
-                                "parameters": {
-                                    "container": "customer",
-                                    "directory": "curated/USAFacts_data/latest",
-                                    "file": "USAFacts_curated_data.csv"
-                                }
-                            }
-                        ],
+                                "referenceName":"csv_source_dataset",
+                                "type":"DatasetReference",
+                                "parameters":{
+                                "container":{
+                                    "value":"@pipeline().parameters.container",
+                                    "type":"Expression"
+                                },
+                                "directory":{
+                                    "value":"@pipeline().parameters.directory",
+                                    "type":"Expression"
+                                },
+                                "file":{
+                                    "value":"@pipeline().parameters.file",
+                                    "type":"Expression"
+                           }
+                        }
+                     }
+                    ],
                         "outputs": [
                             {
                                 "referenceName": "previous_dataset",
@@ -527,6 +548,20 @@
                         ]
                     }
                 ],
+                "parameters":{
+                    "container":{
+                        "type":"string",
+                        "defaultValue":"customer"
+                    },
+                    "directory":{
+                        "type":"string",
+                        "defaultValue":"curated/USAFactsDeaths_data/latest"
+                    },
+                    "file":{
+                        "type":"string",
+                        "defaultValue":"USAFactsDeaths_curated_data.csv"
+               }
+            },
                 "folder": {
                     "name": "JLL/BlobStorageDataExtraction"
                 },
@@ -551,7 +586,7 @@
                 "runtimeState": "Stopped",
                 "pipeline": {
                     "pipelineReference": {
-                        "referenceName": "USAFactsKnownCases_publicToCustomerEnvironmentCopyData",
+                        "referenceName": "USAFactsDeaths_publicToCustomerEnvironmentCopyData",
                         "type": "PipelineReference"
                     },
                     "parameters": {}
@@ -570,7 +605,7 @@
                 }
             },
             "dependsOn": [
-                "[concat(variables('factoryId'), '/pipelines/USAFactsKnownCases_publicToCustomerEnvironmentCopyData')]"
+                "[concat(variables('factoryId'), '/pipelines/USAFactsDeaths_publicToCustomerEnvironmentCopyData')]"
             ]
         },
 
@@ -589,7 +624,7 @@
                     }
                 },
                 "folder": {
-                    "name": "JLL/USAFactsKnownCases-dataset/Sinks"
+                    "name": "JLL/USAFactsDeaths-dataset/Sinks"
                 },
                 "annotations": [],
                 "type": "DelimitedText",
@@ -628,7 +663,7 @@
                     }
                 },
                 "folder": {
-                    "name": "JLL/USAFactsKnownCases-dataset/Sources"
+                    "name": "JLL/USAFactsDeaths-dataset/Sources"
                 },
                 "annotations": [],
                 "type": "DelimitedText",
@@ -675,7 +710,7 @@
                     }
                 },
                 "folder": {
-                    "name": "JLL/USAFactsKnownCases-dataset/Schema"
+                    "name": "JLL/USAFactsDeaths-dataset/Schema"
                 },
                 "annotations": [],
                 "type": "DelimitedText",
@@ -730,7 +765,7 @@
                     }
                 },
                 "folder": {
-                    "name": "JLL/USAFactsKnownCases-dataset/Sources"
+                    "name": "JLL/USAFactsDeaths-dataset/Sources"
                 },
                 "annotations": [],
                 "type": "DelimitedText",
@@ -810,7 +845,7 @@
                     }
                 },
                 "folder": {
-                    "name": "JLL/USAFactsKnownCases-dataset/Schema"
+                    "name": "JLL/USAFactsDeaths-dataset/Schema"
                 },
                 "annotations": [],
                 "type": "DelimitedText",
@@ -1004,8 +1039,8 @@
                                     "name": "PipelineName",
                                     "operator": "Include",
                                     "values": [
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData",
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData_tumblingWindow"
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData",
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData_tumblingWindow"
                                     ]
                                 }
                             ],
@@ -1069,8 +1104,8 @@
                                     "name": "PipelineName",
                                     "operator": "Include",
                                     "values": [
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData",
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData_tumblingWindow"
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData",
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData_tumblingWindow"
                                     ]
                                 },
                                 {
@@ -1127,8 +1162,8 @@
                                     "name": "Name",
                                     "operator": "Include",
                                     "values": [
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData",
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData_tumblingWindow"
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData",
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData_tumblingWindow"
                                     ]
                                 }
                             ],
@@ -1176,8 +1211,8 @@
                                     "name": "Name",
                                     "operator": "Include",
                                     "values": [
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData",
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData_tumblingWindow"
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData",
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData_tumblingWindow"
                                     ]
                                 },
                                 {
@@ -1234,8 +1269,8 @@
                                     "name": "Name",
                                     "operator": "Include",
                                     "values": [
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData",
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData_tumblingWindow"
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData",
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData_tumblingWindow"
                                     ]
                                 }
                             ],
@@ -1297,8 +1332,8 @@
                                     "name": "PipelineName",
                                     "operator": "Include",
                                     "values": [
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData",
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData_tumblingWindow"
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData",
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData_tumblingWindow"
                                     ]
                                 },
                                 {
@@ -1367,8 +1402,8 @@
                                     "name": "PipelineName",
                                     "operator": "Include",
                                     "values": [
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData",
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData_tumblingWindow"
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData",
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData_tumblingWindow"
                                     ]
                                 },
                                 {
@@ -1437,8 +1472,8 @@
                                     "name": "PipelineName",
                                     "operator": "Include",
                                     "values": [
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData",
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData_tumblingWindow"
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData",
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData_tumblingWindow"
                                     ]
                                 },
                                 {
