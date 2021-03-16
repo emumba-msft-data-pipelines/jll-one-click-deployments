@@ -116,7 +116,7 @@
                         }
                     },
                     "dependsOn": [
-                        "[concat(variables('factoryId'), '/linkedServices/olderpopulation_keyvault_linkedservice')]",
+                        "[concat(variables('factoryId'), '/linkedServices/chicago_keyvault_linkedservice')]",
                         "[parameters('factoryName')]"
                     ]
                 },
