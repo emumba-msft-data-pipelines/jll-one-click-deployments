@@ -130,6 +130,7 @@
         "keyVaultName": "[concat(parameters('keyVaultName'), uniquestring(resourceGroup().id))]",
         "serverName": "[concat(parameters('serverName'), uniquestring(resourceGroup().id))]",
         "webHookUri": "https://null",
+        "storageAccountConnectionString": "[reference('storageTemplate').outputs.storageAccountConnectionString.value]",
         "keyVaultTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/demographics-data/public/templates/keyVault/azuredeploy.json",
         "keyVaultPermissionsUpdateTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/demographics-data/public/templates/keyVaultPermissionsUpdate/azuredeploy.json",
         "linkedTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/demographics-data/public/templates/linkedTemplate/azuredeploy.json",
@@ -158,6 +159,9 @@
                     },
                     "sqlAdministratorLoginPassword": {
                         "value": "[parameters('sqlAdministratorLoginPassword')]"
+                    },
+                    "storageAccountConnectionStringValue": {
+                        "value": "[variables('storageAccountConnectionString')]"
                     }
                 }
             }

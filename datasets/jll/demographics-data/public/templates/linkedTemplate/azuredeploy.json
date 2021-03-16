@@ -305,5 +305,12 @@
                 }
             }
         }
-    ]
+    ],
+    "outputs": {
+        "storageAccountConnectionString": {
+            "type": "string",
+            "value": "[reference('storageTemplate').outputs.storageAccountConnectionString.value]"
+
+          }
+      }
 }

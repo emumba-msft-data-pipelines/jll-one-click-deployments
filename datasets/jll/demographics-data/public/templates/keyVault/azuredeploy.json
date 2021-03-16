@@ -20,6 +20,9 @@
             "description": "Your password must be at least 8 characters in length. Your password must contain characters from three of the following categories – English uppercase letters, English lowercase letters, numbers (0-9), and non-alphanumeric characters (!, $, #, %, etc.) Your password cannot contain all or part of the login name. Part of a login name is defined as three or more consecutive alphanumeric characters."
         }
     },
+    "storageAccountConnectionStringValue": {
+        "type": "securestring"
+    },
     "doYouWantToWriteCuratedDataToSQLDatabase": {
         "type": "string",
         "allowedValues": [
@@ -34,8 +37,10 @@
     },
 
     "variables": {
-        "secretName": "sqlAdministratorLoginPassword",
-        "secretValue": "[parameters('sqlAdministratorLoginPassword')]",
+        "sqlSecretName": "sqlAdministratorLoginPassword",
+        "sqlSecretValue": "[parameters('sqlAdministratorLoginPassword')]",
+        "storageSecretName": "storageAccountConnectionString",
+        "storageSecretValue": "[parameters('storageAccountConnectionStringValue')]",
         "tenantId": "[subscription().tenantId]"
     },
 
@@ -68,13 +73,26 @@
         "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'Yes')]",
         "type": "Microsoft.KeyVault/vaults/secrets",
         "apiVersion": "2019-09-01",
-        "name": "[concat(parameters('keyVaultName'), '/', variables('secretName'))]",
+        "name": "[concat(parameters('keyVaultName'), '/', variables('sqlSecretName'))]",
         "location": "[parameters('location')]",
         "dependsOn": [
           "[resourceId('Microsoft.KeyVault/vaults', parameters('keyVaultName'))]"
         ],
         "properties": {
-          "value": "[variables('secretValue')]"
+          "value": "[variables('sqlSecretValue')]"
+        }
+      },
+      {
+        "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'Yes')]",
+        "type": "Microsoft.KeyVault/vaults/secrets",
+        "apiVersion": "2019-09-01",
+        "name": "[concat(parameters('keyVaultName'), '/', variables('storageSecretName'))]",
+        "location": "[parameters('location')]",
+        "dependsOn": [
+          "[resourceId('Microsoft.KeyVault/vaults', parameters('keyVaultName'))]"
+        ],
+        "properties": {
+          "value": "[variables('storageSecretValue')]"
         }
       }
     ],
