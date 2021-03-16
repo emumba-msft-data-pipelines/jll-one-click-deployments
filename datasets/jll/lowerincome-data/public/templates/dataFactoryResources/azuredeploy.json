@@ -103,7 +103,7 @@
                         "annotations": [],
                         "type": "AzureBlobStorage",
                         "typeProperties": {
-                            "accountKey": {
+                            "connectionString": {
                                 "type": "AzureKeyVaultSecret",
                                 "store": {
                                     "referenceName": "lowerIncome_keyvault_linkedservice",
