@@ -103,11 +103,10 @@
                         "annotations": [],
                         "type": "AzureBlobStorage",
                         "typeProperties": {
-                            "connectionString": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'))]",
-                            "accountKey": {
+                            "connectionString": {
                                 "type": "AzureKeyVaultSecret",
                                 "store": {
-                                    "referenceName": "USAFacts_keyvault_linkedservice",
+                                    "referenceName": "lowerIncome_keyvault_linkedservice",
                                     "type": "LinkedServiceReference"
                                 },
                                 "secretName": "storageAccountConnectionString"
