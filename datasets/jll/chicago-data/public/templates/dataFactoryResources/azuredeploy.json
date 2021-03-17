@@ -107,7 +107,7 @@
                             "connectionString": {
                                 "type": "AzureKeyVaultSecret",
                                 "store": {
-                                    "referenceName": "lowerIncome_keyvault_linkedservice",
+                                    "referenceName": "chicago_keyvault_linkedservice",
                                     "type": "LinkedServiceReference"
                                 },
                                 "secretName": "storageAccountConnectionString"
