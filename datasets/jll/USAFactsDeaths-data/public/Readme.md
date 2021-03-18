@@ -37,7 +37,7 @@
 
 Click the following button to deploy all the resources.
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Femumba-msft-data-pipelines%2Fjll-one-click-deployments%2Fsa-kv%2Fdatasets%2Fjll%2FUSAFactsDeaths-data%2Fpublic%2Ftemplates%2Fazuredeploy.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Femumba-msft-data-pipelines%2Fjll-one-click-deployments%2Fsa-kv-usafactsdeaths%2Fdatasets%2Fjll%2FUSAFactsDeaths-data%2Fpublic%2Ftemplates%2Fazuredeploy.json)
 
 
 #### Configure Firewall Rule
