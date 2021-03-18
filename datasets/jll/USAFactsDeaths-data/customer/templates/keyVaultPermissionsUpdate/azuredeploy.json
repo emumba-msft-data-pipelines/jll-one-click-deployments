@@ -41,7 +41,7 @@
         "location": "[parameters('location')]",
         "tags": {
             "Environment": "Public",
-            "AssociatedDataSet": "USAFacts"
+            "AssociatedDataSet": "USAFactsDeaths"
         },
         "properties": {
           "tenantId": "[variables('tenantId')]",

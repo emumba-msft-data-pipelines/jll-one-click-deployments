@@ -88,10 +88,10 @@
         "dataFactoryUniqueName": "[concat(parameters('factoryName'), uniqueString(resourceGroup().id))]",
         "keyVaultName": "[concat(parameters('keyVaultName'), uniqueString(resourceGroup().id))]",
         "webHookUri": "",
-        "storageTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFacts-data/customer/templates/storageAccount/azuredeploy.json",
-        "logicAppTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFacts-data/customer/templates/logicApp/azuredeploy.json",
-        "azureDataFactoryTemplateWithTeamsNotifUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFacts-data/customer/templates/dataFactoryResources/azuredeploy.json",
-        "azureDataFactoryTemplateWithoutTeamsNotifUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFacts-data/customer/templates/dataFactoryResources/azuredeploy.json"
+        "storageTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/USAFactsDeaths-data/datasets/jll/USAFactsDeaths-data/customer/templates/storageAccount/azuredeploy.json",
+        "logicAppTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/USAFactsDeaths-data/datasets/jll/USAFactsDeaths-data/customer/templates/logicApp/azuredeploy.json",
+        "azureDataFactoryTemplateWithTeamsNotifUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/USAFactsDeaths-data/datasets/jll/USAFactsDeaths-data/customer/templates/dataFactoryResources/azuredeploy.json",
+        "azureDataFactoryTemplateWithoutTeamsNotifUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/USAFactsDeaths-data/datasets/jll/USAFactsDeaths-data/customer/templates/dataFactoryResources/azuredeploy.json"
     },
     "resources": [
         {

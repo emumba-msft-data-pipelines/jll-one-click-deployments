@@ -29,7 +29,7 @@
             },
             "tags": {
                 "Environment": "Customer",
-                "AssociatedDataSet": "USAFactsKnownCases"
+                "AssociatedDataSet": "USAFactsDeaths"
             }
     }
 
