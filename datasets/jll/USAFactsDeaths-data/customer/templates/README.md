@@ -1,4 +1,4 @@
 <h2> Click On button to deploy Azure Data Factory to deploy customer environment along with key vault. </h2>
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Femumba-msft-data-pipelines%2Fjll-one-click-deployments%2FUSAFactsDeaths-data%2Fdatasets%2Fjll%2FUSAFactsDeaths-data%2Fcustomer%2Ftemplates%2Fazuredeploy.json" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv-usafactsdeaths/datasets/jll/USAFactsDeaths-data/customer/templates/azuredeploy.json" target="_blank">
   <img src="https://aka.ms/deploytoazurebutton"/>
 </a>
