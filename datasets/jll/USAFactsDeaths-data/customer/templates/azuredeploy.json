@@ -94,7 +94,7 @@
         "webHookUri": "",
         "keyVaultTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv/datasets/jll/USAFactsDeaths-data/customer/templates/keyVault/azuredeploy.json",
         "keyVaultPermissionsUpdateTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv/datasets/jll/USAFactsDeaths-data/customer/templates/keyVaultPermissionsUpdate/azuredeploy.json",
-        "linkedTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/USAFactsDeaths-data/datasets/jll/sa-kv/customer/templates/linkedTemplate/azuredeploy.json",
+        "linkedTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv/datasets/jll/sa-kv/customer/templates/linkedTemplate/azuredeploy.json",
         "emptyDataFactoryTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv/datasets/jll/USAFactsDeaths-data/customer/templates/dataFactory/azuredeploy.json"
     },
     "resources": [
