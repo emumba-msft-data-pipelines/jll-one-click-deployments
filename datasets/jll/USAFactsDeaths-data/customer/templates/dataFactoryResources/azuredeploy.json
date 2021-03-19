@@ -1,0 +1,1612 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "factoryName": {
+        "type": "string",
+        "metadata": {
+          "description": "The name of data factory can contain only letters, numbers and hyphens. The first and last characters must be a letter or number. Spaces are not allowed."
+        }
+    },
+    "location": {
+        "type": "string",
+        "metadata": {
+          "description": "Location of your resources. Default location is eastUS"
+          }
+         },
+
+    "storageAccountName": {
+        "type": "string",
+        "metadata": {
+          "description": "The storage account name can contain only lowercase letters and numbers. Name must be between 1 and 11 characters"
+          }
+        },
+
+    
+    "actionGroupsName": {
+        "type": "String",
+        "metadata": {
+          "description": "The name can contain letters, numbers, and special characters, this can start or end with any number, letter or other special charactor"
+          }
+        },
+    "emailForAlerts": {
+        "type": "String"
+        },
+
+     "webHookUri": {
+        "type": "string"
+        },
+
+    "keyVaultName": {
+            "type": "string",
+            "metadata": {
+              "description": "Specifies the name of the key vault."
+            }
+          },
+    "StartTriggerTime": {
+            "type": "string"
+            
+        }
+  },
+   "variables": {
+        "factoryId": "[resourceId('Microsoft.DataFactory/factories/', parameters('factoryName'))]",
+        "storageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
+        "keyVaultbaseUrl":"[concat('https://',parameters('keyVaultName'),'.vault.azure.net')]"
+    },
+  "resources": [
+     
+        {
+            "name": "[concat(parameters('factoryName'), '/USAFactsDeaths_publicToCustomerEnvironmentCopyData')]",
+            "type": "Microsoft.DataFactory/factories/pipelines",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "activities": [
+                    {
+                        "name": "CopyDataFromPublicToCustomer",
+                        "type": "Copy",
+                        "dependsOn": [],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "source": {
+                                "type": "DelimitedTextSource",
+                                "storeSettings": {
+                                    "type": "AzureBlobStorageReadSettings",
+                                    "recursive": true,
+                                    "modifiedDatetimeStart": {
+                                        "value": "@adddays(utcnow(),-1)",
+                                        "type": "Expression"
+                                    },
+                                    "modifiedDatetimeEnd": {
+                                        "value": "@utcnow()",
+                                        "type": "Expression"
+                                    },
+                                    "wildcardFolderPath": "*",
+                                    "wildcardFileName": "*",
+                                    "enablePartitionDiscovery": false
+                                },
+                                "formatSettings": {
+                                    "type": "DelimitedTextReadSettings"
+                                }
+                            },
+                            "sink": {
+                                "type": "DelimitedTextSink",
+                                "storeSettings": {
+                                    "type": "AzureBlobStorageWriteSettings"
+                                },
+                                "formatSettings": {
+                                    "type": "DelimitedTextWriteSettings",
+                                    "quoteAllText": true,
+                                    "fileExtension": ".txt"
+                                }
+                            },
+                            "enableStaging": false,
+                            "translator": {
+                                "type": "TabularTranslator",
+                                "typeConversion": true,
+                                "typeConversionSettings": {
+                                    "allowDataTruncation": true,
+                                    "treatBooleanAsNumber": false
+                                }
+                            }
+                        },
+                        "inputs": [
+                            {
+                                "referenceName": "public_env_dataset",
+                                "type": "DatasetReference",
+                                "parameters": {
+                                    "container": "public"
+                                }
+                            }
+                        ],
+                        "outputs": [
+                            {
+                                "referenceName": "customer_env_dataseet",
+                                "type": "DatasetReference",
+                                "parameters": {
+                                    "container": "customer"
+                                }
+                            }
+                        ]
+                    },
+                     {
+                    "name":"GetMetadataCurrentSchema",
+                    "type":"GetMetadata",
+                    "dependsOn":[
+                        {
+                            "activity":"CopyDataFromPublicToCustomer",
+                            "dependencyConditions":[
+                            "Succeeded"
+                            ]
+                        }
+                    ],
+                    "policy":{
+                        "timeout":"7.00:00:00",
+                        "retry":0,
+                        "retryIntervalInSeconds":30,
+                        "secureOutput":false,
+                        "secureInput":false
+                    },
+                    "userProperties":[
+                        
+                    ],
+                    "typeProperties":{
+                        "dataset":{
+                            "referenceName":"csv_source_dataset",
+                            "type":"DatasetReference",
+                            "parameters":{
+                            "container":{
+                                "value":"@pipeline().parameters.container",
+                                "type":"Expression"
+                            },
+                            "directory":{
+                                "value":"@pipeline().parameters.directory",
+                                "type":"Expression"
+                            },
+                            "file":{
+                                "value":"@pipeline().parameters.file",
+                                "type":"Expression"
+                            }
+                            }
+                        },
+                        "fieldList":[
+                            "itemName",
+                            "columnCount",
+                            "structure"
+                        ],
+                        "storeSettings":{
+                            "type":"AzureBlobStorageReadSettings",
+                            "recursive":true,
+                            "enablePartitionDiscovery":false
+                        },
+                        "formatSettings":{
+                            "type":"DelimitedTextReadSettings"
+                        }
+                    }
+                },
+                    
+                    {
+                        "name": "GetMetadataPrevSchema",
+                        "type": "GetMetadata",
+                        "dependsOn": [
+                            {
+                                "activity": "CopyDataFromPublicToCustomer",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "dataset": {
+                                "referenceName": "previous_dataset",
+                                "type": "DatasetReference",
+                                "parameters": {
+                                    "container": "schemas-for-comparison",
+                                    "fileName": "previous_dataset.csv",
+                                    "directory": "previous_dataset"
+                                }
+                            },
+                            "fieldList": [
+                                "itemName",
+                                "columnCount",
+                                "structure"
+                            ],
+                            "storeSettings": {
+                                "type": "AzureBlobStorageReadSettings",
+                                "recursive": true,
+                                "enablePartitionDiscovery": false
+                            },
+                            "formatSettings": {
+                                "type": "DelimitedTextReadSettings"
+                            }
+                        }
+                    },
+                    {
+                        "name": "IfCurrentSchemahasMoreColumns",
+                        "type": "IfCondition",
+                        "dependsOn": [
+                            {
+                                "activity": "GetMetadataCurrentSchema",
+                                "dependencyConditions": [
+                                    "Completed"
+                                ]
+                            },
+                            {
+                                "activity": "GetMetadataPrevSchema",
+                                "dependencyConditions": [
+                                    "Completed"
+                                ]
+                            }
+                        ],
+                        "userProperties": [],
+                        "typeProperties": {
+                            "expression": {
+                                "value": "@greater(activity('GetMetadataCurrentSchema').output.columnCount,activity('GetMetadataPrevSchema').output.columnCount)",
+                                "type": "Expression"
+                            },
+                            "ifFalseActivities": [
+                                {
+                                    "name": "WaitCurrentSchemaHasMoreColumnsFALSE",
+                                    "type": "Wait",
+                                    "dependsOn": [],
+                                    "userProperties": [],
+                                    "typeProperties": {
+                                        "waitTimeInSeconds": 1
+                                    }
+                                }
+                            ],
+                            "ifTrueActivities": [
+                                {
+                                    "name": "WaitCurrentSchemaHasMoreColumnsTrue",
+                                    "type": "Wait",
+                                    "dependsOn": [],
+                                    "userProperties": [],
+                                    "typeProperties": {
+                                        "waitTimeInSeconds": 1
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "name": "IfCurrentSchemaHasLessColumns",
+                        "type": "IfCondition",
+                        "dependsOn": [
+                            {
+                                "activity": "GetMetadataCurrentSchema",
+                                "dependencyConditions": [
+                                    "Completed"
+                                ]
+                            },
+                            {
+                                "activity": "GetMetadataPrevSchema",
+                                "dependencyConditions": [
+                                    "Completed"
+                                ]
+                            }
+                        ],
+                        "userProperties": [],
+                        "typeProperties": {
+                            "expression": {
+                                "value": "@greater(activity('GetMetadataPrevSchema').output.columnCount,activity('GetMetadataCurrentSchema').output.columnCount)",
+                                "type": "Expression"
+                            },
+                            "ifFalseActivities": [
+                                {
+                                    "name": "WaitCurrentSchemaLessColumnsFALSE",
+                                    "type": "Wait",
+                                    "dependsOn": [],
+                                    "userProperties": [],
+                                    "typeProperties": {
+                                        "waitTimeInSeconds": 1
+                                    }
+                                }
+                            ],
+                            "ifTrueActivities": [
+                                {
+                                    "name": "WaitCurrentSchemaHasLessColumnsTRUE",
+                                    "type": "Wait",
+                                    "dependsOn": [],
+                                    "userProperties": [],
+                                    "typeProperties": {
+                                        "waitTimeInSeconds": 1
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "name": "IfCurrentSchemaHasSameColumnbutDifferentArrangement",
+                        "type": "IfCondition",
+                        "dependsOn": [
+                            {
+                                "activity": "GetMetadataCurrentSchema",
+                                "dependencyConditions": [
+                                    "Completed"
+                                ]
+                            },
+                            {
+                                "activity": "GetMetadataPrevSchema",
+                                "dependencyConditions": [
+                                    "Completed"
+                                ]
+                            }
+                        ],
+                        "userProperties": [],
+                        "typeProperties": {
+                            "expression": {
+                                "value": "@and(equals(activity('GetMetadataCurrentSchema').output.columnCount,activity('GetMetadataPrevSchema').output.columnCount),not(equals(activity('GetMetadataCurrentSchema').output.structure,activity('GetMetadataPrevSchema').output.structure)))",
+                                "type": "Expression"
+                            },
+                            "ifFalseActivities": [
+                                {
+                                    "name": "WaitCurrentSchemaHasSameColDiffArrangementFALSE",
+                                    "type": "Wait",
+                                    "dependsOn": [],
+                                    "userProperties": [],
+                                    "typeProperties": {
+                                        "waitTimeInSeconds": 1
+                                    }
+                                }
+                            ],
+                            "ifTrueActivities": [
+                                {
+                                    "name": "WaitCurrentSchemaHasSameColDiffArrangementTRUE",
+                                    "type": "Wait",
+                                    "dependsOn": [],
+                                    "userProperties": [],
+                                    "typeProperties": {
+                                        "waitTimeInSeconds": 1
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "name": "SavePrevSchemaCopy",
+                        "type": "Copy",
+                        "dependsOn": [
+                            {
+                                "activity": "IfCurrentSchemahasMoreColumns",
+                                "dependencyConditions": [
+                                    "Completed"
+                                ]
+                            },
+                            {
+                                "activity": "IfCurrentSchemaHasLessColumns",
+                                "dependencyConditions": [
+                                    "Completed"
+                                ]
+                            },
+                            {
+                                "activity": "IfCurrentSchemaHasSameColumnbutDifferentArrangement",
+                                "dependencyConditions": [
+                                    "Completed"
+                                ]
+                            }
+                        ],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "source": {
+                                "type": "DelimitedTextSource",
+                                "storeSettings": {
+                                    "type": "AzureBlobStorageReadSettings",
+                                    "recursive": true,
+                                    "enablePartitionDiscovery": false
+                                },
+                                "formatSettings": {
+                                    "type": "DelimitedTextReadSettings"
+                                }
+                            },
+                            "sink": {
+                                "type": "DelimitedTextSink",
+                                "storeSettings": {
+                                    "type": "AzureBlobStorageWriteSettings"
+                                },
+                                "formatSettings": {
+                                    "type": "DelimitedTextWriteSettings",
+                                    "quoteAllText": true,
+                                    "fileExtension": ".txt"
+                                }
+                            },
+                            "enableStaging": false,
+                            "translator": {
+                                "type": "TabularTranslator",
+                                "typeConversion": true,
+                                "typeConversionSettings": {
+                                    "allowDataTruncation": true,
+                                    "treatBooleanAsNumber": false
+                                }
+                            }
+                        },
+                        "inputs": [
+                            {
+                                "referenceName": "previous_dataset",
+                                "type": "DatasetReference",
+                                "parameters": {
+                                    "container": "schemas-for-comparison",
+                                    "fileName": "previous_dataset.csv",
+                                    "directory": "previous_dataset"
+                                }
+                            }
+                        ],
+                        "outputs": [
+                            {
+                                "referenceName": "get_previous_dataset_copy",
+                                "type": "DatasetReference",
+                                "parameters": {
+                                    "container": "schemas-for-comparison",
+                                    "fileName": "get_previous_dataset_copy.csv",
+                                    "directory": "get_previous_dataset_copy"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SavePrevSchema",
+                        "type": "Copy",
+                        "dependsOn": [
+                            {
+                                "activity": "SavePrevSchemaCopy",
+                                "dependencyConditions": [
+                                    "Completed"
+                                ]
+                            }
+                        ],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "source": {
+                                "type": "DelimitedTextSource",
+                                "storeSettings": {
+                                    "type": "AzureBlobStorageReadSettings",
+                                    "recursive": true,
+                                    "enablePartitionDiscovery": false
+                                },
+                                "formatSettings": {
+                                    "type": "DelimitedTextReadSettings"
+                                }
+                            },
+                            "sink": {
+                                "type": "DelimitedTextSink",
+                                "storeSettings": {
+                                    "type": "AzureBlobStorageWriteSettings"
+                                },
+                                "formatSettings": {
+                                    "type": "DelimitedTextWriteSettings",
+                                    "quoteAllText": true,
+                                    "fileExtension": ".txt"
+                                }
+                            },
+                            "enableStaging": false,
+                            "translator": {
+                                "type": "TabularTranslator",
+                                "typeConversion": true,
+                                "typeConversionSettings": {
+                                    "allowDataTruncation": true,
+                                    "treatBooleanAsNumber": false
+                                }
+                            }
+                        },
+                        "inputs": [
+                            {
+                                "referenceName":"csv_source_dataset",
+                                "type":"DatasetReference",
+                                "parameters":{
+                                "container":{
+                                    "value":"@pipeline().parameters.container",
+                                    "type":"Expression"
+                                },
+                                "directory":{
+                                    "value":"@pipeline().parameters.directory",
+                                    "type":"Expression"
+                                },
+                                "file":{
+                                    "value":"@pipeline().parameters.file",
+                                    "type":"Expression"
+                           }
+                        }
+                     }
+                    ],
+                        "outputs": [
+                            {
+                                "referenceName": "previous_dataset",
+                                "type": "DatasetReference",
+                                "parameters": {
+                                    "container": "schemas-for-comparison",
+                                    "fileName": "previous_dataset.csv",
+                                    "directory": "previous_dataset"
+                                }
+                            }
+                        ]
+                    }
+                ],
+                "parameters":{
+                    "container":{
+                        "type":"string",
+                        "defaultValue":"customer"
+                    },
+                    "directory":{
+                        "type":"string",
+                        "defaultValue":"curated/USAFactsDeaths_data/latest"
+                    },
+                    "file":{
+                        "type":"string",
+                        "defaultValue":"USAFactsDeaths_curated_data.csv"
+               }
+            },
+                "folder": {
+                    "name": "JLL/BlobStorageDataExtraction"
+                },
+                "annotations": [],
+                "lastPublishTime": "2021-02-24T14:27:50Z"
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/datasets/public_env_dataset')]",
+                "[concat(variables('factoryId'), '/datasets/customer_env_dataseet')]",
+                "[concat(variables('factoryId'), '/datasets/csv_source_dataset')]",
+                "[concat(variables('factoryId'), '/datasets/previous_dataset')]",
+                "[concat(variables('factoryId'), '/datasets/get_previous_dataset_copy')]"
+            ]
+        },
+
+         {
+            "name": "[concat(parameters('factoryName'), '/triggerForIncrementalLoadTumblingWindow')]",
+            "type": "Microsoft.DataFactory/factories/triggers",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "annotations": [],
+                "runtimeState": "Stopped",
+                "pipeline": {
+                    "pipelineReference": {
+                        "referenceName": "USAFactsDeaths_publicToCustomerEnvironmentCopyData",
+                        "type": "PipelineReference"
+                    },
+                    "parameters": {}
+                },
+                "type": "TumblingWindowTrigger",
+                "typeProperties": {
+                    "frequency": "Hour",
+                    "interval": 24,
+                    "startTime": "[parameters('StartTriggerTime')]",
+                    "delay": "00:00:00",
+                    "maxConcurrency": 50,
+                    "retryPolicy": {
+                        "intervalInSeconds": 30
+                    },
+                    "dependsOn": []
+                }
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/pipelines/USAFactsDeaths_publicToCustomerEnvironmentCopyData')]"
+            ]
+        },
+
+         {
+            "name": "[concat(parameters('factoryName'), '/customer_env_dataseet')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "AzureBlobStorageCustomerEnvLinkedService",
+                    "type": "LinkedServiceReference"
+                },
+                "parameters": {
+                    "container": {
+                        "type": "string"
+                    }
+                },
+                "folder": {
+                    "name": "JLL/USAFactsDeaths-dataset/Sinks"
+                },
+                "annotations": [],
+                "type": "DelimitedText",
+                "typeProperties": {
+                    "location": {
+                        "type": "AzureBlobStorageLocation",
+                        "container": {
+                            "value": "@dataset().container",
+                            "type": "Expression"
+                        }
+                    },
+                    "columnDelimiter": ",",
+                    "escapeChar": "\\",
+                    "firstRowAsHeader": true,
+                    "quoteChar": "\""
+                },
+                "schema": []
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageCustomerEnvLinkedService')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/public_env_dataset')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "AzureBlobStoragePublicEnvLinkedService",
+                    "type": "LinkedServiceReference"
+                },
+                "parameters": {
+                    "container": {
+                        "type": "string",
+                        "defaultValue": "public"
+                    }
+                },
+                "folder": {
+                    "name": "JLL/USAFactsDeaths-dataset/Sources"
+                },
+                "annotations": [],
+                "type": "DelimitedText",
+                "typeProperties": {
+                    "location": {
+                        "type": "AzureBlobStorageLocation",
+                        "container": {
+                            "value": "@dataset().container",
+                            "type": "Expression"
+                        }
+                    },
+                    "columnDelimiter": ",",
+                    "escapeChar": "\\",
+                    "firstRowAsHeader": true,
+                    "quoteChar": "\""
+                },
+                "schema": []
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/AzureBlobStoragePublicEnvLinkedService')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/get_previous_dataset_copy')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "AzureBlobStorageCustomerEnvLinkedService",
+                    "type": "LinkedServiceReference"
+                },
+                "parameters": {
+                    "container": {
+                        "type": "string",
+                        "defaultValue": "schemas-for-comparison"
+                    },
+                    "fileName": {
+                        "type": "string",
+                        "defaultValue": "get_previous_dataset_copy.csv"
+                    },
+                    "directory": {
+                        "type": "string",
+                        "defaultValue": "get_previous_dataset"
+                    }
+                },
+                "folder": {
+                    "name": "JLL/USAFactsDeaths-dataset/Schema"
+                },
+                "annotations": [],
+                "type": "DelimitedText",
+                "typeProperties": {
+                    "location": {
+                        "type": "AzureBlobStorageLocation",
+                        "fileName": {
+                            "value": "@dataset().fileName",
+                            "type": "Expression"
+                        },
+                        "folderPath": {
+                            "value": "@dataset().directory",
+                            "type": "Expression"
+                        },
+                        "container": {
+                            "value": "@dataset().container",
+                            "type": "Expression"
+                        }
+                    },
+                    "columnDelimiter": ",",
+                    "escapeChar": "\\",
+                    "firstRowAsHeader": true,
+                    "quoteChar": "\""
+                },
+                "schema": []
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageCustomerEnvLinkedService')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/csv_source_dataset')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "AzureBlobStorageCustomerEnvLinkedService",
+                    "type": "LinkedServiceReference"
+                },
+                "parameters": {
+                    "container": {
+                        "type": "string",
+                        "defaultValue": "customer"
+                    },
+                    "directory": {
+                        "type": "string",
+                        "defaultValue": "curated/USAFacts_data/latest"
+                    },
+                    "file": {
+                        "type": "string",
+                        "defaultValue": "USAFacts_curated_data.csv"
+                    }
+                },
+                "folder": {
+                    "name": "JLL/USAFactsDeaths-dataset/Sources"
+                },
+                "annotations": [],
+                "type": "DelimitedText",
+                "typeProperties": {
+                    "location": {
+                        "type": "AzureBlobStorageLocation",
+                        "fileName": {
+                            "value": "@dataset().file",
+                            "type": "Expression"
+                        },
+                        "folderPath": {
+                            "value": "@dataset().directory",
+                            "type": "Expression"
+                        },
+                        "container": {
+                            "value": "@dataset().container",
+                            "type": "Expression"
+                        }
+                    },
+                    "columnDelimiter": ",",
+                    "escapeChar": "\\",
+                    "firstRowAsHeader": true,
+                    "quoteChar": "\""
+                },
+                "schema": [
+                    {
+                        "name": "countyFIPS",
+                        "type": "String"
+                    },
+                    {
+                        "name": "CountyName",
+                        "type": "String"
+                    },
+                    {
+                        "name": "State",
+                        "type": "String"
+                    },
+                    {
+                        "name": "StateFIPS",
+                        "type": "String"
+                    },
+                    {
+                        "name": "Date",
+                        "type": "String"
+                    },
+                    {
+                        "name": "DailyCases",
+                        "type": "String"
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageCustomerEnvLinkedService')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/previous_dataset')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "AzureBlobStorageCustomerEnvLinkedService",
+                    "type": "LinkedServiceReference"
+                },
+                "parameters": {
+                    "container": {
+                        "type": "string",
+                        "defaultValue": "schemas-for-comparison"
+                    },
+                    "fileName": {
+                        "type": "string",
+                        "defaultValue": "previous_dataset.csv"
+                    },
+                    "directory": {
+                        "type": "string",
+                        "defaultValue": "previous_dataset"
+                    }
+                },
+                "folder": {
+                    "name": "JLL/USAFactsDeaths-dataset/Schema"
+                },
+                "annotations": [],
+                "type": "DelimitedText",
+                "typeProperties": {
+                    "location": {
+                        "type": "AzureBlobStorageLocation",
+                        "fileName": {
+                            "value": "@dataset().fileName",
+                            "type": "Expression"
+                        },
+                        "folderPath": {
+                            "value": "@dataset().directory",
+                            "type": "Expression"
+                        },
+                        "container": {
+                            "value": "@dataset().container",
+                            "type": "Expression"
+                        }
+                    },
+                    "columnDelimiter": ",",
+                    "escapeChar": "\\",
+                    "firstRowAsHeader": true,
+                    "quoteChar": "\""
+                },
+                "schema": []
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageCustomerEnvLinkedService')]"
+            ]
+        },
+
+        {
+            "name": "[concat(parameters('factoryName'), '/AzureBlobStorageCustomerEnvLinkedService')]",
+            "type": "Microsoft.DataFactory/factories/linkedServices",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "annotations": [],
+                "type": "AzureBlobStorage",
+                "typeProperties": {
+                    "connectionString": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',listKeys(variables('storageAccountId'), '2019-06-01').keys[0].value)]"
+                }
+            },
+            "dependsOn": [
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/AzureBlobStoragePublicEnvLinkedService')]",
+            "type": "Microsoft.DataFactory/factories/linkedServices",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "annotations": [],
+                "type": "AzureBlobStorage",
+                "typeProperties": {
+                    "sasUri": {
+                        "type": "AzureKeyVaultSecret",
+                        "store": {
+                            "referenceName": "AzureKeyVaultForSASURI",
+                            "type": "LinkedServiceReference"
+                        },
+                        "secretName": "SASURiSecret"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/AzureKeyVaultForSASURI')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/AzureKeyVaultForSASURI')]",
+            "type": "Microsoft.DataFactory/factories/linkedServices",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "annotations": [],
+                "type": "AzureKeyVault",
+                "typeProperties": {
+                    "baseUrl": "[variables('keyVaultbaseUrl')]"
+                }
+            },
+            "dependsOn": [
+            ]
+        },
+
+        {
+            "type": "Microsoft.AlertsManagement/actionRules",
+            "apiVersion": "2019-05-05-preview",
+            "name": "suppressResolvedNotificationCustEnv",
+            "location": "global",
+            "properties": {
+                "conditions": {
+                    "monitorCondition": {
+                        "operator": "Equals",
+                        "values": [
+                            "Resolved"
+                        ]
+                    }
+                },
+                "status": "Enabled",
+                "type": "Suppression",
+                "scope": {
+                    "scopeType": "Resource",
+                    "values": [
+                        "[variables('factoryId')]"
+                    ]
+                },
+                "suppressionConfig": {
+                    "recurrenceType": "Always"
+                },
+                "description": "This rule will supress the resolved notifications in email and ms teams"
+            }
+        },
+        {
+            "type": "microsoft.insights/actionGroups",
+            "apiVersion": "2019-03-01",
+            "name": "[parameters('actionGroupsName')]",
+            "location": "Global",
+            "properties": {
+                "groupShortName": "alerts",
+                "enabled": true,
+                "emailReceivers": [
+                    {
+                        "name": "AlertsOnEmail",
+                        "emailAddress": "[parameters('emailForAlerts')]",
+                        "useCommonAlertSchema": false
+                    }
+                ],
+                "smsReceivers": [],
+                "webhookReceivers": [
+                    {
+                        "name": "microsoftTeamsNotifications",
+                        "serviceUri": "[parameters('webHookUri')]",
+                        "useCommonAlertSchema": false
+                    }
+                ],
+                "itsmReceivers": [],
+                "azureAppPushReceivers": [],
+                "automationRunbookReceivers": [],
+                "voiceReceivers": [],
+                "logicAppReceivers": [],
+                "azureFunctionReceivers": []
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/datasets/public_env_dataset')]",
+                "[concat(variables('factoryId'), '/datasets/customer_env_dataseet')]",
+                "[concat(variables('factoryId'), '/datasets/csv_source_dataset')]",
+                "[concat(variables('factoryId'), '/datasets/previous_dataset')]",
+                "[concat(variables('factoryId'), '/datasets/get_previous_dataset_copy')]"
+            ]
+        },
+         {
+            "type": "Microsoft.Insights/metricalerts",
+            "apiVersion": "2018-03-01",
+            "name": "ActivityCancelledAlert",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/actionGroups', parameters('actionGroupsName'))]"
+            ],
+            "properties": {
+                "description": "Metric alert for activity run cancellation in a pipeline",
+                "severity": 0,
+                "enabled": true,
+                "scopes": [
+                    "[variables('factoryId')]"
+                ],
+                "evaluationFrequency": "PT1M",
+                "windowSize": "PT1M",
+                "criteria": {
+                    "allOf": [
+                        {
+                            "threshold": 1,
+                            "name": "0cf90373-eb76-400a-96b9-8d61a50ffc22",
+                            "metricNamespace": "Microsoft.DataFactory/factories",
+                            "metricName": "ActivityCancelledRuns",
+                            "dimensions": [
+                                {
+                                    "name": "ActivityType",
+                                    "operator": "Include",
+                                    "values": [
+                                        "Copy"
+                                    ]
+                                },
+                                {
+                                    "name": "Name",
+                                    "operator": "Include",
+                                    "values": [
+                                        "CopyDataFromPublicToCustomer",
+                                        "SavePrevSchemaCopy",
+                                        "SavePrevSchema"
+                                    ]
+                                },
+                                {
+                                    "name": "PipelineName",
+                                    "operator": "Include",
+                                    "values": [
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData",
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData_tumblingWindow"
+                                    ]
+                                }
+                            ],
+                            "operator": "GreaterThanOrEqual",
+                            "timeAggregation": "Average",
+                            "criterionType": "StaticThresholdCriterion"
+                        }
+                    ],
+                    "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
+                },
+                "actions": [
+                    {
+                        "actionGroupId": "[resourceId('microsoft.insights/actionGroups', parameters('actionGroupsName'))]",
+                        "webHookProperties": {}
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Insights/metricalerts",
+            "apiVersion": "2018-03-01",
+            "name": "ActivityFailedAlertConfig",
+            "location": "global",
+            "dependsOn": [
+                 "[resourceId('microsoft.insights/actionGroups', parameters('actionGroupsName'))]"
+            ],
+            "properties": {
+                "description": "Metric alert for activity failure in a pipeline",
+                "severity": 0,
+                "enabled": true,
+                "scopes": [
+                    "[variables('factoryId')]"
+                ],
+                "evaluationFrequency": "PT1M",
+                "windowSize": "PT1M",
+                "criteria": {
+                    "allOf": [
+                        {
+                            "threshold": 1,
+                            "name": "024909f8-12de-4df2-a6b0-92fb9b6659c2",
+                            "metricNamespace": "Microsoft.DataFactory/factories",
+                            "metricName": "ActivityFailedRuns",
+                            "dimensions": [
+                                {
+                                    "name": "ActivityType",
+                                    "operator": "Include",
+                                    "values": [
+                                        "Copy"
+                                    ]
+                                },
+                                {
+                                    "name": "Name",
+                                    "operator": "Include",
+                                    "values": [
+                                        "CopyDataFromPublicToCustomer",
+                                        "SavePrevSchemaCopy",
+                                        "SavePrevSchema"
+                                    ]
+                                },
+                                {
+                                    "name": "PipelineName",
+                                    "operator": "Include",
+                                    "values": [
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData",
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData_tumblingWindow"
+                                    ]
+                                },
+                                {
+                                    "name": "FailureType",
+                                    "operator": "Include",
+                                    "values": [
+                                        "UserError",
+                                        "SystemError",
+                                        "BadGateway"
+                                    ]
+                                }
+                            ],
+                            "operator": "GreaterThanOrEqual",
+                            "timeAggregation": "Average",
+                            "criterionType": "StaticThresholdCriterion"
+                        }
+                    ],
+                    "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
+                },
+                "actions": [
+                    {
+                        "actionGroupId": "[resourceId('microsoft.insights/actionGroups', parameters('actionGroupsName'))]",
+                        "webHookProperties": {}
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Insights/metricalerts",
+            "apiVersion": "2018-03-01",
+            "name": "PipelineCancelledAlertConfig",
+            "location": "global",
+            "dependsOn": [
+                 "[resourceId('microsoft.insights/actionGroups', parameters('actionGroupsName'))]"
+            ],
+            "properties": {
+                "description": "Metric alert for pipeline cancellation",
+                "severity": 0,
+                "enabled": true,
+                "scopes": [
+                    "[variables('factoryId')]"
+                ],
+                "evaluationFrequency": "PT1M",
+                "windowSize": "PT1M",
+                "criteria": {
+                    "allOf": [
+                        {
+                            "threshold": 1,
+                            "name": "PipelineCancelledRuns",
+                            "metricNamespace": "Microsoft.DataFactory/factories",
+                            "metricName": "PipelineCancelledRuns",
+                            "dimensions": [
+                                {
+                                    "name": "Name",
+                                    "operator": "Include",
+                                    "values": [
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData",
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData_tumblingWindow"
+                                    ]
+                                }
+                            ],
+                            "operator": "GreaterThanOrEqual",
+                            "timeAggregation": "Average",
+                            "criterionType": "StaticThresholdCriterion"
+                        }
+                    ],
+                    "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
+                },
+                "actions": [
+                    {
+                        "actionGroupId": "[resourceId('microsoft.insights/actionGroups', parameters('actionGroupsName'))]",
+                        "webHookProperties": {}
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Insights/metricalerts",
+            "apiVersion": "2018-03-01",
+            "name": "PipelineFailedAlertConfig",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/actionGroups', parameters('actionGroupsName'))]"
+            ],
+            "properties": {
+                "description": "Metric alert for pipeline failure",
+                "severity": 0,
+                "enabled": true,
+                "scopes": [
+                    "[variables('factoryId')]"
+                ],
+                "evaluationFrequency": "PT1M",
+                "windowSize": "PT1M",
+                "criteria": {
+                    "allOf": [
+                        {
+                            "threshold": 1,
+                            "name": "PipelineFailedRuns",
+                            "metricNamespace": "Microsoft.DataFactory/factories",
+                            "metricName": "PipelineFailedRuns",
+                            "dimensions": [
+                                {
+                                    "name": "Name",
+                                    "operator": "Include",
+                                    "values": [
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData",
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData_tumblingWindow"
+                                    ]
+                                },
+                                {
+                                    "name": "FailureType",
+                                    "operator": "Include",
+                                    "values": [
+                                        "UserError",
+                                        "SystemError",
+                                        "BadGateway"
+                                    ]
+                                }
+                            ],
+                            "operator": "GreaterThanOrEqual",
+                            "timeAggregation": "Average",
+                            "criterionType": "StaticThresholdCriterion"
+                        }
+                    ],
+                    "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
+                },
+                "actions": [
+                    {
+                        "actionGroupId": "[resourceId('microsoft.insights/actionGroups', parameters('actionGroupsName'))]",
+                        "webHookProperties": {}
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Insights/metricalerts",
+            "apiVersion": "2018-03-01",
+            "name": "PipelineSucceededAlert",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/actionGroups', parameters('actionGroupsName'))]"
+            ],
+            "properties": {
+                "description": "Metric alert on pipeline succeeded",
+                "severity": 0,
+                "enabled": true,
+                "scopes": [
+                    "[variables('factoryId')]"
+                ],
+                "evaluationFrequency": "PT1M",
+                "windowSize": "PT1M",
+                "criteria": {
+                    "allOf": [
+                        {
+                            "threshold": 1,
+                            "name": "6eedb8b2-092c-486a-b73f-95581f51b2ec",
+                            "metricNamespace": "Microsoft.DataFactory/factories",
+                            "metricName": "PipelineSucceededRuns",
+                            "dimensions": [
+                                {
+                                    "name": "Name",
+                                    "operator": "Include",
+                                    "values": [
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData",
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData_tumblingWindow"
+                                    ]
+                                }
+                            ],
+                            "operator": "GreaterThanOrEqual",
+                            "timeAggregation": "Average",
+                            "criterionType": "StaticThresholdCriterion"
+                        }
+                    ],
+                    "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
+                },
+                "actions": [
+                    {
+                        "actionGroupId": "[resourceId('microsoft.insights/actionGroups', parameters('actionGroupsName'))]",
+                        "webHookProperties": {}
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Insights/metricalerts",
+            "apiVersion": "2018-03-01",
+            "name": "SourceCurrentSchemaWithLessColumnsAlert",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/actionGroups', parameters('actionGroupsName'))]"
+            ],
+            "properties": {
+                "description": "It is to notify that the current schema of the source has less column(s) than the schema of the same source previously detected.",
+                "severity": 0,
+                "enabled": true,
+                "scopes": [
+                    "[variables('factoryId')]"
+                ],
+                "evaluationFrequency": "PT1M",
+                "windowSize": "PT1M",
+                "criteria": {
+                    "allOf": [
+                        {
+                            "threshold": 1,
+                            "name": "cb3564c1-b962-4793-bfdd-b1021997d342",
+                            "metricNamespace": "Microsoft.DataFactory/factories",
+                            "metricName": "ActivitySucceededRuns",
+                            "dimensions": [
+                                {
+                                    "name": "ActivityType",
+                                    "operator": "Include",
+                                    "values": [
+                                        "Wait"
+                                    ]
+                                },
+                                {
+                                    "name": "Name",
+                                    "operator": "Include",
+                                    "values": [
+                                        "WaitCurrentSchemaHasLessColumnsTRUE"
+                                    ]
+                                },
+                                {
+                                    "name": "PipelineName",
+                                    "operator": "Include",
+                                    "values": [
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData",
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData_tumblingWindow"
+                                    ]
+                                },
+                                {
+                                    "name": "FailureType",
+                                    "operator": "Include",
+                                    "values": [
+                                        "none"
+                                    ]
+                                }
+                            ],
+                            "operator": "GreaterThanOrEqual",
+                            "timeAggregation": "Average",
+                            "criterionType": "StaticThresholdCriterion"
+                        }
+                    ],
+                    "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
+                },
+                "actions": [
+                    {
+                        "actionGroupId": "[resourceId('microsoft.insights/actionGroups', parameters('actionGroupsName'))]",
+                        "webHookProperties": {}
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Insights/metricalerts",
+            "apiVersion": "2018-03-01",
+            "name": "SourceCurrentSchemaWithMoreColumnsAlert",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/actionGroups', parameters('actionGroupsName'))]"
+            ],
+            "properties": {
+                "description": "It is to notify that the current schema of the source has more column(s) than the schema of the same source previously detected.",
+                "severity": 0,
+                "enabled": true,
+                "scopes": [
+                    "[variables('factoryId')]"
+                ],
+                "evaluationFrequency": "PT1M",
+                "windowSize": "PT1M",
+                "criteria": {
+                    "allOf": [
+                        {
+                            "threshold": 1,
+                            "name": "7d820b39-d4f8-4437-bf70-d84dd2e3f22b",
+                            "metricNamespace": "Microsoft.DataFactory/factories",
+                            "metricName": "ActivitySucceededRuns",
+                            "dimensions": [
+                                {
+                                    "name": "ActivityType",
+                                    "operator": "Include",
+                                    "values": [
+                                        "Wait"
+                                    ]
+                                },
+                                {
+                                    "name": "Name",
+                                    "operator": "Include",
+                                    "values": [
+                                        "WaitCurrentSchemaHasMoreColumnsTrue"
+                                    ]
+                                },
+                                {
+                                    "name": "PipelineName",
+                                    "operator": "Include",
+                                    "values": [
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData",
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData_tumblingWindow"
+                                    ]
+                                },
+                                {
+                                    "name": "FailureType",
+                                    "operator": "Include",
+                                    "values": [
+                                        "none"
+                                    ]
+                                }
+                            ],
+                            "operator": "GreaterThanOrEqual",
+                            "timeAggregation": "Average",
+                            "criterionType": "StaticThresholdCriterion"
+                        }
+                    ],
+                    "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
+                },
+                "actions": [
+                    {
+                        "actionGroupId": "[resourceId('microsoft.insights/actionGroups', parameters('actionGroupsName'))]",
+                        "webHookProperties": {}
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Insights/metricalerts",
+            "apiVersion": "2018-03-01",
+            "name": "SourceCurrentSchemaWithSameNumberOfColumnsButDifferentNamesOrArrangementAlert",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/actionGroups', parameters('actionGroupsName'))]"
+            ],
+            "properties": {
+                "description": "It is to notify that the current schema of the source has same number of columns as the schema of the same source previously detected but either the arrangement of the columns is different or one or more columns have different names.",
+                "severity": 0,
+                "enabled": true,
+                "scopes": [
+                    "[variables('factoryId')]"
+                ],
+                "evaluationFrequency": "PT1M",
+                "windowSize": "PT1M",
+                "criteria": {
+                    "allOf": [
+                        {
+                            "threshold": 1,
+                            "name": "fb1360c4-4665-483b-bdb2-6916067a6a98",
+                            "metricNamespace": "Microsoft.DataFactory/factories",
+                            "metricName": "ActivitySucceededRuns",
+                            "dimensions": [
+                                {
+                                    "name": "ActivityType",
+                                    "operator": "Include",
+                                    "values": [
+                                        "Wait"
+                                    ]
+                                },
+                                {
+                                    "name": "Name",
+                                    "operator": "Include",
+                                    "values": [
+                                        "WaitCurrentSchemaHasSameColDiffArrangementTRUE"
+                                    ]
+                                },
+                                {
+                                    "name": "PipelineName",
+                                    "operator": "Include",
+                                    "values": [
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData",
+                                        "USAFactsDeaths_publicToCustomerEnvironmentCopyData_tumblingWindow"
+                                    ]
+                                },
+                                {
+                                    "name": "FailureType",
+                                    "operator": "Include",
+                                    "values": [
+                                        "none"
+                                    ]
+                                }
+                            ],
+                            "operator": "GreaterThanOrEqual",
+                            "timeAggregation": "Average",
+                            "criterionType": "StaticThresholdCriterion"
+                        }
+                    ],
+                    "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
+                },
+                "actions": [
+                    {
+                        "actionGroupId": "[resourceId('microsoft.insights/actionGroups', parameters('actionGroupsName'))]",
+                        "webHookProperties": {}
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Insights/metricalerts",
+            "apiVersion": "2018-03-01",
+            "name": "TriggerCancelledAlertConfig",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/actionGroups', parameters('actionGroupsName'))]"
+            ],
+            "properties": {
+                "description": "Metric alert for trigger cancellation",
+                "severity": 0,
+                "enabled": true,
+                "scopes": [
+                    "[variables('factoryId')]"
+                ],
+                "evaluationFrequency": "PT1M",
+                "windowSize": "PT1M",
+                "criteria": {
+                    "allOf": [
+                        {
+                            "threshold": 1,
+                            "name": "TriggerCancelledRuns",
+                            "metricNamespace": "Microsoft.DataFactory/factories",
+                            "metricName": "TriggerCancelledRuns",
+                            "dimensions": [
+                                {
+                                    "name": "Name",
+                                    "operator": "Include",
+                                    "values": [
+                                        "triggerForIncrementalLoadTumblingWindow"
+                                    ]
+                                }
+                            ],
+                            "operator": "GreaterThanOrEqual",
+                            "timeAggregation": "Average",
+                            "criterionType": "StaticThresholdCriterion"
+                        }
+                    ],
+                    "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
+                },
+                "actions": [
+                    {
+                        "actionGroupId": "[resourceId('microsoft.insights/actionGroups', parameters('actionGroupsName'))]",
+                        "webHookProperties": {}
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Insights/metricalerts",
+            "apiVersion": "2018-03-01",
+            "name": "TriggerFailedAlertConfig",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/actionGroups', parameters('actionGroupsName'))]"
+            ],
+            "properties": {
+                "description": "Metric alert for trigger failed runs",
+                "severity": 0,
+                "enabled": true,
+                "scopes": [
+                    "[variables('factoryId')]"
+                ],
+                "evaluationFrequency": "PT1M",
+                "windowSize": "PT1M",
+                "criteria": {
+                    "allOf": [
+                        {
+                            "threshold": 1,
+                            "name": "TriggerFailedRuns",
+                            "metricNamespace": "Microsoft.DataFactory/factories",
+                            "metricName": "TriggerFailedRuns",
+                            "dimensions": [
+                                {
+                                    "name": "Name",
+                                    "operator": "Include",
+                                    "values": [
+                                        "triggerForIncrementalLoadTumblingWindow"
+                                    ]
+                                },
+                                {
+                                    "name": "FailureType",
+                                    "operator": "Include",
+                                    "values": [
+                                        "UserError",
+                                        "SystemError",
+                                        "BadGateway"
+                                    ]
+                                }
+                            ],
+                            "operator": "GreaterThanOrEqual",
+                            "timeAggregation": "Average",
+                            "criterionType": "StaticThresholdCriterion"
+                        }
+                    ],
+                    "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
+                },
+                "actions": [
+                    {
+                        "actionGroupId": "[resourceId('microsoft.insights/actionGroups', parameters('actionGroupsName'))]",
+                        "webHookProperties": {}
+                    }
+                ]
+            }
+        }
+
+
+
+   
+  ]
+}
