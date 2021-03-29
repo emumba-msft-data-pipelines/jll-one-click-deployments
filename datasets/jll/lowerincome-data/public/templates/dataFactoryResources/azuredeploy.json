@@ -103,10 +103,18 @@
                         "annotations": [],
                         "type": "AzureBlobStorage",
                         "typeProperties": {
-                            "connectionString": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',concat(listKeys(variables('storageAccountId'),'2015-05-01-preview').key1))]"
+                            "connectionString": {
+                                "type": "AzureKeyVaultSecret",
+                                "store": {
+                                    "referenceName": "lowerIncome_keyvault_linkedservice",
+                                    "type": "LinkedServiceReference"
+                                },
+                                "secretName": "storageAccountConnectionString"
+                            }
                         }
                     },
                     "dependsOn": [
+                        "[concat(variables('factoryId'), '/linkedServices/lowerIncome_keyvault_linkedservice')]",
                         "[parameters('factoryName')]"
                     ]
                 },
@@ -153,7 +161,6 @@
                     ]
                 },
                 {
-                    "condition": "[equals(parameters('doYouWantToWriteCuratedDataToSQLDatabase'),'Yes')]",
                     "name": "[concat(parameters('factoryName'), '/lowerIncome_keyvault_linkedservice')]",
                     "type": "Microsoft.DataFactory/factories/linkedServices",
                     "apiVersion": "2018-06-01",

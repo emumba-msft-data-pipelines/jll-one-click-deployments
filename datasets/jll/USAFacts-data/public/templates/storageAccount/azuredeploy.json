@@ -1,5 +1,5 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "storageAccountName": {
@@ -16,7 +16,8 @@
         }
     },
     "variables": {
-        "containerName": "public"
+        "containerName": "public",
+        "storageAccountId": "[concat(resourceGroup().id,'/providers/Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]"
     },
     "resources": [
         {
@@ -108,5 +109,11 @@
             }
 
         }
-    ]
+    ],
+    "outputs": {  
+        "storageAccountConnectionString": {  
+            "type": "string",  
+            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',concat(listKeys(variables('storageAccountId'),'2015-05-01-preview').key1),';EndpointSuffix=core.windows.net')]"
+        }
+    }
 }
