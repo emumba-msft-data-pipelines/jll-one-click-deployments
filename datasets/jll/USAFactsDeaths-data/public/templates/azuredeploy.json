@@ -132,16 +132,16 @@
         "serverName": "[concat(parameters('serverName'), uniquestring(resourceGroup().id))]",
         "dataShareAccountName": "[concat(parameters('dataShareAccountName'), uniquestring(resourceGroup().id))]",
         "webHookUri": "https://null",
-        "storageTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv/datasets/jll/USAFactsDeaths-data/public/templates/storageAccount/azuredeploy.json",
-        "keyVaultTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv/datasets/jll/USAFactsDeaths-data/public/templates/keyVault/azuredeploy.json",
-        "keyVaultPermissionsUpdateTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv/datasets/jll/USAFactsDeaths-data/public/templates/keyVaultPermissionsUpdate/azuredeploy.json",
-        "emptyDataFactoryTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv/datasets/jll/USAFactsDeaths-data/public/templates/dataFactory/azuredeploy.json",
-        "sqlServerTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv/datasets/jll/USAFactsDeaths-data/public/templates/sqlServer/azuredeploy.json",
-        "dataShareTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv/datasets/jll/USAFactsDeaths-data/public/templates/dataShare/azuredeploy.json",
-        "logicAppTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv/datasets/jll/USAFactsDeaths-data/public/templates/logicApp/azuredeploy.json",
-        "dataFactoryTemplateWithTeamsNotifUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv/datasets/jll/USAFactsDeaths-data/public/templates/dataFactoryResources/azuredeploy.json",
-        "dataFactoryTemplateWithoutTeamsNotifUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv/datasets/jll/USAFactsDeaths-data/public/templates/dataFactoryResources/azuredeploy.json",
-        "shareTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv/datasets/jll/USAFactsDeaths-data/public/templates/share/azuredeploy.json"
+        "storageTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFactsDeaths-data/public/templates/storageAccount/azuredeploy.json",
+        "keyVaultTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFactsDeaths-data/public/templates/keyVault/azuredeploy.json",
+        "keyVaultPermissionsUpdateTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFactsDeaths-data/public/templates/keyVaultPermissionsUpdate/azuredeploy.json",
+        "emptyDataFactoryTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFactsDeaths-data/public/templates/dataFactory/azuredeploy.json",
+        "sqlServerTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFactsDeaths-data/public/templates/sqlServer/azuredeploy.json",
+        "dataShareTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFactsDeaths-data/public/templates/dataShare/azuredeploy.json",
+        "logicAppTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFactsDeaths-data/public/templates/logicApp/azuredeploy.json",
+        "dataFactoryTemplateWithTeamsNotifUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFactsDeaths-data/public/templates/dataFactoryResources/azuredeploy.json",
+        "dataFactoryTemplateWithoutTeamsNotifUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFactsDeaths-data/public/templates/dataFactoryResources/azuredeploy.json",
+        "shareTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFactsDeaths-data/public/templates/share/azuredeploy.json"
     
     },
     "resources": [
