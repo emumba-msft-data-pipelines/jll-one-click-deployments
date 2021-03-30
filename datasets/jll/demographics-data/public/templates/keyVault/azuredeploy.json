@@ -32,7 +32,7 @@
 
     "variables": {
         "sqlSecretName": "sqlAdministratorLoginPassword",
-        "sqlSecretValue": "[parameters('sqlAdministratorLoginPassword')]",
+        "sqlSecretValue": "[variables('sqlAdministratorLoginPassword')]",
         "storageSecretName": "storageAccountConnectionString",
         "storageSecretValue": "[parameters('storageAccountConnectionStringValue')]",
         "tenantId": "[subscription().tenantId]",

@@ -55,7 +55,7 @@
             },
             "properties": {
               "administratorLogin": "[parameters('sqlAdministratorLogin')]",
-              "administratorLoginPassword": "[parameters('sqlAdministratorLoginPassword')]",
+              "administratorLoginPassword": "[variables('sqlAdministratorLoginPassword')]",
               "version": "12.0"
             },
             "resources": [
