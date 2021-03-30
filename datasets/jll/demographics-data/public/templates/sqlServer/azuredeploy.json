@@ -45,8 +45,7 @@
         }
     },
     "variables": {
-        "databaseCollation": "SQL_Latin1_General_CP1_CI_AS",
-        "sqlAdministratorLoginPassword": ""
+        "databaseCollation": "SQL_Latin1_General_CP1_CI_AS"
     },
     "resources": [
         {
@@ -61,7 +60,7 @@
             },
             "properties": {
               "administratorLogin": "[parameters('sqlAdministratorLogin')]",
-              "administratorLoginPassword": "[variables('sqlAdministratorLoginPassword')]",
+              "administratorLoginPassword": "[parameters('sqlAdministratorLoginPassword')]",
               "version": "12.0"
             },
             "resources": [

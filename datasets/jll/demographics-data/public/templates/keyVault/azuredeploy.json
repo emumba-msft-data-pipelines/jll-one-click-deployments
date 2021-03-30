@@ -38,11 +38,10 @@
 
     "variables": {
         "sqlSecretName": "sqlAdministratorLoginPassword",
-        "sqlSecretValue": "[variables('sqlAdministratorLoginPassword')]",
+        "sqlSecretValue": "[parameters('sqlAdministratorLoginPassword')]",
         "storageSecretName": "storageAccountConnectionString",
         "storageSecretValue": "[parameters('storageAccountConnectionStringValue')]",
-        "tenantId": "[subscription().tenantId]",
-        "sqlAdministratorLoginPassword": ""
+        "tenantId": "[subscription().tenantId]"
     },
 
     "resources": [
