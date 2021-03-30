@@ -125,7 +125,7 @@
         "serverName": "[concat(parameters('serverName'), uniquestring(resourceGroup().id))]",
         "dataShareAccountName": "[concat(parameters('dataShareAccountName'), uniquestring(resourceGroup().id))]",
         "webHookUri": "https://null",
-        "sqlAdministratorLoginPassword": "[concat('P', uniqueString(resourceGroup().id, deployment().name), 'x', '!')]",
+        "sqlAdministratorLoginPassword": "[concat('P', uniqueString(resourceGroup().id, deployment().name, '224F5A8B-51DB-46A3-A7C8-59B0DD584A41'), 'x', '!')]",
         "storageTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sql-random-password/datasets/jll/demographics-data/public/templates/storageAccount/azuredeploy.json",
         "keyVaultTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sql-random-password/datasets/jll/demographics-data/public/templates/keyVault/azuredeploy.json",
         "keyVaultPermissionsUpdateTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sql-random-password/datasets/jll/demographics-data/public/templates/keyVaultPermissionsUpdate/azuredeploy.json",
