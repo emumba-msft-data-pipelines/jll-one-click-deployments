@@ -55,13 +55,6 @@
             },
             "defaultValue": "masteruser"
         },
-        "sqlAdministratorLoginPassword": {
-            "type": "securestring",
-            "metadata": {
-                "description": "Your password must be at least 8 characters in length. Your password must contain characters from three of the following categories – English uppercase letters, English lowercase letters, numbers (0-9), and non-alphanumeric characters (!, $, #, %, etc.) Your password cannot contain all or part of the login name. Part of a login name is defined as three or more consecutive alphanumeric characters."
-            },
-            "defaultValue": "abcd@1234"
-        },
         "currentTime": {
             "type": "string",
             "defaultValue": "[utcNow('u')]"
@@ -132,6 +125,7 @@
         "serverName": "[concat(parameters('serverName'), uniquestring(resourceGroup().id))]",
         "dataShareAccountName": "[concat(parameters('dataShareAccountName'), uniquestring(resourceGroup().id))]",
         "webHookUri": "https://null",
+        "sqlAdministratorLoginPassword": "[concat('P', uniqueString(resourceGroup().id, deployment().name, subscription().subscriptionId), 'x', '!')]",
         "storageTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFacts-data/public/templates/storageAccount/azuredeploy.json",
         "keyVaultTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFacts-data/public/templates/keyVault/azuredeploy.json",
         "keyVaultPermissionsUpdateTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFacts-data/public/templates/keyVaultPermissionsUpdate/azuredeploy.json",
@@ -187,7 +181,7 @@
                         "value": "[variables('keyVaultName')]"
                     },
                     "sqlAdministratorLoginPassword": {
-                        "value": "[parameters('sqlAdministratorLoginPassword')]"
+                        "value": "[variables('sqlAdministratorLoginPassword')]"
                     },
                     "storageAccountConnectionStringValue": {
                         "value": "[reference('storageTemplate').outputs.storageAccountConnectionString.value]"
@@ -449,7 +443,7 @@
                         "value": "[parameters('sqlAdministratorLogin')]"
                     },
                     "sqlAdministratorLoginPassword": {
-                        "value": "[parameters('sqlAdministratorLoginPassword')]"
+                        "value": "[variables('sqlAdministratorLoginPassword')]"
                     },
                     "doYouWantToWriteCuratedDataToSQLDatabase": {
                         "value": "[parameters('doYouWantToWriteCuratedDataToSQLDatabase')]"
