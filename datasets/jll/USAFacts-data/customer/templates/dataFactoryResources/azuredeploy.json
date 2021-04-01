@@ -791,30 +791,6 @@
                     "quoteChar": "\""
                 },
                 "schema": [
-                    {
-                        "name": "countyFIPS",
-                        "type": "String"
-                    },
-                    {
-                        "name": "CountyName",
-                        "type": "String"
-                    },
-                    {
-                        "name": "State",
-                        "type": "String"
-                    },
-                    {
-                        "name": "StateFIPS",
-                        "type": "String"
-                    },
-                    {
-                        "name": "Date",
-                        "type": "String"
-                    },
-                    {
-                        "name": "DailyCases",
-                        "type": "String"
-                    }
                 ]
             },
             "dependsOn": [
