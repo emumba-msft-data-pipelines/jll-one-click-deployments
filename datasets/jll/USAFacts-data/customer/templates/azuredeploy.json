@@ -72,7 +72,6 @@
                 }
             },
         "emailForAlerts": {
-            "defaultValue": "assadullah@emumba.com",
             "type": "String"
             },
         "yourObjectId": {
@@ -90,18 +89,49 @@
 
     "variables": {
         "dataFactoryUniqueName": "[concat(parameters('factoryName'), uniquestring(resourceGroup().id))]",
+        "storageAccountUniqueName": "[toLower(concat(parameters('storageAccountName'), uniqueString(resourceGroup().id)))]",
         "keyVaultName": "[concat(parameters('keyVaultName'), uniquestring(resourceGroup().id))]",
         "webHookUri": "",
-        "keyVaultTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFacts-data/customer/templates/keyVault/azuredeploy.json",
-        "keyVaultPermissionsUpdateTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFacts-data/customer/templates/keyVaultPermissionsUpdate/azuredeploy.json",
-        "linkedTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFacts-data/customer/templates/linkedTemplate/azuredeploy.json",
-        "emptyDataFactoryTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/USAFacts-data/customer/templates/dataFactory/azuredeploy.json"
+        "storageTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv-customer/datasets/jll/USAFacts-data/customer/templates/storageAccount/azuredeploy.json",
+        "logicAppTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv-customer/datasets/jll/USAFacts-data/customer/templates/logicApp/azuredeploy.json",
+        "DataFactoryTemplateWithTeamsNotifUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv-customer/datasets/jll/USAFacts-data/customer/templates/dataFactoryResources/azuredeploy.json",
+        "DataFactoryTemplateWithoutTeamsNotifUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv-customer/datasets/jll/USAFacts-data/customer/templates/dataFactoryResources/azuredeploy.json",
+        "keyVaultTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv-customer/datasets/jll/USAFacts-data/customer/templates/keyVault/azuredeploy.json",
+        "keyVaultPermissionsUpdateTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv-customer/datasets/jll/USAFacts-data/customer/templates/keyVaultPermissionsUpdate/azuredeploy.json",
+        "emptyDataFactoryTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv-customer/datasets/jll/USAFacts-data/customer/templates/dataFactory/azuredeploy.json"
     },
     "resources": [
+        {
+            "name": "storageTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('storageTemplateUri')]"
+                },
+                "parameters": {
+                    "storageAccountName": {
+                        "value": "[variables('storageAccountUniqueName')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "existingOrNewStorage": {
+                        "value": "[parameters('existingOrNewStorage')]"
+                    }
+                }
+            }
+        },
+
+
         {
             "name": "keyVaultTemplate",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-05-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','storageTemplate')]"
+            ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -116,6 +146,9 @@
                     },
                     "SASBlobUriValue": {
                         "value": "[parameters('SASBlobUriValue')]"
+                    },
+                    "storageAccountConnectionStringValue": {
+                        "value": "[reference('storageTemplate').outputs.storageAccountConnectionString.value]"
                     }
                 }
             }
@@ -126,7 +159,8 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-05-01",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments','emptyDataFactory')]"
+                "[resourceId('Microsoft.Resources/deployments','emptyDataFactory')]",
+                "[resourceId('Microsoft.Resources/deployments','storageTemplate')]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -149,8 +183,10 @@
                 }
             }
         },
-        {
-            "name": "linkedTemplate",
+
+         {
+            "condition": "[equals(parameters('enableMicrosoftTeamsNotification'),'Yes')]",
+            "name": "logicAppTemplate",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-05-01",
             "dependsOn": [
@@ -159,32 +195,86 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('linkedTemplateUri')]"
+                    "uri": "[variables('logicAppTemplateUri')]"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "logicAppName": {
+                        "value": "[parameters('logicAppName')]"
+                    }
+                }
+            }
+        },
+
+         {
+            "condition": "[equals(parameters('enableMicrosoftTeamsNotification'),'Yes')]",
+            "name": "DataFactoryTemplateWithTeamsNotif",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','logicAppTemplate')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('DataFactoryTemplateWithTeamsNotifUri')]"
                 },
                 "parameters": {
                     "factoryName": {
-                        "value": "[parameters('factoryName')]"
+                        "value": "[variables('dataFactoryUniqueName')]"
                     },
                     "location": {
                         "value": "[parameters('location')]"
                     },
-                    "existingOrNewStorage": {
-                        "value": "[parameters('existingOrNewStorage')]"
-                    },
                     "storageAccountName": {
-                        "value": "[parameters('storageAccountName')]"
+                        "value": "[variables('storageAccountUniqueName')]"
                     },
                     "keyVaultName": {
-                        "value": "[parameters('keyVaultName')]"
+                        "value": "[variables('keyVaultName')]"
                     },
-                    "SASBlobUriValue": {
-                        "value": "[parameters('SASBlobUriValue')]"
+    
+                    "actionGroupsName": {
+                        "value": "[parameters('actionGroupsName')]"
                     },
-                    "enableMicrosoftTeamsNotification": {
-                        "value": "[parameters('enableMicrosoftTeamsNotification')]"
+                    "emailForAlerts": {
+                        "value": "[parameters('emailForAlerts')]"
                     },
-                    "logicAppName": {
-                        "value": "[parameters('logicAppName')]"
+                    "StartTriggerTime": {
+                        "value": "[parameters('StartTriggerTime')]"
+                    },
+                    "webHookUri": {
+                        "value": "[if(equals(parameters('enableMicrosoftTeamsNotification'),'Yes'), reference('logicAppTemplate','2018-05-01').outputs.WebHookURI.value, 'http://example.com')]"
+                    }
+                }
+            }
+        },
+        {
+            "condition": "[equals(parameters('enableMicrosoftTeamsNotification'),'No')]",
+            "name": "DataFactoryTemplateWithoutTeamsNotif",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','logicAppTemplate')]"         
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('DataFactoryTemplateWithoutTeamsNotifUri')]"
+                },
+                "parameters": {
+                     "factoryName": {
+                        "value": "[variables('dataFactoryUniqueName')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "storageAccountName": {
+                        "value": "[variables('storageAccountUniqueName')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[variables('keyVaultName')]"
                     },
                     "actionGroupsName": {
                         "value": "[parameters('actionGroupsName')]"
@@ -194,10 +284,14 @@
                     },
                     "StartTriggerTime": {
                         "value": "[parameters('StartTriggerTime')]"
+                    },
+                    "webHookUri": {
+                        "value": "http://example.com"
                     }
                 }
             }
         },
+       
         {
             "name": "emptyDataFactory",
             "type": "Microsoft.Resources/deployments",

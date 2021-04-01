@@ -29,7 +29,6 @@
     },
 
     "variables": {
-        "secretName": "SASURiSecret",
         "tenantId": "[subscription().tenantId]"
     },
 
@@ -86,7 +85,8 @@
                         "Delete",
                         "Recover",
                         "Backup",
-                        "Restore"
+                        "Restore",
+                        "purge"
                     ],
                     "certificates": [
                         "Get",
