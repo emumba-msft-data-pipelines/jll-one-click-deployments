@@ -74,10 +74,10 @@
         "emailForAlerts": {
             "type": "String"
             },
-        "yourObjectId": {
+        "azureUserObjectId": {
           "type": "string",
           "metadata": {
-              "description": "Kindly give your Object Id so that full permissions to key vault can be assigned to you"
+              "description": "Kindly give your Object Id so that full permissions to key vault can be assigned to you. To get your Object Id, search 'Users' in the search bar in azure portal. Then click on your name and in the 'Profile' tab your Object Id is present under 'Identity' section"
             }
       },
       "StartTriggerTime": {
@@ -177,8 +177,8 @@
                     "factoryName": {
                         "value": "[variables('dataFactoryUniqueName')]"
                     },
-                    "yourObjectId": {
-                        "value": "[parameters('yourObjectId')]"
+                    "azureUserObjectId": {
+                        "value": "[parameters('azureUserObjectId')]"
                     }
                 }
             }

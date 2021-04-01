@@ -20,10 +20,10 @@
             "description": "The name you provide will be appended with a unique sting to make it globally available. The name can contain only letters, numbers and hyphens. The first and last characters must be a letter or number. Spaces are not allowed."
         }
       },
-      "yourObjectId": {
+       "azureUserObjectId": {
           "type": "string",
           "metadata": {
-              "description": "Kindly give your Object Id so that full permissions to key vault can be assigned to you"
+              "description": "Kindly give your Object Id so that full permissions to key vault can be assigned to you. To get your Object Id, search 'Users' in the search bar in azure portal. Then click on your name and in the 'Profile' tab your Object Id is present under 'Identity' section"
             }
       }
     },
@@ -58,7 +58,7 @@
             },
             {
                 "tenantId": "[variables('tenantId')]",
-                "objectId": "[parameters('yourObjectId')]",
+                "objectId": "[parameters('azureUserObjectId')]",
                 "permissions": {
                     "keys": [
                         "Get",
