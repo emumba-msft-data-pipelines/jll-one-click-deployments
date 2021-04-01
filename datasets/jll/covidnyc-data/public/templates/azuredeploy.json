@@ -48,7 +48,7 @@
             },
             "defaultValue": "demopubsqldb"
         },
-        "sqlAdministratorLogin": {
+        "sqlServerAdministratorLogin": {
             "type": "string",
             "metadata": {
                 "description": "Your login name must not contain a SQL Identifier or a typical system name (like admin, administrator, sa, root, dbmanager, loginmanager, etc.) or a built-in database user or role (like dbo, guest, public, etc.)"
@@ -125,7 +125,7 @@
         "serverName": "[concat(parameters('serverName'), uniquestring(resourceGroup().id))]",
         "dataShareAccountName": "[concat(parameters('dataShareAccountName'), uniquestring(resourceGroup().id))]",
         "webHookUri": "https://null",
-        "sqlAdministratorLoginPassword": "[concat('P', uniqueString(resourceGroup().id, deployment().name, subscription().subscriptionId), 'x', '!')]",
+        "sqlServerAdministratorLoginPassword": "[concat('P', uniqueString(resourceGroup().id, deployment().name, subscription().subscriptionId), 'x', '!')]",
         "storageTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/covidnyc-data/public/templates/storageAccount/azuredeploy.json",
         "keyVaultTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/covidnyc-data/public/templates/keyVault/azuredeploy.json",
         "keyVaultPermissionsUpdateTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/covidnyc-data/public/templates/keyVaultPermissionsUpdate/azuredeploy.json",
@@ -180,8 +180,8 @@
                     "keyVaultName": {
                         "value": "[variables('keyVaultName')]"
                     },
-                    "sqlAdministratorLoginPassword": {
-                        "value": "[variables('sqlAdministratorLoginPassword')]"
+                    "sqlServerAdministratorLoginPassword": {
+                        "value": "[variables('sqlServerAdministratorLoginPassword')]"
                     },
                     "storageAccountConnectionStringValue": {
                         "value": "[reference('storageTemplate').outputs.storageAccountConnectionString.value]"
@@ -273,8 +273,8 @@
                     "location": {
                         "value": "[parameters('location')]"
                     },
-                    "sqlAdministratorLogin": {
-                        "value": "[parameters('sqlAdministratorLogin')]"
+                    "sqlServerAdministratorLogin": {
+                        "value": "[parameters('sqlServerAdministratorLogin')]"
                     },
                     "databaseName": {
                         "value": "[parameters('databaseName')]"
@@ -323,8 +323,8 @@
                     "location": {
                         "value": "[parameters('location')]"
                     },
-                    "sqlAdministratorLogin": {
-                        "value": "[parameters('sqlAdministratorLogin')]"
+                    "sqlServerAdministratorLogin": {
+                        "value": "[parameters('sqlServerAdministratorLogin')]"
                     },
                     "databaseName": {
                         "value": "[parameters('databaseName')]"
@@ -439,11 +439,11 @@
                     "serverName": {
                         "value": "[variables('serverName')]"
                     },
-                    "sqlAdministratorLogin": {
-                        "value": "[parameters('sqlAdministratorLogin')]"
+                    "sqlServerAdministratorLogin": {
+                        "value": "[parameters('sqlServerAdministratorLogin')]"
                     },
-                    "sqlAdministratorLoginPassword": {
-                        "value": "[variables('sqlAdministratorLoginPassword')]"
+                    "sqlServerAdministratorLoginPassword": {
+                        "value": "[variables('sqlServerAdministratorLoginPassword')]"
                     },
                     "doYouWantToWriteCuratedDataToSQLDatabase": {
                         "value": "[parameters('doYouWantToWriteCuratedDataToSQLDatabase')]"

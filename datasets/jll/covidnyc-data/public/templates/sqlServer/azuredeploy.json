@@ -30,14 +30,14 @@
                 "description": "Value should not match special patterns. It should contain a length of maximum of 128."
             }
         },
-        "sqlAdministratorLogin": {
+        "sqlServerAdministratorLogin": {
             "type": "string",
             "metadata": {
                 "description": "Your login name must not contain a SQL Identifier or a typical system name (like admin, administrator, sa, root, dbmanager, loginmanager, etc.) or a built-in database user or role (like dbo, guest, public, etc.)"
             },
             "defaultValue": "Specify administrator username of SQL server if selected 'Yes'"
         },
-        "sqlAdministratorLoginPassword": {
+        "sqlServerAdministratorLoginPassword": {
             "type": "securestring",
             "metadata": {
                 "description": "Your password must be at least 8 characters in length. Your password must contain characters from three of the following categories – English uppercase letters, English lowercase letters, numbers (0-9), and non-alphanumeric characters (!, $, #, %, etc.) Your password cannot contain all or part of the login name. Part of a login name is defined as three or more consecutive alphanumeric characters."
@@ -59,8 +59,8 @@
                 "AssociatedDataSet": "CovidNYC"
             },
             "properties": {
-              "administratorLogin": "[parameters('sqlAdministratorLogin')]",
-              "administratorLoginPassword": "[parameters('sqlAdministratorLoginPassword')]",
+              "administratorLogin": "[parameters('sqlServerAdministratorLogin')]",
+              "administratorLoginPassword": "[parameters('sqlServerAdministratorLoginPassword')]",
               "version": "12.0"
             },
             "resources": [
