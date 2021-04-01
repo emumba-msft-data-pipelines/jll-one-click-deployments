@@ -61,7 +61,6 @@
         },
         "notificationEmail": {
             "type": "string",
-            "defaultValue": "",
             "metadata": {
                 "description": "Please specify comma separated email addresses on which you would like to receive the ADF pipeline alerts."
             }
@@ -110,12 +109,11 @@
               "description": "Specifies the name of the key vault."
             }
           },
-          "yourObjectId": {
+          "azureUserObjectId": {
               "type": "string",
-              "defaultValue": "",
               "metadata": {
-                  "description": "Kindly give your Object Id so that full permissions to key vault can be assigned to you"
-                }
+                "description": "Kindly give your Object Id so that full permissions to key vault can be assigned to you. To get your Object Id, search 'Users' in the search bar in azure portal. Then click on your name and in the 'Profile' tab your Object Id is present under 'Identity' section"
+              }
           }
     },
     "variables": {
@@ -216,8 +214,8 @@
                     "factoryName": {
                         "value": "[variables('factoryName')]"
                     },
-                    "yourObjectId": {
-                        "value": "[parameters('yourObjectId')]"
+                    "azureUserObjectId": {
+                        "value": "[parameters('azureUserObjectId')]"
                     }
                 }
             }
