@@ -1,1 +1,1 @@
-# jll-one-click-deploymentss
+# jll-one-click-deployments
