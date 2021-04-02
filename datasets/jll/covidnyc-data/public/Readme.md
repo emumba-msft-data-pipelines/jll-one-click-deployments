@@ -23,8 +23,6 @@
    - SQL Database Name
    
    - SQL Server Administrator Username
-   
-   - SQL Server Administrator Password
 
 7. Notification Email
 8. Option (Yes or No) to enable Microsoft Teams Notifications
