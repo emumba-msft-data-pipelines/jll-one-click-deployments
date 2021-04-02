@@ -2,7 +2,7 @@
 1. Deploy Data Factory with optional SQL Server and SQL Database
 2. Setup and Configure Alerts for Azure Data Factory
 3. Configure Data Share
-4. Key vault Management
+4. Key Vault Secrets And Access Policies
 
 
 ## Deploy Data Factory with optional SQL Server and SQL Database
