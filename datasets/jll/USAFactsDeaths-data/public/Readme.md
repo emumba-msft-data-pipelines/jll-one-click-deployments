@@ -224,7 +224,7 @@ Azure Key Vault is a cloud service for securely storing and accessing secrets. A
 
 The user whose object id will be provided is given full access to all secrets, keys and certificates inside the key vault. While the data factory is given GET access to any secret in the key vault.
 
-### Getting the User Object Id
+### Get the User Object Id
 
 Follow these steps to find a user's object ID in the Azure portal:
 
