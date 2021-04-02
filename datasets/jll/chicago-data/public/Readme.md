@@ -237,7 +237,7 @@ Follow these steps to find a user's object ID in the Azure portal:
 
 3. Click Profile tab in the left panel, and copy the user's Object ID under Identity section.
 
-![object id(./images/oid3.png)
+![object id](./images/oid3.png)
 
 ### Add Access Policy
 
@@ -255,7 +255,7 @@ User with 'key vault Contributor' role can manage the key vaults. If you have th
 
 ![key vault](./images/kv3.png)
 
-4. In front of Service Principle, click on None Selected.
+4. In front of Service Principal, click on None Selected.
 
 ![key vault](./images/kv4.png)
 
