@@ -240,7 +240,7 @@ Follow these steps to find a user's object ID in the Azure portal:
 
 ### Add Access Policy
 
-User with 'key vault Contributor' role can manage the key vaults. If you have the said 'key vault Contributor' role, follow these steps to give any user or service the access to the keyvault:
+User with **key vault Contributor** role can manage the key vaults. If you have the said **key vault Contributor** role, follow these steps to give any user or service the access to the keyvault:
 
 1. Type Key vaults in the search bar inside azure portal. Click **Key vaults**.
 
@@ -258,7 +258,7 @@ User with 'key vault Contributor' role can manage the key vaults. If you have th
 
 ![key vault](./images/kv4.png)
 
-5. Search the user name or service name to which the access is to be given. Note that only one resource can be added during one add access policy procedure. Click on the name of the user or service and click select.
+5. Search the user name or service name to which the access is to be given. Note that only one resource can be added during one add access policy procedure. Click on the name of the user or service and click **Select**.
 
 ![key vault](./images/kv5.png)
 
@@ -280,7 +280,7 @@ Follow these steps to see and update values of secrets in key vault.
 
 ![key vault](./images/kv1.png)
 
-2. Click on your key vault's name and click **Secrets** in the left panel.
+2. Click on your key vault's name and click **Secrets** in the left panel. Click on the secret's name.
 
 ![key vault](./images/kv9.png)
 
