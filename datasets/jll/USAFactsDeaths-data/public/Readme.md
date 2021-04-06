@@ -215,26 +215,26 @@ If you are using data share to get data from a public environment into the custo
 
 ## Key Vault Secrets And Access Policies
 
-Azure Key Vault is a cloud service for securely storing and accessing secrets. A secret is anything that you want to tightly control access to, such as API keys, passwords, certificates, or cryptographic keys. Here two secrets are being saved in the key vault with access given to the data factory and to the user whose object id will be provided while creating the deployment (details later):
+Azure Key Vault is a cloud service for securely storing and accessing secrets. A secret is anything that you want to tightly control access to, such as API keys, passwords, certificates, or cryptographic keys. Here two secrets are being saved in the key vault with access given to the data factory and to the user whose object id will be provided while creating the deployment:
 
 1. SQL server administrator password
 2. Connection string for the blob storage 
 
-The user whose object id will be provided is given full access to all secrets, keys and certificates inside the key vault. While the data factory is given GET access to any secret in the key vault.
+The user whose object id will be provided is given full access to all secrets, keys and certificates inside the key vault. While the data factory has the GET access to the secrets in the key vault.
 
 ### Get the User Object Id
 
 Follow these steps to find a user's object ID in the Azure portal:
 
-1. Type Users in the search bar inside azure portal. Click Users.
+1. Type Users in the search bar inside azure portal. Click **Users**.
 
 ![object id](./images/oid1.png)
 
-2. In the All users section, locate the user name whose object id is to be retrieved. Click on the name.
+2. In the *All users* section, locate the user name whose object id is to be retrieved. Click on the name.
 
 ![object id](./images/oid2.png)
 
-3. Click Profile tab in the left panel, and copy the user's Object ID under Identity section.
+3. Click *Profile* tab in the left panel, and copy the user's **Object ID** under *Identity* section.
 
 ![object id](./images/oid3.png)
 
@@ -242,7 +242,7 @@ Follow these steps to find a user's object ID in the Azure portal:
 
 User with 'key vault Contributor' role can manage the key vaults. If you have the said 'key vault Contributor' role, follow these steps to give any user or service the access to the keyvault:
 
-1. Type Key vaults in the search bar inside azure portal. Click Key vaults.
+1. Type Key vaults in the search bar inside azure portal. Click **Key vaults**.
 
 ![key vault](./images/kv1.png)
 
@@ -250,11 +250,11 @@ User with 'key vault Contributor' role can manage the key vaults. If you have th
 
 ![key vault](./images/kv2.png)
 
-3. Click on Access Policies in the left panel, and then click Add Access Policy.
+3. Click on **Access Policies** in the left panel, and then click *Add Access Policy*.
 
 ![key vault](./images/kv3.png)
 
-4. In front of Service Principal, click on None Selected.
+4. In front of *Service Principal*, click on **None Selected**.
 
 ![key vault](./images/kv4.png)
 
@@ -264,11 +264,11 @@ User with 'key vault Contributor' role can manage the key vaults. If you have th
 
 ![key vault](./images/kv6.png)
 
-6. Select the suitable permissions, from the separate drop downs for keys, secrets and certificates. Click Add.
+6. Select the suitable permissions, from the separate drop downs for keys, secrets and certificates. Click **Add**.
 
 ![key vault](./images/kv7.png)
 
-7. Click Save.
+7. Click **Save**.
 
 ![key vault](./images/kv8.png)
 
@@ -276,21 +276,21 @@ User with 'key vault Contributor' role can manage the key vaults. If you have th
 
 Follow these steps to see and update values of secrets in key vault.
 
-1. Type Key vaults in the search bar inside azure portal. Click Key vaults.
+1. Type Key vaults in the search bar inside azure portal. Click **Key vaults**.
 
 ![key vault](./images/kv1.png)
 
-2. Click on your key vault's name and click Secrets in the left panel.
+2. Click on your key vault's name and click **Secrets** in the left panel.
 
 ![key vault](./images/kv9.png)
 
-3. To see the secret's value click on the hexadecimal string under Version (CURRENT VERSION only initially). Now click Show Secret Value to see the secret's value.
+3. To see the secret's value click on the hexadecimal string under Version (CURRENT VERSION only initially). Now click *Show Secret Value* to see the secret's value.
 
 ![key vault](./images/kv10.png)
 
 ![key vault](./images/kv11.png)
 
-4. To update the secret's value, click on New Version under the secret's name and above the version list. Enter the secret's value against Value field and click Create.
+4. To update the secret's value, click on **New Version** under the secret's name and above the version list. Enter the secret's value against *Value* field and click *Create*.
 
 ![key vault](./images/kv12.png)
 
