@@ -2,6 +2,7 @@
 1. Deploy Data Factory with optional SQL Server and SQL Database
 2. Setup and Configure Alerts for Azure Data Factory
 3. Configure Data Share
+4. Key Vault Secrets And Access Policies
 
 
 ## Deploy Data Factory with optional SQL Server and SQL Database
@@ -21,9 +22,7 @@
 
    - SQL Database Name
    
-   - SQL Login Administrator Username
-   
-   - SQL Login Administrator Password
+   - SQL Server Administrator Username
 
 7. Notification Email
 8. Option (Yes or No) to enable Microsoft Teams Notifications
@@ -31,6 +30,8 @@
 10. Data Share Account Name.
 11. Share Name
 12. Option (Yes or No) to deploy and use data share.
+13. Key Vault Name.
+14. Azure User Object Id.
 
 
 **NOTE** - If you go with SQL sink, the name of the table where data is written is _**chicago.curatedTable**_.
@@ -145,69 +146,152 @@ If you are using data share to get data from a public environment into the custo
 
 2. Click **Start Sharing your data**.
 
-![data share public](../customer/images/data%20share/1.png)
+![data share public](./images/data%20share/1.png)
 
 3. Click on the share named **demo_public_share** (or any other name you have provided while deploying).
 
-![data share public](../customer/images/data%20share/2.png)
+![data share public](./images/data%20share/2.png)
 
 4. Under **Datasets** tab, click **Add datasets** and then select **Azure Blob Storage** as dataset type and click *Next*. Then select subscription, resource group and storage account deployed with current deployment and click *Next*.
 
-![data share public](../customer/images/data%20share/3.png)
+![data share public](./images/data%20share/3.png)
 
-![data share public](../customer/images/data%20share/4.png)
+![data share public](./images/data%20share/4.png)
 
-![data share public](../customer/images/data%20share/5.png)
+![data share public](./images/data%20share/5.png)
 
 5. Select **public** container and click *Next*. And now click **Add datasets**.
 
-![data share public](../customer/images/data%20share/6.png)
+![data share public](./images/data%20share/6.png)
 
-![data share public](../customer/images/data%20share/7.png)
+![data share public](./images/data%20share/7.png)
 
 6. Now under **Invitations** tab click **Add recipient**.
 
-![data share public](../customer/images/data%20share/8.png)
+![data share public](./images/data%20share/8.png)
 
 7. In the blade opened, click **Add recipient** and provide the customer side email and click **Add and send invitation**.
 
-![data share public](../customer/images/data%20share/9.png)
+![data share public](./images/data%20share/9.png)
 
-![data share public](../customer/images/data%20share/10.png)
+![data share public](./images/data%20share/10.png)
 
 
 ### Step 2 - Customer Side
 
 1. Go to Data Share Invitations.
 
-![data share customer](../customer/images/data%20share/11.png)
+![data share customer](./images/data%20share/11.png)
 
 2. Click on **demo_public_share** (or any other name you have provided while deploying at public side).
 
-![data share customer](../customer/images/data%20share/12.png)
+![data share customer](./images/data%20share/12.png)
 
 3. Agree to the terms of use and provide subscription, resource group, data share account and received share name. Click **Accept and configure**.
 
-![data share customer](../customer/images/data%20share/13.png)
+![data share customer](./images/data%20share/13.png)
 
 4. Under the *Datasets* tab, checkmark the dataset and click **Map to target**.
 
-![data share customer](../customer/images/data%20share/14.png)
+![data share customer](./images/data%20share/14.png)
 
 5. Provide the storage account name (the one deployed currently) along with other options and give the Path as **receivedcopy**. Click *Map to target*. *Note* that the Path is the container name and cannot contain capital letters.
 
-![data share customer](../customer/images/data%20share/15.png)
+![data share customer](./images/data%20share/15.png)
 
-![data share customer](../customer/images/data%20share/16.png)
+![data share customer](./images/data%20share/16.png)
 
 6. Now under *Details* tab, click **Trigger snapshot** and then click **Full copy**.
 
-![data share customer](../customer/images/data%20share/17.png)
+![data share customer](./images/data%20share/17.png)
 
-![data share customer](../customer/images/data%20share/18.png)
+![data share customer](./images/data%20share/18.png)
 
 7. Optionally you can enable the snapshot schedule if configured at the public side. For that, checkmark the **Daily** schedule under *Snapshot schedule* tab and click *Enable*.
 
-![data share customer](../customer/images/data%20share/19.png)
+![data share customer](./images/data%20share/19.png)
 
-![data share customer](../customer/images/data%20share/20.png)
+![data share customer](./images/data%20share/20.png)
+
+## Key Vault Secrets And Access Policies
+
+Azure Key Vault is a cloud service for securely storing and accessing secrets. A secret is anything that you want to tightly control access to, such as API keys, passwords, certificates, or cryptographic keys. Here two secrets are being saved in the key vault with access given to the data factory and to the user whose object id will be provided while creating the deployment:
+
+1. SQL server administrator password
+2. Connection string for the blob storage 
+
+The user whose object id will be provided is given full access to all secrets, keys and certificates inside the key vault. While the data factory has the GET access to the secrets in the key vault.
+
+### Get the User Object Id
+
+Follow these steps to find a user's object ID in the Azure portal:
+
+1. Type Users in the search bar inside azure portal. Click **Users**.
+
+![object id](./images/oid1.png)
+
+2. In the *All users* section, locate the user name whose object id is to be retrieved. Click on the name.
+
+![object id](./images/oid2.png)
+
+3. Click *Profile* tab in the left panel, and copy the user's **Object ID** under *Identity* section.
+
+![object id](./images/oid3.png)
+
+### Add Access Policy
+
+User with **key vault Contributor** role can manage the key vaults. If you have the said **key vault Contributor** role, follow these steps to give any user or service the access to the keyvault:
+
+1. Type Key vaults in the search bar inside azure portal. Click **Key vaults**.
+
+![key vault](./images/kv1.png)
+
+2. Click on your key vault's name.
+
+![key vault](./images/kv2.png)
+
+3. Click on **Access Policies** in the left panel, and then click *Add Access Policy*.
+
+![key vault](./images/kv3.png)
+
+4. In front of *Service Principal*, click on **None Selected**.
+
+![key vault](./images/kv4.png)
+
+5. Search the user name or service name to which the access is to be given. Note that only one resource can be added during one add access policy procedure. Click on the name of the user or service and click **Select**.
+
+![key vault](./images/kv5.png)
+
+![key vault](./images/kv6.png)
+
+6. Select the suitable permissions, from the separate drop downs for keys, secrets and certificates. Click **Add**.
+
+![key vault](./images/kv7.png)
+
+7. Click **Save**.
+
+![key vault](./images/kv8.png)
+
+### Update Secret Values
+
+Follow these steps to see and update values of secrets in key vault.
+
+1. Type Key vaults in the search bar inside azure portal. Click **Key vaults**.
+
+![key vault](./images/kv1.png)
+
+2. Click on your key vault's name and click **Secrets** in the left panel. Click on the secret's name.
+
+![key vault](./images/kv9.png)
+
+3. To see the secret's value click on the hexadecimal string under Version (CURRENT VERSION only initially). Now click *Show Secret Value* to see the secret's value.
+
+![key vault](./images/kv10.png)
+
+![key vault](./images/kv11.png)
+
+4. To update the secret's value, click on **New Version** under the secret's name and above the version list. Enter the secret's value against *Value* field and click *Create*.
+
+![key vault](./images/kv12.png)
+
+![key vault](./images/kv13.png)
