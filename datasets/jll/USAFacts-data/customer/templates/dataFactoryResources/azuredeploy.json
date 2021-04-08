@@ -56,7 +56,7 @@
   "resources": [
      
         {
-            "name": "[concat(parameters('factoryName'), '/USAFactsKnownCases_publicToCustomerEnvironmentCopyData')]",
+            "name": "[concat(parameters('factoryName'), '/CopyDataFromSourceToCustomerEnvironment')]",
             "type": "Microsoft.DataFactory/factories/pipelines",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -118,7 +118,7 @@
                         },
                         "inputs": [
                             {
-                                "referenceName": "public_env_dataset",
+                                "referenceName": "PublicEnvDataset",
                                 "type": "DatasetReference",
                                 "parameters": {
                                     "container": "public"
@@ -127,7 +127,7 @@
                         ],
                         "outputs": [
                             {
-                                "referenceName": "customer_env_dataseet",
+                                "referenceName": "CustomerEnvDataseet",
                                 "type": "DatasetReference",
                                 "parameters": {
                                     "container": "customer"
@@ -158,7 +158,7 @@
                     ],
                     "typeProperties":{
                         "dataset":{
-                            "referenceName":"csv_source_dataset",
+                            "referenceName":"CsvSourceDataset",
                             "type":"DatasetReference",
                             "parameters":{
                             "container":{
@@ -212,12 +212,12 @@
                         "userProperties": [],
                         "typeProperties": {
                             "dataset": {
-                                "referenceName": "previous_dataset",
+                                "referenceName": "PreviousDataset",
                                 "type": "DatasetReference",
                                 "parameters": {
                                     "container": "schemas-for-comparison",
-                                    "fileName": "previous_dataset.csv",
-                                    "directory": "previous_dataset"
+                                    "fileName": "PreviousDataset.csv",
+                                    "directory": "PreviousDataset"
                                 }
                             },
                             "fieldList": [
@@ -442,23 +442,23 @@
                         },
                         "inputs": [
                             {
-                                "referenceName": "previous_dataset",
+                                "referenceName": "PreviousDataset",
                                 "type": "DatasetReference",
                                 "parameters": {
                                     "container": "schemas-for-comparison",
-                                    "fileName": "previous_dataset.csv",
-                                    "directory": "previous_dataset"
+                                    "fileName": "PreviousDataset.csv",
+                                    "directory": "PreviousDataset"
                                 }
                             }
                         ],
                         "outputs": [
                             {
-                                "referenceName": "get_previous_dataset_copy",
+                                "referenceName": "GetPreviousDatasetCopy",
                                 "type": "DatasetReference",
                                 "parameters": {
                                     "container": "schemas-for-comparison",
-                                    "fileName": "get_previous_dataset_copy.csv",
-                                    "directory": "get_previous_dataset_copy"
+                                    "fileName": "GetPreviousDatasetCopy.csv",
+                                    "directory": "GetPreviousDatasetCopy"
                                 }
                             }
                         ]
@@ -517,7 +517,7 @@
                         },
                         "inputs": [
                             {
-                                "referenceName":"csv_source_dataset",
+                                "referenceName":"CsvSourceDataset",
                                 "type":"DatasetReference",
                                 "parameters":{
                                 "container":{
@@ -537,12 +537,12 @@
                     ],
                         "outputs": [
                             {
-                                "referenceName": "previous_dataset",
+                                "referenceName": "PreviousDataset",
                                 "type": "DatasetReference",
                                 "parameters": {
                                     "container": "schemas-for-comparison",
-                                    "fileName": "previous_dataset.csv",
-                                    "directory": "previous_dataset"
+                                    "fileName": "PreviousDataset.csv",
+                                    "directory": "PreviousDataset"
                                 }
                             }
                         ]
@@ -563,17 +563,17 @@
                }
             },
                 "folder": {
-                    "name": "JLL/BlobStorageDataExtraction"
+                    "name": "BlobStorageDataExtraction"
                 },
                 "annotations": [],
                 "lastPublishTime": "2021-02-24T14:27:50Z"
             },
             "dependsOn": [
-                "[concat(variables('factoryId'), '/datasets/public_env_dataset')]",
-                "[concat(variables('factoryId'), '/datasets/customer_env_dataseet')]",
-                "[concat(variables('factoryId'), '/datasets/csv_source_dataset')]",
-                "[concat(variables('factoryId'), '/datasets/previous_dataset')]",
-                "[concat(variables('factoryId'), '/datasets/get_previous_dataset_copy')]"
+                "[concat(variables('factoryId'), '/datasets/PublicEnvDataset')]",
+                "[concat(variables('factoryId'), '/datasets/CustomerEnvDataseet')]",
+                "[concat(variables('factoryId'), '/datasets/CsvSourceDataset')]",
+                "[concat(variables('factoryId'), '/datasets/PreviousDataset')]",
+                "[concat(variables('factoryId'), '/datasets/GetPreviousDatasetCopy')]"
             ]
         },
 
@@ -586,7 +586,7 @@
                 "runtimeState": "Stopped",
                 "pipeline": {
                     "pipelineReference": {
-                        "referenceName": "USAFactsKnownCases_publicToCustomerEnvironmentCopyData",
+                        "referenceName": "CopyDataFromSourceToCustomerEnvironment",
                         "type": "PipelineReference"
                     },
                     "parameters": {}
@@ -605,12 +605,12 @@
                 }
             },
             "dependsOn": [
-                "[concat(variables('factoryId'), '/pipelines/USAFactsKnownCases_publicToCustomerEnvironmentCopyData')]"
+                "[concat(variables('factoryId'), '/pipelines/CopyDataFromSourceToCustomerEnvironment')]"
             ]
         },
 
          {
-            "name": "[concat(parameters('factoryName'), '/customer_env_dataseet')]",
+            "name": "[concat(parameters('factoryName'), '/CustomerEnvDataseet')]",
             "type": "Microsoft.DataFactory/factories/datasets",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -624,7 +624,7 @@
                     }
                 },
                 "folder": {
-                    "name": "JLL/USAFactsKnownCases-dataset/Sinks"
+                    "name": "Sinks"
                 },
                 "annotations": [],
                 "type": "DelimitedText",
@@ -648,7 +648,7 @@
             ]
         },
         {
-            "name": "[concat(parameters('factoryName'), '/public_env_dataset')]",
+            "name": "[concat(parameters('factoryName'), '/PublicEnvDataset')]",
             "type": "Microsoft.DataFactory/factories/datasets",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -663,7 +663,7 @@
                     }
                 },
                 "folder": {
-                    "name": "JLL/USAFactsKnownCases-dataset/Sources"
+                    "name": "Sources"
                 },
                 "annotations": [],
                 "type": "DelimitedText",
@@ -687,7 +687,7 @@
             ]
         },
         {
-            "name": "[concat(parameters('factoryName'), '/get_previous_dataset_copy')]",
+            "name": "[concat(parameters('factoryName'), '/GetPreviousDatasetCopy')]",
             "type": "Microsoft.DataFactory/factories/datasets",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -702,15 +702,15 @@
                     },
                     "fileName": {
                         "type": "string",
-                        "defaultValue": "get_previous_dataset_copy.csv"
+                        "defaultValue": "GetPreviousDatasetCopy.csv"
                     },
                     "directory": {
                         "type": "string",
-                        "defaultValue": "get_previous_dataset"
+                        "defaultValue": "get_PreviousDataset"
                     }
                 },
                 "folder": {
-                    "name": "JLL/USAFactsKnownCases-dataset/Schema"
+                    "name": "Schema"
                 },
                 "annotations": [],
                 "type": "DelimitedText",
@@ -742,7 +742,7 @@
             ]
         },
         {
-            "name": "[concat(parameters('factoryName'), '/csv_source_dataset')]",
+            "name": "[concat(parameters('factoryName'), '/CsvSourceDataset')]",
             "type": "Microsoft.DataFactory/factories/datasets",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -765,7 +765,7 @@
                     }
                 },
                 "folder": {
-                    "name": "JLL/USAFactsKnownCases-dataset/Sources"
+                    "name": "Sources"
                 },
                 "annotations": [],
                 "type": "DelimitedText",
@@ -798,7 +798,7 @@
             ]
         },
         {
-            "name": "[concat(parameters('factoryName'), '/previous_dataset')]",
+            "name": "[concat(parameters('factoryName'), '/PreviousDataset')]",
             "type": "Microsoft.DataFactory/factories/datasets",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -813,15 +813,15 @@
                     },
                     "fileName": {
                         "type": "string",
-                        "defaultValue": "previous_dataset.csv"
+                        "defaultValue": "PreviousDataset.csv"
                     },
                     "directory": {
                         "type": "string",
-                        "defaultValue": "previous_dataset"
+                        "defaultValue": "PreviousDataset"
                     }
                 },
                 "folder": {
-                    "name": "JLL/USAFactsKnownCases-dataset/Schema"
+                    "name": "Schema"
                 },
                 "annotations": [],
                 "type": "DelimitedText",
@@ -971,11 +971,11 @@
                 "azureFunctionReceivers": []
             },
             "dependsOn": [
-                "[concat(variables('factoryId'), '/datasets/public_env_dataset')]",
-                "[concat(variables('factoryId'), '/datasets/customer_env_dataseet')]",
-                "[concat(variables('factoryId'), '/datasets/csv_source_dataset')]",
-                "[concat(variables('factoryId'), '/datasets/previous_dataset')]",
-                "[concat(variables('factoryId'), '/datasets/get_previous_dataset_copy')]"
+                "[concat(variables('factoryId'), '/datasets/PublicEnvDataset')]",
+                "[concat(variables('factoryId'), '/datasets/CustomerEnvDataseet')]",
+                "[concat(variables('factoryId'), '/datasets/CsvSourceDataset')]",
+                "[concat(variables('factoryId'), '/datasets/PreviousDataset')]",
+                "[concat(variables('factoryId'), '/datasets/GetPreviousDatasetCopy')]"
             ]
         },
          {
@@ -1023,8 +1023,8 @@
                                     "name": "PipelineName",
                                     "operator": "Include",
                                     "values": [
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData",
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData_tumblingWindow"
+                                        "CopyDataFromSourceToCustomerEnvironment",
+                                        "CopyDataFromSourceToCustomerEnvironment_tumblingWindow"
                                     ]
                                 }
                             ],
@@ -1088,8 +1088,8 @@
                                     "name": "PipelineName",
                                     "operator": "Include",
                                     "values": [
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData",
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData_tumblingWindow"
+                                        "CopyDataFromSourceToCustomerEnvironment",
+                                        "CopyDataFromSourceToCustomerEnvironment_tumblingWindow"
                                     ]
                                 },
                                 {
@@ -1146,8 +1146,8 @@
                                     "name": "Name",
                                     "operator": "Include",
                                     "values": [
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData",
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData_tumblingWindow"
+                                        "CopyDataFromSourceToCustomerEnvironment",
+                                        "CopyDataFromSourceToCustomerEnvironment_tumblingWindow"
                                     ]
                                 }
                             ],
@@ -1195,8 +1195,8 @@
                                     "name": "Name",
                                     "operator": "Include",
                                     "values": [
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData",
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData_tumblingWindow"
+                                        "CopyDataFromSourceToCustomerEnvironment",
+                                        "CopyDataFromSourceToCustomerEnvironment_tumblingWindow"
                                     ]
                                 },
                                 {
@@ -1253,8 +1253,8 @@
                                     "name": "Name",
                                     "operator": "Include",
                                     "values": [
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData",
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData_tumblingWindow"
+                                        "CopyDataFromSourceToCustomerEnvironment",
+                                        "CopyDataFromSourceToCustomerEnvironment_tumblingWindow"
                                     ]
                                 }
                             ],
@@ -1316,8 +1316,8 @@
                                     "name": "PipelineName",
                                     "operator": "Include",
                                     "values": [
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData",
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData_tumblingWindow"
+                                        "CopyDataFromSourceToCustomerEnvironment",
+                                        "CopyDataFromSourceToCustomerEnvironment_tumblingWindow"
                                     ]
                                 },
                                 {
@@ -1386,8 +1386,8 @@
                                     "name": "PipelineName",
                                     "operator": "Include",
                                     "values": [
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData",
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData_tumblingWindow"
+                                        "CopyDataFromSourceToCustomerEnvironment",
+                                        "CopyDataFromSourceToCustomerEnvironment_tumblingWindow"
                                     ]
                                 },
                                 {
@@ -1456,8 +1456,8 @@
                                     "name": "PipelineName",
                                     "operator": "Include",
                                     "values": [
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData",
-                                        "USAFactsKnownCases_publicToCustomerEnvironmentCopyData_tumblingWindow"
+                                        "CopyDataFromSourceToCustomerEnvironment",
+                                        "CopyDataFromSourceToCustomerEnvironment_tumblingWindow"
                                     ]
                                 },
                                 {
