@@ -1,0 +1,93 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+        "type": "string",
+        "metadata": {
+          "description": "Location of your resources. Default location is eastUS"
+          }
+        },
+
+    "keyVaultName": {
+        "type": "string",
+        "metadata": {
+          "description": "Specifies the name of the key vault."
+          }
+        },
+    
+      "SASBlobUriValue": {
+          "type": "securestring",
+          "metadata": {
+            "description": "Specifies the value of the SAS Blob URI that you want to create."
+          }
+      },
+      "storageAccountConnectionStringValue": {
+        "type": "securestring"
+    }
+  },
+
+   "variables": {
+      "SASURISecretName": "SASURiSecret",
+      "SASURISecretValue": "[parameters('SASBlobUriValue')]",
+      "storageSecretName": "storageAccountConnectionString",
+      "storageSecretValue": "[parameters('storageAccountConnectionStringValue')]",
+      "tenantId": "[subscription().tenantId]"
+   },
+
+  "resources": [
+    {
+        "type": "Microsoft.KeyVault/vaults",
+        "apiVersion": "2019-09-01",
+        "name": "[parameters('keyVaultName')]",
+        "location": "[parameters('location')]",
+        "tags": {
+            "Environment": "Customers",
+            "AssociatedDataSet": "USAFacts"
+        },
+        "properties": {
+          "tenantId": "[variables('tenantId')]",
+          "enableSoftDelete": false,
+          "accessPolicies": [],
+          "sku": {
+            "name": "Standard",
+            "family": "A"
+          },
+          "networkAcls": {
+            "defaultAction": "Allow",
+            "bypass": "AzureServices"
+          }
+        }
+      },
+      {
+        "type": "Microsoft.KeyVault/vaults/secrets",
+        "apiVersion": "2019-09-01",
+        "name": "[concat(parameters('keyVaultName'), '/', variables('SASURISecretName'))]",
+        "location": "[parameters('location')]",
+        "dependsOn": [
+          "[resourceId('Microsoft.KeyVault/vaults', parameters('keyVaultName'))]"
+        ],
+        "properties": {
+          "value": "[variables('SASURISecretValue')]"
+        }
+      },
+    {
+        "type": "Microsoft.KeyVault/vaults/secrets",
+        "apiVersion": "2019-09-01",
+        "name": "[concat(parameters('keyVaultName'), '/', variables('storageSecretName'))]",
+        "location": "[parameters('location')]",
+        "dependsOn": [
+          "[resourceId('Microsoft.KeyVault/vaults', parameters('keyVaultName'))]"
+        ],
+        "properties": {
+          "value": "[variables('storageSecretValue')]"
+        }
+    }
+  ],
+  "outputs": {
+      "SASSecretUri": {
+          "type": "string",
+          "value": "[resourceId('Microsoft.KeyVault/vaults', parameters('keyVaultName'))]"
+      }
+  }
+}
