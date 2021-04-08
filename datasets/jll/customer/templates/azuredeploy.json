@@ -92,13 +92,13 @@
         "storageAccountUniqueName": "[toLower(concat(parameters('storageAccountName'), uniqueString(resourceGroup().id)))]",
         "keyVaultName": "[concat(parameters('keyVaultName'), uniquestring(resourceGroup().id))]",
         "webHookUri": "",
-        "storageTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv-customer/datasets/jll/customer/templates/storageAccount/azuredeploy.json",
-        "logicAppTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv-customer/datasets/jll/customer/templates/logicApp/azuredeploy.json",
-        "DataFactoryTemplateWithTeamsNotifUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv-customer/datasets/jll/customer/templates/dataFactoryResources/azuredeploy.json",
-        "DataFactoryTemplateWithoutTeamsNotifUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv-customer/datasets/jll/customer/templates/dataFactoryResources/azuredeploy.json",
-        "keyVaultTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv-customer/datasets/jll/customer/templates/keyVault/azuredeploy.json",
-        "keyVaultPermissionsUpdateTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv-customer/datasets/jll/customer/templates/keyVaultPermissionsUpdate/azuredeploy.json",
-        "emptyDataFactoryTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/sa-kv-customer/datasets/jll/customer/templates/dataFactory/azuredeploy.json"
+        "storageTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/customer/templates/storageAccount/azuredeploy.json",
+        "logicAppTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/customer/templates/logicApp/azuredeploy.json",
+        "DataFactoryTemplateWithTeamsNotifUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/customer/templates/dataFactoryResources/azuredeploy.json",
+        "DataFactoryTemplateWithoutTeamsNotifUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/customer/templates/dataFactoryResources/azuredeploy.json",
+        "keyVaultTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/customer/templates/keyVault/azuredeploy.json",
+        "keyVaultPermissionsUpdateTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/customer/templates/keyVaultPermissionsUpdate/azuredeploy.json",
+        "emptyDataFactoryTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/jll-one-click-deployments/main/datasets/jll/customer/templates/dataFactory/azuredeploy.json"
     },
     "resources": [
         {
