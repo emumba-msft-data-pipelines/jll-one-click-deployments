@@ -126,7 +126,7 @@ Follow these steps to add multiple emails to receive alerts on.
 
 Azure Key Vault is a cloud service for securely storing and accessing secrets. A secret is anything that you want to tightly control access to, such as API keys, passwords, certificates, or cryptographic keys. Here two secrets are being saved in the key vault with access given to the data factory and to the user whose object id will be provided while creating the deployment:
 
-1. SQL server administrator password
+1. SAS URI for blob storage
 2. Connection string for the blob storage 
 
 The user whose object id will be provided is given full access to all secrets, keys and certificates inside the key vault. While the data factory has the GET access to the secrets in the key vault.
