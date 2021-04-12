@@ -54,7 +54,7 @@ After the deployment, you can go inside your resource group open the ADF **Autho
 
 4. Now you can use value of sas uri in customer account while deploying arm template or you can update the url value from key vault service.
 
-####Customer Environment Pipeline Flow
+####  Customer Environment Pipeline Flow
 ![piepline flow](./images/pipeline/pipelineFlow.png)
 
 1. Linked service for source blob storage is created by using **SAS URI** of source blob storage.
